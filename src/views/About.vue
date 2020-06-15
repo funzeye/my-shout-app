@@ -1,5 +1,18 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
+  <div class="ion-page">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>My Shout!</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <h1>About Page</h1>
+    </ion-content>
   </div>
 </template>
+
+<script>
+export default {
+  name: 'about'
+}
+</script>

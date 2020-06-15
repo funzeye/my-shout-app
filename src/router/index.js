@@ -1,26 +1,56 @@
 import Vue from 'vue'
-import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-
-Vue.use(VueRouter)
+import About from '../views/About.vue'
+import CreateNew from '../views/CreateNew.vue'
+import TabRoot from '../components/TabRoot.vue'
+// import VueRouter from 'vue-router'
+// Vue.use(VueRouter)
+import { IonicVueRouter } from '@ionic/vue'
+Vue.use(IonicVueRouter)
 
 const routes = [
+
+  // {
+  //   path: '',
+  //   component: TabRoot
+  // },
+  // {
+  //   path: '/about',
+  //   component: About
+  // },
   {
-    path: '/',
-    name: 'Home',
-    component: Home
+    path: '/tabs',
+    component: TabRoot,
+    children: [
+      {
+        path: '/',
+        redirect: '/tabs/home'
+      },
+      {
+        path: 'home',
+        component: Home,
+        name: 'home'
+      },
+      {
+        path: 'about',
+        component: About,
+        name: 'about'
+      },
+      {
+        path: 'create-new',
+        component: CreateNew,
+        name: 'create-new'
+      }
+    ]
   },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
+  { path: '/', redirect: '/tabs/home' },
+  { path: '*', redirect: '/tabs/home' }
+
+  // { path: '' }
 ]
 
-const router = new VueRouter({
+const router = new IonicVueRouter({
+  mode: 'history', // for not having the # in the URL
   routes
 })
 
