@@ -1,18 +1,24 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="ion-page">
+    <the-header />
+    <ion-content class="ion-padding">
+      <table-card :i="i" />
+    </ion-content>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import TableCard from '../components/TableCard.vue'
+import TheHeader from '../components/TheHeader.vue'
 
 export default {
-  name: 'Home',
+
+  name: 'home',
   components: {
-    HelloWorld
-  }
+    TheHeader,
+    TableCard
+  },
+  props: ['i']
 }
+
 </script>
