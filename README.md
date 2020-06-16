@@ -1,4 +1,10 @@
-# first-ionic-vue-app
+# My Shout App
+
+## intro
+Ionic + Vue App
+
+Also uses:
+Vuex, Vuelidate, Axios, Firebase
 
 ## Project setup
 ```
