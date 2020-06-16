@@ -1,10 +1,6 @@
 <template>
     <div class="ion-page">
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>My Shout!</ion-title>
-      </ion-toolbar>
-    </ion-header>
+    <the-header />
     <ion-content class="ion-padding">
       <h1>Create New Pub</h1>
 
@@ -50,51 +46,36 @@
 </template>
 
 <script>
+import TheHeader from '../components/TheHeader.vue'
+
 export default {
   data () {
     return {
-      pub: {
-        pubName: '',
-        addressLine1: '',
-        addressLine2: '',
-        townCity: '',
-        county: '',
-        eircode: '',
-        numOfTables: ''
+    }
+  },
+  components: {
+    TheHeader
+  },
+  computed: {
+    pubs () {
+      return this.$store.getters.pubs
+    },
+    pub: {
+      get () {
+        return this.$store.getters.pub
       },
-      pubs: []
+      set (pub) {
+        this.$store.dispatch('updatePub', pub)
+      }
     }
   },
   methods: {
     submitted () {
+      var newPub = this.pub
       console.log('submitted new pub details:')
-      console.log(this.pub)
-      console.log('http post - response:')
-      this.$http.post('', this.pub)
-        .then(response => {
-          console.log(response)
-        }, error => {
-          console.log(error)
-        })
-      this.resetForm() // clear form automatically after successful request
-      this.fetchData()
-    },
-    fetchData () {
-      console.log('fecthing data from the DB and updating List')
-      this.$http.get('', { params: { pubName: "Walsh's Public House" } })
-        .then(response => {
-          console.log(response)
-          return response.json()
-        }, error => {
-          console.log(error)
-        })
-        .then(data => {
-          const resultArray = []
-          for (const key in data) {
-            resultArray.push(data[key])
-          }
-          this.pubs = resultArray
-        })
+      console.log(newPub)
+
+      this.$store.dispatch('storePub', newPub)
     },
     resetForm () {
       this.pub.pubName = ''
@@ -106,8 +87,9 @@ export default {
       this.pub.numOfTables = ''
     }
   },
-  mounted: function () {
-    this.fetchData()
+  created () {
+    this.$store.dispatch('fetchUser')
+    this.$store.dispatch('fetchPubs')
   }
 }
 </script>

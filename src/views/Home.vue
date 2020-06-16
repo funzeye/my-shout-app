@@ -1,10 +1,6 @@
 <template>
   <div class="ion-page">
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>My Shout!</ion-title>
-      </ion-toolbar>
-    </ion-header>
+    <the-header />
     <ion-content class="ion-padding">
       <table-card :i="i" />
     </ion-content>
@@ -13,19 +9,16 @@
 
 <script>
 import TableCard from '../components/TableCard.vue'
+import TheHeader from '../components/TheHeader.vue'
 
 export default {
 
   name: 'home',
   components: {
+    TheHeader,
     TableCard
   },
-  props: ['i'],
-  methods: {
-    navigate: function () {
-      this.$router.push('about')
-    }
-  }
+  props: ['i']
 }
 
 </script>

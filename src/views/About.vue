@@ -1,10 +1,6 @@
 <template>
   <div class="ion-page">
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>My Shout!</ion-title>
-      </ion-toolbar>
-    </ion-header>
+    <the-header />
     <ion-content class="ion-padding">
       <h1>About Page</h1>
     </ion-content>
@@ -12,7 +8,12 @@
 </template>
 
 <script>
+import TheHeader from '../components/TheHeader.vue'
+
 export default {
-  name: 'about'
+  name: 'about',
+  components: {
+    TheHeader
+  }
 }
 </script>
