@@ -13,22 +13,30 @@
           <ion-input-vue
                   type="email"
                   id="email"
+                  @blur="$v.email.touch()"
                   v-model="email"></ion-input-vue>
         </ion-item>
+        <ion-note v-if="!$v.email.email" class="error ion-padding" color="danger">Valid Email Required</ion-note>
+
         <ion-item class="input">
           <ion-label for="password">Password</ion-label>
           <ion-input-vue
                   type="password"
                   id="password"
+                  @blur="$v.password.touch()"
                   v-model="password"></ion-input-vue>
         </ion-item>
+        <ion-note v-if="!$v.password.minLen" class="error ion-padding" color="danger">Must be at least 6 characters long</ion-note>
+
         <ion-item class="input">
           <ion-label for="confirm-password">Confirm Password</ion-label>
           <ion-input-vue
                   type="password"
                   id="confirm-password"
+                  @blur="$v.confirmPassword.touch()"
                   v-model="confirmPassword"></ion-input-vue>
         </ion-item>
+        <ion-note v-if="!$v.confirmPassword.sameAs" class="error ion-padding" color="danger">Passwords do not match</ion-note>
 
         <ion-item class="input">
           <ion-label>Accept Terms of Use</ion-label>
@@ -36,7 +44,7 @@
         </ion-item>
 
         <div class="ion-padding">
-          <ion-button type="submit">Submit</ion-button>
+          <ion-button type="submit" :disabled="$v.$invalid">Submit</ion-button>
         </div>
       </form>
     </ion-content>
@@ -44,6 +52,7 @@
 </template>
 
 <script>
+import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
 
 export default {
   data () {
@@ -53,6 +62,20 @@ export default {
       confirmPassword: '',
       terms: false
     }
+  },
+  validations: {
+    email: {
+      required,
+      email
+    },
+    password: {
+      required,
+      minLen: minLength(6)
+    },
+    confirmPassword: {
+      sameAs: sameAs('password')
+    }
+
   },
   methods: {
     onSubmit () {
@@ -68,3 +91,7 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+</style>
