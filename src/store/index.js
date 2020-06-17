@@ -19,7 +19,8 @@ export default new Vuex.Store({
       townCity: '',
       county: '',
       eircode: '',
-      numOfTables: ''
+      numOfTables: '',
+      floors: { lower: 0, upper: 0 }
     }
   },
   mutations: {
@@ -51,7 +52,8 @@ export default new Vuex.Store({
         townCity: '',
         county: '',
         eircode: '',
-        numOfTables: ''
+        numOfTables: '',
+        floors: { lower: 0, upper: 0 }
       }
     }
   },
@@ -146,7 +148,7 @@ export default new Vuex.Store({
         .then(res => console.log(res))
         .catch(error => console.log(error))
     },
-    storePub ({ commit, state }, pubData) {
+    storePub ({ commit, state, dispatch }, pubData) {
       if (!state.idToken) {
         console.log('No Id Token - Exiting')
         return
@@ -156,9 +158,34 @@ export default new Vuex.Store({
         .then(res => {
           console.log(res)
           commit('addNewPub', pubData)
-          commit('resetPub')
+          console.log('pub successfully saved to DB: ', res.data)
+          dispatch('storeTables', res.data.name)
+          // commit('resetPub') // no longer need to reset as we immediately go to a new page
         })
         .catch(error => console.log(error))
+    },
+    storeTables ({ commit, state }, pubId) {
+      if (!state.idToken) {
+        console.log('No Id Token - Exiting')
+        return
+      }
+      console.log('adding new tables to DB')
+      console.log('number of tables to add:', state.pub.numOfTables)
+
+      for (var index = 1; index <= state.pub.numOfTables; index++) {
+        const table = {
+          pubId: pubId,
+          tableNum: index,
+          seats: 4
+        }
+        console.log('adding new table:', table)
+        globalAxios.post('pubtables.json' + '?auth=' + state.idToken, table)
+          .then(res => {
+            console.log(res)
+            console.log('table successfully saved to DB.')
+          })
+          .catch(error => console.log(error))
+      }
     },
     fetchUser ({ commit, state }) {
       if (!state.idToken) {

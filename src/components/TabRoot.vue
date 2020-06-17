@@ -8,10 +8,6 @@
           <About />
         </ion-tab>
 
-        <ion-tab tab="create-new">
-          <CreateNew />
-        </ion-tab>
-
         <template slot="bottom">
           <ion-tab-bar>
             <ion-tab-button tab="home">
@@ -24,11 +20,6 @@
               <ion-icon :src="i.informationCircle"></ion-icon>
               <ion-label>About</ion-label>
             </ion-tab-button>
-
-            <ion-tab-button tab="create-new">
-              <ion-icon :src="i.addCircle"></ion-icon>
-              <ion-label>Create New</ion-label>
-            </ion-tab-button>
           </ion-tab-bar>
         </template>
       </ion-tabs>
@@ -37,7 +28,6 @@
 <script>
 import Home from '../views/Home.vue'
 import About from '../views/About.vue'
-import CreateNew from '../views/CreateNew.vue'
 
 import * as allIcons from 'ionicons/icons'
 
@@ -50,8 +40,7 @@ export default {
   },
   components: {
     Home,
-    About,
-    CreateNew
+    About
   }
 }
 </script>

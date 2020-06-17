@@ -26,7 +26,24 @@
       </ion-item>
 
       <ion-item>
-        <ion-label position="stacked">No. of Tables <ion-text color="danger">*</ion-text></ion-label>
+          <ion-label position="stacked">Floors</ion-label>
+          <ion-range ref="floors" id="dual-range"
+            dual-knobs pin snaps debounce="200" min="-5" max="10" v-model="pub.floors"
+            @ionChange="pub.floors = $event.target.value">
+            <ion-icon slot="start" :src="i.layers"></ion-icon>
+            <ion-icon slot="end" :src="i.layers"></ion-icon>
+          </ion-range>
+          <ion-note v-if="pub.floors.lower === pub.floors.upper" class="error ion-padding" color="secondary">1 Floor Selected</ion-note>
+          <ion-note v-if="pub.floors.lower === pub.floors.upper && pub.floors.upper !== 0" class="error ion-padding" color="secondary">Floor #: {{ pub.floors.lower }}</ion-note>
+          <ion-note v-if="pub.floors.lower === pub.floors.upper && pub.floors.upper === 0" class="error ion-padding" color="secondary">Ground Floor Only</ion-note>
+
+          <ion-note v-if="pub.floors.lower !== pub.floors.upper" class="error ion-padding" color="secondary">{{ pub.floors.upper - pub.floors.lower + 1 }} Floors Selected</ion-note>
+          <ion-note v-if="pub.floors.lower !== pub.floors.upper" class="error ion-padding" color="secondary">Lowest floor #: {{ pub.floors.lower }}</ion-note>
+          <ion-note v-if="pub.floors.lower !== pub.floors.upper" class="error ion-padding" color="secondary">Highest floor #: {{ pub.floors.upper }}</ion-note>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Tables Reservable (Total Number)<ion-text color="danger">*</ion-text></ion-label>
         <ion-input-vue
           @blur="$v.pub.numOfTables.touch()"
           type="number"
@@ -35,6 +52,7 @@
         </ion-input-vue>
         <ion-note v-if="!$v.pub.numOfTables.minVal" class="error ion-padding" color="danger">Must add at least 1 table</ion-note>
       </ion-item>
+
       <div class="ion-padding">
         <ion-button expand="block" class="ion-no-margin" :disabled="$v.$invalid" type="submit">Create Pub</ion-button>
       </div>
@@ -53,9 +71,12 @@
 <script>
 import TheHeader from '../components/TheHeader.vue'
 import { required, numeric, minValue } from 'vuelidate/lib/validators'
+import * as allIcons from 'ionicons/icons'
+
 export default {
   data () {
     return {
+      i: allIcons
     }
   },
   validations: {
@@ -94,11 +115,15 @@ export default {
       console.log(newPub)
 
       this.$store.dispatch('storePub', newPub)
+      this.$router.replace('create-new-pub-tables')
     }
   },
   created () {
     this.$store.dispatch('fetchUser')
     this.$store.dispatch('fetchPubs')
+  },
+  mounted () {
+    this.$refs.floors.value = this.pub.floors
   }
 }
 </script>

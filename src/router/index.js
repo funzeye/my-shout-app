@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Home from '../views/Home.vue'
 import About from '../views/About.vue'
-import CreateNew from '../views/CreateNew.vue'
+import CreateNewPub from '../views/CreateNewPub.vue'
+import CreateNewPubTables from '../views/CreateNewPubTables.vue'
 import TabRoot from '../components/TabRoot.vue'
 import SignUpPage from '../components/auth/SignUp.vue'
 import SignInPage from '../components/auth/SignIn.vue'
@@ -49,21 +50,37 @@ const routes = [
             next('/signin')
           }
         }
-      },
-      {
-        path: 'create-new',
-        component: CreateNew,
-        name: 'create-new',
-        beforeEnter (to, from, next) {
-          var token = store.state.idToken
-          if (token) {
-            next()
-          } else {
-            next('/signin')
-          }
-        }
       }
     ]
+  },
+  {
+    path: '/create-new-pub',
+    component: CreateNewPub,
+    name: 'create-new-pub',
+    beforeEnter (to, from, next) {
+      var token = store.state.idToken
+      if (token) {
+        next()
+      } else {
+        next('/signin')
+      }
+    }
+  },
+  {
+    path: '/create-new-pub-tables',
+    component: CreateNewPubTables,
+    name: 'create-new-pub-tables',
+    beforeEnter (to, from, next) {
+      var token = store.state.idToken
+      var pub = store.state.pub
+      if (!token) {
+        next('/signin')
+      } else if (!pub.pubName) {
+        next('/')
+      } else {
+        next()
+      }
+    }
   },
   {
     path: '/signup',
