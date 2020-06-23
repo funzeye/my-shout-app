@@ -12,6 +12,7 @@ export default new Vuex.Store({
     userId: null,
     user: null,
     pubs: [],
+    pubTables: [],
     pub: {
       pubName: '',
       addressLine1: '',
@@ -21,7 +22,11 @@ export default new Vuex.Store({
       eircode: '',
       numOfTables: '',
       floors: { lower: 0, upper: 0 }
-    }
+    },
+    pubFloorArea: {
+      name: ''
+    },
+    pubFloorAreas: []
   },
   mutations: {
     authUser (state, userData) {
@@ -38,11 +43,28 @@ export default new Vuex.Store({
     storePubs (state, pubs) {
       state.pubs = pubs
     },
+    storePubFloorAreas (state, pubFloorAreas) {
+      state.pubFloorAreas = pubFloorAreas
+    },
     addNewPub (state, pub) {
       state.pubs.push(pub)
     },
+    addNewPubFloorArea (state, pub) {
+      state.pubFloorAreas.push(pub)
+    },
+    addNewPubTable (state, pubTable) {
+      state.pubTables.push(pubTable)
+    },
     updatePub (state, pub) {
       state.pub = pub
+    },
+    updatePubFloorArea (state, pubFloorArea) {
+      state.pubFloorArea = pubFloorArea
+    },
+    resetPubFloorArea (state) {
+      state.pubFloorArea = {
+        name: ''
+      }
     },
     resetPub (state) {
       state.pub = {
@@ -139,6 +161,25 @@ export default new Vuex.Store({
           console.log(error)
         })
     },
+    fetchPubFloorAreas ({ commit, state }) {
+      if (!state.idToken) {
+        console.log('No Id Token - Exiting')
+        return
+      }
+      console.log('fecthing pub data from the DB and updating List')
+      globalAxios.get('pubFloorArea.json' + '?auth=' + state.idToken)
+        .then(response => {
+          console.log(response)
+          const data = response.data
+          const resultArray = []
+          for (const key in data) {
+            resultArray.push(data[key])
+          }
+          commit('storePubFloorAreas', resultArray)
+        }, error => {
+          console.log(error)
+        })
+    },
     storeUser ({ commit, state }, userData) {
       if (!state.idToken) {
         console.log('No Id Token - Exiting')
@@ -164,6 +205,21 @@ export default new Vuex.Store({
         })
         .catch(error => console.log(error))
     },
+    storePubFloorArea ({ commit, state }, pubFloorAreaData) {
+      if (!state.idToken) {
+        console.log('No Id Token - Exiting')
+        return
+      }
+      console.log('adding new pub floor area to DB: ', pubFloorAreaData)
+      globalAxios.post('pubFloorArea.json' + '?auth=' + state.idToken, pubFloorAreaData)
+        .then(res => {
+          console.log(res)
+          commit('addNewPubFloorArea', pubFloorAreaData)
+          console.log('pub successfully saved to DB: ', res.data)
+          commit('resetPubFloorArea') // no longer need to reset as we immediately go to a new page
+        })
+        .catch(error => console.log(error))
+    },
     storeTables ({ commit, state }, pubId) {
       if (!state.idToken) {
         console.log('No Id Token - Exiting')
@@ -182,6 +238,7 @@ export default new Vuex.Store({
         globalAxios.post('pubtables.json' + '?auth=' + state.idToken, table)
           .then(res => {
             console.log(res)
+            commit('addNewPubTable', table)
             console.log('table successfully saved to DB.')
           })
           .catch(error => console.log(error))
@@ -211,6 +268,9 @@ export default new Vuex.Store({
     updatePub ({ commit }, payload) {
       commit('updatePub', payload)
     },
+    updatePubFloorArea ({ commit }, payload) {
+      commit('updatePubFloorArea', payload)
+    },
     logout ({ commit }) {
       router.replace('/signin')
       commit('clearAuthData')
@@ -229,10 +289,25 @@ export default new Vuex.Store({
       console.log(state)
       return state.pubs
     },
+    pubTables (state) {
+      console.log('calling pubTables getter')
+      console.log(state)
+      return state.pubTables
+    },
     pub (state) {
       console.log('calling pub getter')
       console.log(state)
       return state.pub
+    },
+    pubFloorAreas (state) {
+      console.log('calling pub floor areas getter')
+      console.log(state)
+      return state.pubFloorAreas
+    },
+    pubFloorArea (state) {
+      console.log('calling pub floor area getter')
+      console.log(state)
+      return state.pubFloorArea
     },
     isAuthenticated (state) {
       return state.idToken !== null

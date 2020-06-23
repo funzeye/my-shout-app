@@ -3,17 +3,24 @@
       <ion-card>
         <ion-item>
           <ion-icon :src="i.beer" slot="start"></ion-icon>
-          <ion-label>Table #1</ion-label>
-          <ion-button size="default" fill="outline" slot="end">Reserve</ion-button>
+          <ion-label>Table #{{ table.tableNum }}</ion-label>
+          <ion-button size="default" fill="outline" slot="end">Edit</ion-button>
+        </ion-item>
+        <ion-item>
+          <ion-icon :src="i.layers" slot="start"></ion-icon>
+          <ion-label v-if="floors.lower === floors.upper && floors.lower === 0">Ground Floor</ion-label>
+          <ion-label v-else-if="floors.lower === floors.upper">Floor # {{ floors.lower }}</ion-label>
+          <ion-label v-else-if="floors.lower !== floors.upper">Floor # ?</ion-label>
         </ion-item>
         <ion-item>
           <ion-icon :src="i.location" slot="start"></ion-icon>
-          <ion-label>Lounge</ion-label>
-          <ion-icon :src="i.people" slot="end"></ion-icon>
-          <ion-label slot="end">4</ion-label>
-          <ion-note slot="end">Location &amp; Seats</ion-note>
+          <ion-label>Area: ?</ion-label>
         </ion-item>
         <ion-item>
+          <ion-icon :src="i.people" slot="start"></ion-icon>
+          <ion-label>No. of Seats: {{ table.seats }}</ion-label>
+        </ion-item>
+        <!--<ion-item>
           <ion-icon :src="i.person" slot="start"></ion-icon>
           <ion-label></ion-label>
           <ion-note slot="end">Reserved By</ion-note>
@@ -22,13 +29,13 @@
           <ion-icon :src="i.alarm" slot="start"></ion-icon>
           <ion-label></ion-label>
           <ion-note slot="end">Reserved Until</ion-note>
-        </ion-item>
-        <ion-card-content>
+        </ion-item>-->
+        <!--<ion-card-content>
           Clicking 'Reserve' will cancel the other reservation on table #2
-        </ion-card-content>
+        </ion-card-content>-->
       </ion-card>
 
-      <ion-card>
+      <!--<ion-card>
         <ion-item>
           <ion-icon :src="i.beer" slot="start"></ion-icon>
           <ion-label>Table #2</ion-label>
@@ -110,12 +117,12 @@
         <ion-card-content>
           Clicking 'Reserve' will cancel the other reservation on table #2
         </ion-card-content>
-      </ion-card>
+      </ion-card>-->
   </div>
 </template>
 
 <script>
 export default {
-  props: ['i']
+  props: ['i', 'table', 'floors']
 }
 </script>

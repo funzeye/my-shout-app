@@ -3,6 +3,7 @@ import Home from '../views/Home.vue'
 import About from '../views/About.vue'
 import CreateNewPub from '../views/CreateNewPub.vue'
 import CreateNewPubTables from '../views/CreateNewPubTables.vue'
+import CreateNewPubFloorArea from '../views/CreateNewPubFloorArea.vue'
 import TabRoot from '../components/TabRoot.vue'
 import SignUpPage from '../components/auth/SignUp.vue'
 import SignInPage from '../components/auth/SignIn.vue'
@@ -52,6 +53,19 @@ const routes = [
         }
       }
     ]
+  },
+  {
+    path: '/create-new-pub-floor-area',
+    component: CreateNewPubFloorArea,
+    name: 'create-new-pub-floor-area',
+    beforeEnter (to, from, next) {
+      var token = store.state.idToken
+      if (token) {
+        next()
+      } else {
+        next('/signin')
+      }
+    }
   },
   {
     path: '/create-new-pub',
