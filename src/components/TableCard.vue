@@ -3,8 +3,8 @@
       <ion-card>
         <ion-item>
           <ion-icon :src="i.beer" slot="start"></ion-icon>
-          <ion-label>Table #{{ table.tableNum }}</ion-label>
-          <ion-button size="default" fill="outline" slot="end">Edit</ion-button>
+          <ion-label>Table #{{ pubTable.tableNum }}</ion-label>
+          <ion-button size="default" fill="outline" slot="end" @click.prevent="editTableDetails">Edit</ion-button>
         </ion-item>
         <ion-item>
           <ion-icon :src="i.layers" slot="start"></ion-icon>
@@ -18,7 +18,7 @@
         </ion-item>
         <ion-item>
           <ion-icon :src="i.people" slot="start"></ion-icon>
-          <ion-label>No. of Seats: {{ table.seats }}</ion-label>
+          <ion-label>No. of Seats: {{ pubTable.seats }}</ion-label>
         </ion-item>
         <!--<ion-item>
           <ion-icon :src="i.person" slot="start"></ion-icon>
@@ -123,6 +123,12 @@
 
 <script>
 export default {
-  props: ['i', 'table', 'floors']
+  props: ['i', 'pubTable', 'floors'],
+  methods: {
+    editTableDetails () {
+      this.$store.dispatch('setSelectedPubTable', this.pubTable)
+      this.$router.push({ name: 'edit-table-details', params: { id: this.pubTable.tableNum } })
+    }
+  }
 }
 </script>

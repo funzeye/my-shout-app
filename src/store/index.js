@@ -13,7 +13,14 @@ export default new Vuex.Store({
     user: null,
     pubs: [],
     pubTables: [],
+    pubTable: {
+      key: '',
+      seats: 4,
+      tableNum: null,
+      pubFloorArea: ''
+    },
     pub: {
+      key: '',
       pubName: '',
       addressLine1: '',
       addressLine2: '',
@@ -40,6 +47,9 @@ export default new Vuex.Store({
     storeUser (state, user) {
       state.user = user
     },
+    storePubTable (state, user) {
+      state.pubTable = user
+    },
     storePubs (state, pubs) {
       state.pubs = pubs
     },
@@ -57,6 +67,9 @@ export default new Vuex.Store({
     },
     updatePub (state, pub) {
       state.pub = pub
+    },
+    setSelectedPubTable (state, pubTable) {
+      state.pubTable = pubTable
     },
     updatePubFloorArea (state, pubFloorArea) {
       state.pubFloorArea = pubFloorArea
@@ -161,6 +174,46 @@ export default new Vuex.Store({
           console.log(error)
         })
     },
+    fetchPubTables ({ commit, state }, pubKey) {
+      if (!state.idToken) {
+        console.log('No Id Token - Exiting')
+        return
+      }
+      console.log('fecthing pub tables data from the DB and updating List')
+      console.log('for pub with key:', pubKey)
+      globalAxios.get('pubtables.json' + '?auth=' + state.idToken + '&&orderby="pubId"&&equalTo=' + pubKey)
+        .then(response => {
+          console.log(response)
+          const data = response.data
+          const resultArray = []
+          for (const key in data) {
+            resultArray.push(data[key])
+          }
+          commit('storePubTables', resultArray)
+        }, error => {
+          console.log(error)
+        })
+    },
+    fetchPub ({ commit, state }, userId) {
+      if (!state.idToken) {
+        console.log('No Id Token - Exiting')
+        return
+      }
+      console.log('fecthing pub data from the DB')
+      console.log('for pub with user id:', userId)
+      globalAxios.get('pubtables.json' + '?auth=' + state.idToken + '&&orderby="userId"&&equalTo=' + userId)
+        .then(response => {
+          console.log(response)
+          const data = response.data
+          const resultArray = []
+          for (const key in data) {
+            resultArray.push(data[key])
+          }
+          commit('updatePub', resultArray[0]) // TODO
+        }, error => {
+          console.log(error)
+        })
+    },
     fetchPubFloorAreas ({ commit, state }) {
       if (!state.idToken) {
         console.log('No Id Token - Exiting')
@@ -195,12 +248,23 @@ export default new Vuex.Store({
         return
       }
       console.log('adding new pub to DB: ', pubData)
-      globalAxios.post('pub.json' + '?auth=' + state.idToken, pubData)
+      const pub = {
+        pubName: pubData.pubName,
+        addressLine1: pubData.addressLine1,
+        addressLine2: pubData.addressLine2,
+        townCity: pubData.townCity,
+        county: pubData.county,
+        eircode: pubData.eircode,
+        numOfTables: pubData.numOfTables,
+        floors: { lower: pubData.floors.lower, upper: pubData.floors.upper }
+      }
+      globalAxios.post('pub.json' + '?auth=' + state.idToken, pub)
         .then(res => {
-          console.log(res)
+          console.log('adding new pub response:', res)
+          pubData.key = res.data.name
           commit('addNewPub', pubData)
           console.log('pub successfully saved to DB: ', res.data)
-          dispatch('storeTables', res.data.name)
+          dispatch('storePubTables', res.data.name)
           // commit('resetPub') // no longer need to reset as we immediately go to a new page
         })
         .catch(error => console.log(error))
@@ -220,7 +284,26 @@ export default new Vuex.Store({
         })
         .catch(error => console.log(error))
     },
-    storeTables ({ commit, state }, pubId) {
+    updatePubTable ({ commit, state }, pubTable) {
+      if (!state.idToken) {
+        console.log('No Id Token - Exiting')
+        return
+      }
+      const table = {
+        pubId: pubTable.pubId,
+        tableNum: pubTable.tableNum,
+        seats: pubTable.seats,
+        pubFloorArea: pubTable.pubFloorArea
+      }
+      console.log('updating existing pub table in DB: ', table)
+      globalAxios.patch('pubtables/' + pubTable.key + '.json' + '?auth=' + state.idToken, table)
+        .then(res => {
+          console.log(res)
+          console.log('pub table successfully saved to DB: ', res.data)
+        })
+        .catch(error => console.log(error))
+    },
+    storePubTables ({ commit, state }, pubId) {
       if (!state.idToken) {
         console.log('No Id Token - Exiting')
         return
@@ -238,11 +321,37 @@ export default new Vuex.Store({
         globalAxios.post('pubtables.json' + '?auth=' + state.idToken, table)
           .then(res => {
             console.log(res)
+            table.key = res.data.name
             commit('addNewPubTable', table)
             console.log('table successfully saved to DB.')
           })
           .catch(error => console.log(error))
       }
+    },
+    fetchPubTable ({ commit, state }, pubTableKey) {
+      if (!state.idToken) {
+        console.log('No Id Token - Exiting')
+        return
+      }
+      console.log('fecthing pub table data from the DB')
+      globalAxios.get('pubtables.json' + '?auth=' + state.idToken + '&orderBy="$key"&equalTo="' + pubTableKey + '"')
+        .then(response => {
+          console.log('Successful response upon getting single pub table data from the DB')
+          console.log(response)
+          const data = response.data
+          const pubTables = []
+          for (const key in data) {
+            console.log('looping through keys found in data for fecthPubTable call')
+            const pubTable = data[key]
+            console.log('pubTable:', pubTable)
+            pubTable.key = key
+            pubTables.push(pubTable)
+          }
+          commit('storePubTable', pubTables[0])
+        }, error => {
+          console.log('Error response while getting single pub table data from the DB')
+          console.log(error)
+        })
     },
     fetchUser ({ commit, state }) {
       if (!state.idToken) {
@@ -267,6 +376,9 @@ export default new Vuex.Store({
     },
     updatePub ({ commit }, payload) {
       commit('updatePub', payload)
+    },
+    setSelectedPubTable ({ commit }, payload) {
+      commit('setSelectedPubTable', payload)
     },
     updatePubFloorArea ({ commit }, payload) {
       commit('updatePubFloorArea', payload)
@@ -293,6 +405,11 @@ export default new Vuex.Store({
       console.log('calling pubTables getter')
       console.log(state)
       return state.pubTables
+    },
+    pubTable (state) {
+      console.log('calling pubTable getter')
+      console.log(state)
+      return state.pubTable
     },
     pub (state) {
       console.log('calling pub getter')

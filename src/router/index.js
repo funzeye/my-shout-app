@@ -4,6 +4,7 @@ import About from '../views/About.vue'
 import CreateNewPub from '../views/CreateNewPub.vue'
 import CreateNewPubTables from '../views/CreateNewPubTables.vue'
 import CreateNewPubFloorArea from '../views/CreateNewPubFloorArea.vue'
+import EditTableDetails from '../views/EditTableDetails.vue'
 import TabRoot from '../components/TabRoot.vue'
 import SignUpPage from '../components/auth/SignUp.vue'
 import SignInPage from '../components/auth/SignIn.vue'
@@ -85,16 +86,24 @@ const routes = [
     component: CreateNewPubTables,
     name: 'create-new-pub-tables',
     beforeEnter (to, from, next) {
+      console.log('navigating to create-new-pub-tables page.')
       var token = store.state.idToken
       var pub = store.state.pub
       if (!token) {
         next('/signin')
       } else if (!pub.pubName) {
+        console.log('pub name not found - re-directing to home page')
         next('/')
       } else {
+        console.log('pub name found - continuing to pub tables page')
         next()
       }
-    }
+    },
+    children: [{
+      path: ':id/edit-table-details',
+      component: EditTableDetails,
+      name: 'edit-table-details'
+    }]
   },
   {
     path: '/signup',

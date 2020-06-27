@@ -1,12 +1,13 @@
 <template>
-    <div class="ion-page">
+  <div class="ion-page">
     <the-header />
     <ion-content class="ion-padding">
       <h1>Edit Table Details for {{ pub.pubName }}</h1>
-
+      <h2>{{ pub }} </h2>
       <ion-list>
         <div v-for="pt in pubTables" :key="pt['.key']">
-          <table-card :i="i" :table="pt" :floors="pub.floors" />
+          {{ pt }}
+          <table-card :i="i" :pubTable="pt" :floors="pub.floors" />
         </div>
       </ion-list>
 
@@ -16,6 +17,7 @@
         </div>
       </form>
     </ion-content>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -25,6 +27,7 @@ import TableCard from '../components/TableCard.vue'
 import * as allIcons from 'ionicons/icons'
 
 export default {
+  name: 'create-new-pub-tables',
   components: {
     TheHeader,
     TableCard
@@ -45,6 +48,12 @@ export default {
       set (pub) {
         this.$store.dispatch('updatePub', pub)
       }
+    }
+  },
+  created () {
+    if (!this.pubTables) {
+      console.log('fecthing pub tables for pub with key of: ', this.pub.key)
+      this.$store.dispatch('fetchPubTables', this.pub.key)
     }
   }
 }

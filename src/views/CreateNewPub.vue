@@ -3,6 +3,7 @@
     <the-header />
     <ion-content class="ion-padding">
       <h1>Create New Pub</h1>
+      <h2>{{ pub }}</h2>
 
       <form @submit.prevent="submitted">
       <ion-item>
@@ -15,13 +16,13 @@
         <ion-input-vue @blur="$v.pub.addressLine1.touch()" placeholder="Address Line 1" v-model="pub.addressLine1"></ion-input-vue>
         <ion-input-vue placeholder="Address Line 2 (Optional)" v-model="pub.addressLine2"></ion-input-vue>
         <ion-input-vue @blur="$v.pub.townCity.touch()" placeholder="Town/City" v-model="pub.townCity"></ion-input-vue>
-        <ion-select value="" interface="alert" placeholder="County" name="county" v-model="pub.county">
+        <ion-select-vue value="" interface="alert" placeholder="County" name="county" v-model="pub.county">
             <ion-select-option value="mayo">Mayo</ion-select-option>
             <ion-select-option value="sligo">Sligo</ion-select-option>
             <ion-select-option value="galway">Galway</ion-select-option>
             <ion-select-option value="roscommon">Roscommon</ion-select-option>
             <ion-select-option value="leitrim">Leitrim</ion-select-option>
-        </ion-select>
+        </ion-select-vue>
         <ion-input-vue placeholder="Eircode (Optional)" v-model="pub.eircode"></ion-input-vue>
       </ion-item>
 

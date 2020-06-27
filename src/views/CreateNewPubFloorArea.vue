@@ -1,8 +1,8 @@
 <template>
-<div class="ion-page">
+  <div class="ion-page">
     <the-header />
     <ion-content class="ion-padding">
-      <h1>Create New Pub</h1>
+      <h1>Create New Pub Floor Area</h1>
 
       <form @submit.prevent="submitted">
         <ion-item>
