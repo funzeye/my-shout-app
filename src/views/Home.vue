@@ -2,6 +2,9 @@
   <div class="ion-page">
     <the-header />
     <ion-content class="ion-padding">
+      <h2>user id: {{ userId }}</h2>
+      <h2>pub.floors: {{ pub.floors }}</h2>
+      <h2>pubTables: {{ pubTables }}</h2>
       <ion-list>
         <div v-for="pt in pubTables" :key="pt['.key']">
           {{ pt }}
@@ -31,18 +34,14 @@ export default {
     pub () {
       return this.$store.getters.pub
     },
-    user () {
-      return this.$store.getters.user
+    userId () {
+      return this.$store.getters.userId
     }
   },
   created () {
-    if (!this.pub) {
-      console.log('fecthing pub linked to user id of: ', this.user.userId)
-      this.$store.dispatch('fetchPub', this.user.userId)
-    }
-    if (!this.pubTables) {
-      console.log('fecthing pub tables for pub with key of: ', this.pub.key)
-      this.$store.dispatch('fetchPubTables', this.pub.key)
+    if (!this.pub || this.pub.pubName === '') {
+      console.log('fecthing pub linked to user id of: ', this.userId)
+      this.$store.dispatch('fetchPub', this.userId)
     }
   }
 }

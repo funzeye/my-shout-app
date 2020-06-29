@@ -10,7 +10,7 @@ export default new Vuex.Store({
   state: {
     idToken: null,
     userId: null,
-    user: null,
+    // user: null,
     pubs: [],
     pubTables: [],
     pubTable: {
@@ -21,6 +21,7 @@ export default new Vuex.Store({
     },
     pub: {
       key: '',
+      userId: '',
       pubName: '',
       addressLine1: '',
       addressLine2: '',
@@ -44,11 +45,14 @@ export default new Vuex.Store({
       state.idToken = null
       state.userId = null
     },
-    storeUser (state, user) {
-      state.user = user
-    },
+    // storeUser (state, user) {
+    //  state.user = user
+    // },
     storePubTable (state, user) {
       state.pubTable = user
+    },
+    storePubTables (state, pubTables) {
+      state.pubTables = pubTables
     },
     storePubs (state, pubs) {
       state.pubs = pubs
@@ -81,6 +85,8 @@ export default new Vuex.Store({
     },
     resetPub (state) {
       state.pub = {
+        key: '',
+        userId: '',
         pubName: '',
         addressLine1: '',
         addressLine2: '',
@@ -112,7 +118,7 @@ export default new Vuex.Store({
           localStorage.setItem('token', res.data.idToken)
           localStorage.setItem('userId', res.data.localId)
           localStorage.setItem('expirationDate', expirationDate.getTime())
-          dispatch('storeUser', authData)
+          // dispatch('storeUser', authData)
           dispatch('setLogoutTimer', res.data.expiresIn)
           router.replace('/')
         })
@@ -161,7 +167,7 @@ export default new Vuex.Store({
         return
       }
       console.log('fecthing pub data from the DB and updating List')
-      globalAxios.get('pub.json' + '?auth=' + state.idToken)
+      globalAxios.get('pubs.json' + '?auth=' + state.idToken)
         .then(response => {
           console.log(response)
           const data = response.data
@@ -181,7 +187,7 @@ export default new Vuex.Store({
       }
       console.log('fecthing pub tables data from the DB and updating List')
       console.log('for pub with key:', pubKey)
-      globalAxios.get('pubtables.json' + '?auth=' + state.idToken + '&&orderby="pubId"&&equalTo=' + pubKey)
+      globalAxios.get('pubTables.json' + '?auth=' + state.idToken + '&orderBy="pubId"&equalTo="' + pubKey + '"')
         .then(response => {
           console.log(response)
           const data = response.data
@@ -194,22 +200,26 @@ export default new Vuex.Store({
           console.log(error)
         })
     },
-    fetchPub ({ commit, state }, userId) {
+    fetchPub ({ commit, state, dispatch }, userId) {
       if (!state.idToken) {
         console.log('No Id Token - Exiting')
         return
       }
       console.log('fecthing pub data from the DB')
       console.log('for pub with user id:', userId)
-      globalAxios.get('pubtables.json' + '?auth=' + state.idToken + '&&orderby="userId"&&equalTo=' + userId)
+      globalAxios.get('pubs.json' + '?auth=' + state.idToken + '&orderBy="userId"&equalTo="' + userId + '"')
         .then(response => {
-          console.log(response)
+          console.log('fetchPub response: ', response)
           const data = response.data
           const resultArray = []
           for (const key in data) {
+            console.log('fetchPub key: ', key)
+            data[key].key = key
+            console.log('fetchPub data[key]: ', data[key])
             resultArray.push(data[key])
           }
           commit('updatePub', resultArray[0]) // TODO
+          dispatch('fetchPubTables', state.pub.key)
         }, error => {
           console.log(error)
         })
@@ -233,15 +243,15 @@ export default new Vuex.Store({
           console.log(error)
         })
     },
-    storeUser ({ commit, state }, userData) {
-      if (!state.idToken) {
-        console.log('No Id Token - Exiting')
-        return
-      }
-      globalAxios.post('users.json' + '?auth=' + state.idToken, userData)
-        .then(res => console.log(res))
-        .catch(error => console.log(error))
-    },
+    // storeUser ({ commit, state }, userData) {
+    //  if (!state.idToken) {
+    //    console.log('No Id Token - Exiting')
+    //    return
+    //  }
+    //  globalAxios.post('users.json' + '?auth=' + state.idToken, userData)
+    //    .then(res => console.log(res))
+    //    .catch(error => console.log(error))
+    // },
     storePub ({ commit, state, dispatch }, pubData) {
       if (!state.idToken) {
         console.log('No Id Token - Exiting')
@@ -249,6 +259,7 @@ export default new Vuex.Store({
       }
       console.log('adding new pub to DB: ', pubData)
       const pub = {
+        userId: localStorage.getItem('userId'),
         pubName: pubData.pubName,
         addressLine1: pubData.addressLine1,
         addressLine2: pubData.addressLine2,
@@ -258,7 +269,7 @@ export default new Vuex.Store({
         numOfTables: pubData.numOfTables,
         floors: { lower: pubData.floors.lower, upper: pubData.floors.upper }
       }
-      globalAxios.post('pub.json' + '?auth=' + state.idToken, pub)
+      globalAxios.post('pubs.json' + '?auth=' + state.idToken, pub)
         .then(res => {
           console.log('adding new pub response:', res)
           pubData.key = res.data.name
@@ -318,7 +329,7 @@ export default new Vuex.Store({
           seats: 4
         }
         console.log('adding new table:', table)
-        globalAxios.post('pubtables.json' + '?auth=' + state.idToken, table)
+        globalAxios.post('pubTables.json' + '?auth=' + state.idToken, table)
           .then(res => {
             console.log(res)
             table.key = res.data.name
@@ -334,7 +345,7 @@ export default new Vuex.Store({
         return
       }
       console.log('fecthing pub table data from the DB')
-      globalAxios.get('pubtables.json' + '?auth=' + state.idToken + '&orderBy="$key"&equalTo="' + pubTableKey + '"')
+      globalAxios.get('pubTables.json' + '?auth=' + state.idToken + '&orderBy="$key"&equalTo="' + pubTableKey + '"')
         .then(response => {
           console.log('Successful response upon getting single pub table data from the DB')
           console.log(response)
@@ -353,27 +364,27 @@ export default new Vuex.Store({
           console.log(error)
         })
     },
-    fetchUser ({ commit, state }) {
-      if (!state.idToken) {
-        console.log('No Id Token - Exiting')
-        return
-      }
-      console.log('fecthing user data from the DB and updating List')
-      globalAxios.get('users.json' + '?auth=' + state.idToken)
-        .then(response => {
-          console.log(response)
-          const data = response.data
-          const users = []
-          for (const key in data) {
-            const user = data[key]
-            user.id = key
-            users.push(user)
-          }
-          commit('storeUser', users[0]) // not a good real world example - should be getting the exact user - not the first one in list!
-        }, error => {
-          console.log(error)
-        })
-    },
+    // fetchUser ({ commit, state }) {
+    //  if (!state.idToken) {
+    //     console.log('No Id Token - Exiting')
+    //     return
+    //   }
+    //   console.log('fecthing user data from the DB and updating List')
+    //   globalAxios.get('users.json' + '?auth=' + state.idToken)
+    //     .then(response => {
+    //       console.log(response)
+    //       const data = response.data
+    //       const users = []
+    //       for (const key in data) {
+    //         const user = data[key]
+    //         user.id = key
+    //         users.push(user)
+    //       }
+    //       // commit('storeUser', users[0]) // TODO not a good real world example - should be getting the exact user - not the first one in list!
+    //     }, error => {
+    //       console.log(error)
+    //     })
+    // },
     updatePub ({ commit }, payload) {
       commit('updatePub', payload)
     },
@@ -392,9 +403,13 @@ export default new Vuex.Store({
     }
   },
   getters: {
-    user (state) {
-      console.log('calling user getter')
-      return state.user
+    // user (state) {
+    //  console.log('calling user getter')
+    //  return state.user
+    // },
+    userId (state) {
+      console.log('calling user id getter')
+      return state.userId
     },
     pubs (state) {
       console.log('calling pubs getter')

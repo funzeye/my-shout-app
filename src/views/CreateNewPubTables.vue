@@ -51,7 +51,7 @@ export default {
     }
   },
   created () {
-    if (!this.pubTables) {
+    if (!this.pubTables.length === 0) {
       console.log('fecthing pub tables for pub with key of: ', this.pub.key)
       this.$store.dispatch('fetchPubTables', this.pub.key)
     }
