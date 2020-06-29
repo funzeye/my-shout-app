@@ -49,7 +49,7 @@ export default {
   methods: {
     submitted () {
       this.$store.dispatch('updatePubTable', this.pubTable)
-      this.$router.replace('create-new-pub-tables')
+      this.$router.replace({ name: 'create-new-pub-tables' })
     }
   },
   computed: {

@@ -193,6 +193,7 @@ export default new Vuex.Store({
           const data = response.data
           const resultArray = []
           for (const key in data) {
+            data[key].key = key
             resultArray.push(data[key])
           }
           commit('storePubTables', resultArray)
@@ -307,7 +308,7 @@ export default new Vuex.Store({
         pubFloorArea: pubTable.pubFloorArea
       }
       console.log('updating existing pub table in DB: ', table)
-      globalAxios.patch('pubtables/' + pubTable.key + '.json' + '?auth=' + state.idToken, table)
+      globalAxios.patch('pubTables/' + pubTable.key + '.json' + '?auth=' + state.idToken, table)
         .then(res => {
           console.log(res)
           console.log('pub table successfully saved to DB: ', res.data)

@@ -90,6 +90,7 @@ const routes = [
       var token = store.state.idToken
       var pub = store.state.pub
       if (!token) {
+        console.log('token not found - re-directing to sign in')
         next('/signin')
       } else if (!pub.pubName) {
         console.log('pub name not found - re-directing to home page')
