@@ -3,18 +3,17 @@
       <ion-card>
         <ion-item>
           <ion-icon :src="i.beer" slot="start"></ion-icon>
-          <ion-label>Table #{{ pubTable.tableNum }}</ion-label>
+          <ion-label>Table #: {{ pubTable.tableNum }}</ion-label>
           <ion-button size="default" fill="outline" slot="end" @click.prevent="editTableDetails">Edit</ion-button>
         </ion-item>
         <ion-item>
           <ion-icon :src="i.layers" slot="start"></ion-icon>
-          <ion-label v-if="floors.lower === floors.upper && floors.lower === 0">Ground Floor</ion-label>
-          <ion-label v-else-if="floors.lower === floors.upper">Floor # {{ floors.lower }}</ion-label>
-          <ion-label v-else-if="floors.lower !== floors.upper">Floor # ?</ion-label>
+          <ion-label v-if="pubTable.floor === 0">Ground Floor</ion-label>
+          <ion-label v-else>Floor #: {{ pubFloors.lower }}</ion-label>
         </ion-item>
         <ion-item>
           <ion-icon :src="i.location" slot="start"></ion-icon>
-          <ion-label>Area: ?</ion-label>
+          <ion-label>Area: {{ pubTable.pubFloorArea }} </ion-label>
         </ion-item>
         <ion-item>
           <ion-icon :src="i.people" slot="start"></ion-icon>
@@ -123,7 +122,7 @@
 
 <script>
 export default {
-  props: ['i', 'pubTable', 'floors'],
+  props: ['i', 'pubTable', 'pubFloors'],
   methods: {
     editTableDetails () {
       this.$store.dispatch('setSelectedPubTable', this.pubTable)

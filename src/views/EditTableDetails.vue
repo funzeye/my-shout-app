@@ -4,24 +4,36 @@
     <ion-content class="ion-padding">
       <h1>Edit Table Details</h1>
       <h2>Table #{{ $route.params.id }}</h2>
-      <h3> {{pubTable}} </h3>
-
+      <h3> pub table: {{ pubTable }} </h3>
+      <h4> pubFloors: {{ pubFloors }} </h4>
+      <h4> pubTable.floor: {{ pubTable.floor }} </h4>
       <form @submit.prevent="submitted">
         <ion-item>
             <ion-label position="stacked">Pub Floor Area Name <ion-text color="danger">*</ion-text></ion-label>
-            <!--<ion-select value="" interface="alert" placeholder="e.g. Lounge" name="pubFloorArea" v-model="pubTable.area">-->
             <ion-select-vue value="" interface="alert" placeholder="e.g. Lounge" name="pubFloorArea" v-model="pubTable.pubFloorArea">
                 <ion-select-option v-for="pfa in pubFloorAreas" :key="pfa['.key']" :value="pfa.name">{{ pfa.name }}</ion-select-option>
             </ion-select-vue>
         </ion-item>
 
         <ion-item>
-          <ion-label position="stacked">Seats</ion-label>
-          <ion-range ref="seats" pin snaps debounce="200" min="1" max="12" v-model="pubTable.seats"
+          <ion-label position="stacked">Seats {{ pubTable.seats }}</ion-label>
+          <ion-range name="seats" ref="seats" pin snaps debounce="200" min="1" max="12" v-model="pubTable.seats"
             @ionChange="pubTable.seats = $event.target.value">
+            <ion-icon slot="start" :src="i.people"></ion-icon>
+            <ion-icon slot="end" :src="i.people"></ion-icon>
+          </ion-range>
+        </ion-item>
+
+        <ion-item v-if="pubFloors.lower !== pubFloors.upper">
+          <ion-label position="stacked">Located on Floor # {{ pubTable.floor }}</ion-label>
+          <ion-range name="floor" ref="floor" pin snaps debounce="200" :min="pubFloors.lower" :max="pubFloors.upper" v-model="pubTable.floor"
+            @ionChange="updateTableFloors">
             <ion-icon slot="start" :src="i.layers"></ion-icon>
             <ion-icon slot="end" :src="i.layers"></ion-icon>
           </ion-range>
+        </ion-item>
+        <ion-item v-else>
+          <ion-label ref="floor" position="stacked">Located on Floor # {{ pubFloors.lower }}</ion-label>
         </ion-item>
 
         <div class="ion-padding">
@@ -50,17 +62,26 @@ export default {
     submitted () {
       this.$store.dispatch('updatePubTable', this.pubTable)
       this.$router.replace({ name: 'create-new-pub-tables' })
+    },
+    updateTableFloors (e) {
+      console.log('updating table floors:', e)
+      this.pubTable.floor = e.target.value
     }
   },
   computed: {
+    pubFloors () {
+      return this.$store.getters.pub.floors
+    },
     pubFloorAreas () {
       return this.$store.getters.pubFloorAreas
     },
     pubTable: {
       get () {
+        console.log('getting pubTable from getter')
         return this.$store.getters.pubTable
       },
       set (pubTable) {
+        console.log('updating pubTable in setter:', pubTable)
         this.$store.dispatch('setSelectedPubTable', pubTable)
       }
     }
@@ -72,6 +93,7 @@ export default {
   },
   mounted () {
     this.$refs.seats.value = this.pubTable.seats
+    this.$refs.floor.value = this.pubTable.floor
   }
 }
 </script>

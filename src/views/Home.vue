@@ -2,13 +2,13 @@
   <div class="ion-page">
     <the-header />
     <ion-content class="ion-padding">
-      <h2>user id: {{ userId }}</h2>
+      <!--<h2>user id: {{ userId }}</h2>
       <h2>pub.floors: {{ pub.floors }}</h2>
-      <h2>pubTables: {{ pubTables }}</h2>
+      <h2>pubTables: {{ pubTables }}</h2>-->
       <ion-list>
         <div v-for="pt in pubTables" :key="pt['.key']">
-          {{ pt }}
-          <table-card :i="i" :pubTable="pt" :floors="pub.floors" />
+          <!--{{ pt }}-->
+          <table-card :i="i" :pubTable="pt" :pubFloors="pub.floors" />
         </div>
       </ion-list>
     </ion-content>

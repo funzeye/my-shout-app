@@ -17,7 +17,8 @@ export default new Vuex.Store({
       key: '',
       seats: 4,
       tableNum: null,
-      pubFloorArea: ''
+      pubFloorArea: '',
+      floor: null
     },
     pub: {
       key: '',
@@ -54,6 +55,15 @@ export default new Vuex.Store({
     storePubTables (state, pubTables) {
       state.pubTables = pubTables
     },
+    updatePubTableInPubTables (state, { pubTable, key }) {
+      console.log('updating pub table in pubTables array with key:', key)
+      var foundIndex = state.pubTables.findIndex(x => x.key === key)
+      console.log('foundIndex: ', foundIndex)
+      console.log('updated pubTable details: ', pubTable)
+      // state.pubTables[foundIndex] = pubTable
+      Vue.set(state.pubTables, foundIndex, pubTable)
+      console.log('state.pubTables: ', state.pubTables)
+    },
     storePubs (state, pubs) {
       state.pubs = pubs
     },
@@ -73,6 +83,7 @@ export default new Vuex.Store({
       state.pub = pub
     },
     setSelectedPubTable (state, pubTable) {
+      console.log('calling setSelectedPubTable mutation in index.js')
       state.pubTable = pubTable
     },
     updatePubFloorArea (state, pubFloorArea) {
@@ -305,13 +316,19 @@ export default new Vuex.Store({
         pubId: pubTable.pubId,
         tableNum: pubTable.tableNum,
         seats: pubTable.seats,
-        pubFloorArea: pubTable.pubFloorArea
+        pubFloorArea: pubTable.pubFloorArea,
+        floor: pubTable.floor
       }
       console.log('updating existing pub table in DB: ', table)
       globalAxios.patch('pubTables/' + pubTable.key + '.json' + '?auth=' + state.idToken, table)
         .then(res => {
           console.log(res)
           console.log('pub table successfully saved to DB: ', res.data)
+          console.log('about to update pub table in pub tables from action with key:', pubTable.key)
+          commit('updatePubTableInPubTables', {
+            pubTable: pubTable,
+            key: pubTable.key
+          })
         })
         .catch(error => console.log(error))
     },
@@ -323,11 +340,19 @@ export default new Vuex.Store({
       console.log('adding new tables to DB')
       console.log('number of tables to add:', state.pub.numOfTables)
 
+      let defaultFloor = 0
+      if (state.pub.floors.lower > 0) {
+        defaultFloor = state.pub.floors.lower
+      } else if (state.pub.floors.upper < 0) {
+        defaultFloor = state.pub.floors.upper
+      }
+
       for (var index = 1; index <= state.pub.numOfTables; index++) {
         const table = {
           pubId: pubId,
           tableNum: index,
-          seats: 4
+          seats: 4,
+          floor: defaultFloor
         }
         console.log('adding new table:', table)
         globalAxios.post('pubTables.json' + '?auth=' + state.idToken, table)
@@ -390,6 +415,7 @@ export default new Vuex.Store({
       commit('updatePub', payload)
     },
     setSelectedPubTable ({ commit }, payload) {
+      console.log('calling setSelectedPubTable action in index.js')
       commit('setSelectedPubTable', payload)
     },
     updatePubFloorArea ({ commit }, payload) {
@@ -423,7 +449,7 @@ export default new Vuex.Store({
       return state.pubTables
     },
     pubTable (state) {
-      console.log('calling pubTable getter')
+      console.log('calling pubTable getter in index.js')
       console.log(state)
       return state.pubTable
     },

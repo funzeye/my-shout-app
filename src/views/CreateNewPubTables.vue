@@ -3,17 +3,17 @@
     <the-header />
     <ion-content class="ion-padding">
       <h1>Edit Table Details for {{ pub.pubName }}</h1>
-      <h2>{{ pub }} </h2>
+      <!-- <h2>{{ pub }} </h2> -->
       <ion-list>
         <div v-for="pt in pubTables" :key="pt['.key']">
-          {{ pt }}
-          <table-card :i="i" :pubTable="pt" :floors="pub.floors" />
+          <!-- {{ pt }} -->
+          <table-card :i="i" :pubTable="pt" :pubFloors="pub.floors" />
         </div>
       </ion-list>
 
       <form @submit.prevent="submitted">
         <div class="ion-padding">
-          <ion-button expand="block" class="ion-no-margin" type="submit">Continue</ion-button>
+          <ion-button expand="block" class="ion-no-margin" type="submit">Complete</ion-button>
         </div>
       </form>
     </ion-content>
@@ -37,6 +37,11 @@ export default {
       i: allIcons
     }
   },
+  methods: {
+    submitted () {
+      this.$router.replace({ name: 'home' })
+    }
+  },
   computed: {
     pubTables () {
       return this.$store.getters.pubTables
@@ -48,6 +53,11 @@ export default {
       set (pub) {
         this.$store.dispatch('updatePub', pub)
       }
+    }
+  },
+  watch: {
+    pubTables (newPubTables, oldPubTables) {
+      console.log('pubTables is updated')
     }
   },
   created () {
