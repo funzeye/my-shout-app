@@ -23,7 +23,7 @@
 
 <script>
 import TheHeader from '../components/TheHeader.vue'
-import TableCard from '../components/TableCard.vue'
+import TableCard from '../components/TableCardEdit.vue'
 import * as allIcons from 'ionicons/icons'
 
 export default {

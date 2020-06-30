@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import TableCard from '../components/TableCard.vue'
+import TableCard from '../components/TableCardReservation.vue'
 import TheHeader from '../components/TheHeader.vue'
 
 export default {
