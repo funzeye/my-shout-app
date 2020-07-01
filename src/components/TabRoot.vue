@@ -1,7 +1,7 @@
 <template>
   <ion-tabs>
         <ion-tab tab="home" id="home">
-          <Home :i="i" />
+          <Home :i="i"/>
         </ion-tab>
 
         <ion-tab tab="about">

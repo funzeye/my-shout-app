@@ -4,6 +4,7 @@ import About from '../views/About.vue'
 import CreateNewPub from '../views/CreateNewPub.vue'
 import CreateNewPubTables from '../views/CreateNewPubTables.vue'
 import CreateNewPubFloorArea from '../views/CreateNewPubFloorArea.vue'
+import ReserveTable from '../views/ReserveTable.vue'
 import EditTableDetails from '../views/EditTableDetails.vue'
 import TabRoot from '../components/TabRoot.vue'
 import SignUpPage from '../components/auth/SignUp.vue'
@@ -72,6 +73,19 @@ const routes = [
     path: '/create-new-pub',
     component: CreateNewPub,
     name: 'create-new-pub',
+    beforeEnter (to, from, next) {
+      var token = store.state.idToken
+      if (token) {
+        next()
+      } else {
+        next('/signin')
+      }
+    }
+  },
+  {
+    path: '/reserve-table',
+    component: ReserveTable,
+    name: 'reserve-table',
     beforeEnter (to, from, next) {
       var token = store.state.idToken
       if (token) {

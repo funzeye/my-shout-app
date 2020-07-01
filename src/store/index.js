@@ -35,7 +35,14 @@ export default new Vuex.Store({
     pubFloorArea: {
       name: ''
     },
-    pubFloorAreas: []
+    pubFloorAreas: [],
+    reservation: {
+      key: '',
+      tableId: '',
+      reservedBy: '',
+      reservedAtDate: '',
+      isActive: false
+    }
   },
   mutations: {
     authUser (state, userData) {
@@ -66,6 +73,9 @@ export default new Vuex.Store({
     },
     storePubs (state, pubs) {
       state.pubs = pubs
+    },
+    setCurrentReservation (state, reservation) {
+      state.reservation = reservation
     },
     storePubFloorAreas (state, pubFloorAreas) {
       state.pubFloorAreas = pubFloorAreas
@@ -236,13 +246,36 @@ export default new Vuex.Store({
           console.log(error)
         })
     },
+    fetchReservation ({ commit, state, dispatch }, userId) {
+      if (!state.idToken) {
+        console.log('No Id Token - Exiting')
+        return
+      }
+      console.log('fecthing reservation from the DB')
+      console.log('for user id:', userId)
+      globalAxios.get('reservations.json' + '?auth=' + state.idToken + '&orderBy="reservedBy"&equalTo="' + userId + '"') // TODO limit to todays date
+        .then(response => {
+          console.log('fetchPub response: ', response)
+          const data = response.data
+          const resultArray = []
+          for (const key in data) {
+            console.log('fetchReservation key: ', key)
+            data[key].key = key
+            console.log('fetchReservation data[key]: ', data[key])
+            resultArray.push(data[key])
+          }
+          commit('setCurrentReservation', resultArray[0]) // TODO
+        }, error => {
+          console.log(error)
+        })
+    },
     fetchPubFloorAreas ({ commit, state }) {
       if (!state.idToken) {
         console.log('No Id Token - Exiting')
         return
       }
       console.log('fecthing pub data from the DB and updating List')
-      globalAxios.get('pubFloorArea.json' + '?auth=' + state.idToken)
+      globalAxios.get('pubFloorAreas.json' + '?auth=' + state.idToken)
         .then(response => {
           console.log(response)
           const data = response.data
@@ -298,7 +331,7 @@ export default new Vuex.Store({
         return
       }
       console.log('adding new pub floor area to DB: ', pubFloorAreaData)
-      globalAxios.post('pubFloorArea.json' + '?auth=' + state.idToken, pubFloorAreaData)
+      globalAxios.post('pubFloorAreas.json' + '?auth=' + state.idToken, pubFloorAreaData)
         .then(res => {
           console.log(res)
           commit('addNewPubFloorArea', pubFloorAreaData)
@@ -421,6 +454,36 @@ export default new Vuex.Store({
     updatePubFloorArea ({ commit }, payload) {
       commit('updatePubFloorArea', payload)
     },
+    cancelReservation ({ commit, state }) {
+      if (!state.idToken) {
+        console.log('No Id Token - Exiting')
+        return
+      }
+      console.log('cancelling reservation in DB: ', state.reservation.key)
+      // TODO
+    },
+    createReservation ({ commit, state }) {
+      if (!state.idToken) {
+        console.log('No Id Token - Exiting')
+        return
+      }
+      const reservation = {
+        tableId: state.pubTable.key,
+        reservedBy: state.userId,
+        reservedAtDate: new Date(),
+        isActive: true
+      }
+
+      console.log('adding new reservation to DB: ', reservation)
+      globalAxios.post('reservations.json' + '?auth=' + state.idToken, reservation)
+        .then(res => {
+          console.log(res)
+          reservation.key = res.data.name
+          commit('setCurrentReservation', reservation)
+          console.log('reservation successfully saved to DB: ', res.data)
+        })
+        .catch(error => console.log(error))
+    },
     logout ({ commit }) {
       router.replace('/signin')
       commit('clearAuthData')
@@ -470,6 +533,10 @@ export default new Vuex.Store({
     },
     isAuthenticated (state) {
       return state.idToken !== null
+    },
+    currentReservation (state) {
+      console.log('calling current reservation getter')
+      return state.reservation
     }
   },
   modules: {

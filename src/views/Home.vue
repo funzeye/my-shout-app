@@ -8,7 +8,7 @@
       <ion-list>
         <div v-for="pt in pubTables" :key="pt['.key']">
           <!--{{ pt }}-->
-          <table-card :i="i" :pubTable="pt" :pubFloors="pub.floors" />
+          <table-card :i="i" :pubTable="pt" :pubFloors="pub.floors" :reservation="reservation" />
         </div>
       </ion-list>
     </ion-content>
@@ -36,12 +36,19 @@ export default {
     },
     userId () {
       return this.$store.getters.userId
+    },
+    reservation () {
+      return this.$store.getters.currentReservation
     }
   },
   created () {
     if (!this.pub || this.pub.pubName === '') {
       console.log('fecthing pub linked to user id of: ', this.userId)
       this.$store.dispatch('fetchPub', this.userId)
+    }
+    if (!this.reservation || this.reservation.key === '') { // if no reservation double check in DB to see if they have any
+      console.log('fecthing reservations linked to user id of: ', this.userId)
+      this.$store.dispatch('fetchReservation', this.userId)
     }
   }
 }
