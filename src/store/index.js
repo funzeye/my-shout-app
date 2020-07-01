@@ -104,6 +104,16 @@ export default new Vuex.Store({
         name: ''
       }
     },
+    resetCurrentReservation (state) {
+      state.reservation = {
+        key: '',
+        tableId: '',
+        reservedBy: '',
+        reservedAtDate: '',
+        isActive: false
+      }
+      console.log('current reservation state reset to nothing')
+    },
     resetPub (state) {
       state.pub = {
         key: '',
@@ -460,7 +470,19 @@ export default new Vuex.Store({
         return
       }
       console.log('cancelling reservation in DB: ', state.reservation.key)
-      // TODO
+      const reservationKey = state.reservation.key
+      const reservation = state.reservation
+      reservation.isActive = false
+      reservation.key = null
+      // update record but don't delete it
+      globalAxios.patch('reservations/' + reservationKey + '.json' + '?auth=' + state.idToken, reservation)
+        .then(res => {
+          console.log(res)
+          console.log('reservation successfully cancelled in DB: ', res.data)
+          console.log('about to reset reservation...')
+          commit('resetCurrentReservation')
+        })
+        .catch(error => console.log(error))
     },
     createReservation ({ commit, state }) {
       if (!state.idToken) {
