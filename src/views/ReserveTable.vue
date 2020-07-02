@@ -26,7 +26,7 @@
             <ion-button expand="block" class="ion-no-margin" type="submit">Confirm Reservation</ion-button>
         </div>
         <div class="ion-padding">
-            <ion-button expand="block" class="ion-no-margin" @click.prevent="cancel" type="submit">Cancel</ion-button>
+            <ion-button expand="block" class="ion-no-margin" @click.prevent="cancel">Cancel</ion-button>
         </div>
       </form>
     </ion-content>
@@ -58,11 +58,11 @@ export default {
   },
   methods: {
     cancel () {
+      console.log('reservetable.vue: cancel button clicked')
       this.$router.push({ name: 'home' })
     },
     reserve () {
-      console.log('submitting a new reservation')
-
+      console.log('reservetable.vue: confirm reservation button clicked. submitting a new reservation')
       this.$store.dispatch('createReservation')
       this.$router.replace('home')
     }

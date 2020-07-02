@@ -12,7 +12,9 @@ export default new Vuex.Store({
     userId: null,
     user: {
       email: '',
-      userId: null
+      userId: null,
+      firstName: '',
+      surname: ''
     },
     pubs: [],
     pubTables: [],
@@ -44,7 +46,8 @@ export default new Vuex.Store({
       tableId: '',
       reservedBy: '',
       reservedAtDate: '',
-      isActive: false
+      isActive: false,
+      userDetails: null
     },
     reservations: []
   },
@@ -128,7 +131,8 @@ export default new Vuex.Store({
         tableId: '',
         reservedBy: '',
         reservedAtDate: '',
-        isActive: false
+        isActive: false,
+        userDetails: null
       }
       console.log('current reservation state reset to nothing')
     },
@@ -169,6 +173,8 @@ export default new Vuex.Store({
           localStorage.setItem('expirationDate', expirationDate.getTime())
           dispatch('storeUserDetails', {
             email: authData.email,
+            firstName: authData.firstName,
+            surname: authData.surname,
             userId: res.data.localId
           })
           dispatch('setLogoutTimer', res.data.expiresIn)
@@ -278,16 +284,31 @@ export default new Vuex.Store({
               todaysDate.getMonth() === reservedAtDateStringAsDate.getMonth() &&
               todaysDate.getFullYear() === reservedAtDateStringAsDate.getFullYear()
             if (data[key].isActive && reservationIsToday) {
-              data[key].key = key
-              console.log('pushing reservation to resultArray:', data[key])
-              resultArray.push(data[key])
+              // retrieve user details and append to reservation object as an inner object
+              console.log('getting userdetails for user with id of:', data[key].reservedBy)
+              globalAxios.get('usersDetails.json' + '?auth=' + state.idToken +
+                '&orderBy="userId"&equalTo="' + data[key].reservedBy + '"')
+                .then(response => {
+                  console.log(response)
+                  const userData = response.data
+                  const usesDetailsResultArray = []
+                  for (const dataKey in userData) {
+                    console.log('fetch user details key inside: ', dataKey)
+                    console.log('user details userData[key]: ', userData[dataKey])
+                    usesDetailsResultArray.push(userData[dataKey])
+                  }
+                  data[key].key = key
+                  data[key].userDetails = usesDetailsResultArray[0]
+                  console.log('pushing reservation to resultArray:', data[key])
+                  resultArray.push(data[key])
+                })
             } else if (!reservationIsToday) {
               console.log('reservation not added as it is not todays date')
             } else if (!data[key].isActive) {
               console.log('reservation not added as it is not active')
             }
           }
-          commit('setReservations', resultArray)
+          commit('setReservations', resultArray) // TODO might speed things up if I add to collection inside loop...
         }, error => {
           console.log(error)
         })
@@ -310,14 +331,16 @@ export default new Vuex.Store({
             console.log('fetchPub data[key]: ', data[key])
             resultArray.push(data[key])
           }
-          commit('updatePub', resultArray[0]) // TODO
-          dispatch('fetchPubTables', state.pub.key)
-          dispatch('fetchReservationsForPub', state.pub.key)
+          if (resultArray.length > 0) {
+            commit('updatePub', resultArray[0]) // TODO
+            dispatch('fetchPubTables', state.pub.key)
+            dispatch('fetchReservationsForPub', state.pub.key)
+          }
         }, error => {
           console.log(error)
         })
     },
-    fetchReservation ({ commit, state, dispatch }, userId) {
+    fetchReservationForPunter ({ commit, state, dispatch }, userId) {
       if (!state.idToken) {
         console.log('No Id Token - Exiting')
         return
@@ -369,7 +392,9 @@ export default new Vuex.Store({
           console.log(res)
           commit('storeUserDetails', {
             email: userData.email,
-            userId: userData.userId
+            userId: userData.userId,
+            firstName: userData.firstName,
+            surname: userData.surname
           })
         })
         .catch(error => console.log(error))
@@ -545,7 +570,8 @@ export default new Vuex.Store({
         key: null,
         pubId: resFromArray.pubId,
         reservedAtDate: resFromArray.reservedAtDate,
-        reservedBy: resFromArray.reservedBy
+        reservedBy: resFromArray.reservedBy,
+        userDetails: null
       }
       const resKey = resFromArray.key
 
@@ -577,10 +603,24 @@ export default new Vuex.Store({
       globalAxios.post('reservations.json' + '?auth=' + state.idToken, reservation)
         .then(res => {
           console.log('new reservatioon data:', res)
-          reservation.key = res.data.name
-          // commit('setCurrentReservation', reservation)
-          commit('addReservationToCollection', reservation)
-          console.log('reservation successfully saved to DB: ', res.data)
+          globalAxios.get('usersDetails.json' + '?auth=' + state.idToken +
+          '&orderBy="userId"&equalTo="' + reservation.reservedBy + '"')
+            .then(response => {
+              console.log(response)
+              const userData = response.data
+              const usesDetailsResultArray = []
+              for (const dataKey in userData) {
+                console.log('fetch user details key inside: ', dataKey)
+                console.log('user details userData[key]: ', userData[dataKey])
+                usesDetailsResultArray.push(userData[dataKey])
+              }
+              reservation.key = res.data.name
+              reservation.userDetails = usesDetailsResultArray[0]
+
+              // commit('setCurrentReservation', reservation)
+              commit('addReservationToCollection', reservation)
+              console.log('reservation successfully saved to DB: ', res.data)
+            })
         })
         .catch(error => console.log(error))
     },

@@ -9,7 +9,21 @@
       <h1>Sign Up</h1>
       <form @submit.prevent="onSubmit">
         <ion-item class="input">
-          <ion-label for="email">Mail</ion-label>
+          <ion-label for="firstName">First name</ion-label>
+          <ion-input-vue
+                  type="text"
+                  id="firstName"
+                  v-model="firstName"></ion-input-vue>
+        </ion-item>
+        <ion-item class="input">
+          <ion-label for="surname">Surname</ion-label>
+          <ion-input-vue
+                  type="text"
+                  id="surname"
+                  v-model="surname"></ion-input-vue>
+        </ion-item>
+        <ion-item class="input">
+          <ion-label for="email">Email</ion-label>
           <ion-input-vue
                   type="email"
                   id="email"
@@ -57,6 +71,8 @@ import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
 export default {
   data () {
     return {
+      firstName: '',
+      surname: '',
       email: '',
       password: '',
       confirmPassword: '',
@@ -83,7 +99,9 @@ export default {
         email: this.email,
         password: this.password,
         confirmPassword: this.confirmPassword,
-        terms: this.terms
+        terms: this.terms,
+        firstName: this.firstName,
+        surname: this.surname
       }
       console.log(formData)
       this.$store.dispatch('signup', formData)

@@ -3,7 +3,6 @@
     <the-header />
     <ion-content class="ion-padding">
       <h1>Create New Pub</h1>
-      <h2>{{ pub }}</h2>
 
       <form @submit.prevent="submitted">
       <ion-item>
