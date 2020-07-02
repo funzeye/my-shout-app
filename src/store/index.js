@@ -590,6 +590,21 @@ export default new Vuex.Store({
     updatePubFloorArea ({ commit }, payload) {
       commit('updatePubFloorArea', payload)
     },
+    cancelAllReservationsForPunter ({ commit, state, dispatch }, userId) {
+      if (!state.idToken) {
+        console.log('No Id Token - Exiting')
+        return
+      }
+      console.log('cancelling reservations in DB for user: ', userId)
+
+      const resFromArray = state.reservations.filter(res => res.reservedBy === userId)
+      console.log('resFromArray: ', resFromArray)
+      resFromArray.forEach((res) => {
+        console.log('res: ', res)
+        console.log('cancelling reservation in DB for table: ', res.tableId)
+        dispatch('cancelReservation', res.tableId)
+      })
+    },
     cancelReservation ({ commit, state }, pubTableKey) {
       if (!state.idToken) {
         console.log('No Id Token - Exiting')

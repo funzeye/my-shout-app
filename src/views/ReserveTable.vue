@@ -58,11 +58,12 @@ export default {
   },
   methods: {
     cancel () {
-      console.log('reservetable.vue: cancel button clicked')
+      console.log('reserveTable.vue: cancel button clicked')
       this.$router.push({ name: 'home' })
     },
     reserve () {
-      console.log('reservetable.vue: confirm reservation button clicked. submitting a new reservation')
+      console.log('reserveTable.vue: confirm reservation button clicked. submitting a new reservation')
+      this.$store.dispatch('cancelAllReservationsForPunter', this.user.userId)
       this.$store.dispatch('createReservation')
       this.$router.replace('home')
     }
