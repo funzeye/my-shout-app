@@ -41,7 +41,7 @@ export default new Vuex.Store({
       name: ''
     },
     pubFloorAreas: [],
-    reservation: {
+    activeReservationForPub: {
       key: '',
       tableId: '',
       reservedBy: '',
@@ -60,9 +60,14 @@ export default new Vuex.Store({
       state.idToken = null
       state.userId = null
     },
+    setStateActiveReservationForPub (state, reservation) {
+      state.activeReservationForPub = reservation
+    },
     storeUserDetails (state, userData) {
       state.user.email = userData.email
       state.user.userId = userData.userId
+      state.user.firstName = userData.firstName
+      state.user.surname = userData.surname
     },
     removeReservationFromCollection (state, reservationKey) {
       console.log('removing reservation from collection:', reservationKey)
@@ -340,6 +345,31 @@ export default new Vuex.Store({
           console.log(error)
         })
     },
+    fetchUserDetails ({ commit, state, dispatch }) {
+      if (!state.idToken) {
+        console.log('No Id Token - Exiting')
+        return
+      }
+      console.log('fecthing user details data from the DB')
+      console.log('for user details with user id:', state.userId)
+      globalAxios.get('usersDetails.json' + '?auth=' + state.idToken + '&orderBy="userId"&equalTo="' + state.userId + '"')
+        .then(response => {
+          console.log('fetchUserDetails response: ', response)
+          const data = response.data
+          const resultArray = []
+          for (const key in data) {
+            console.log('fetchUserDetailsa key: ', key)
+            data[key].key = key
+            console.log('fetchUserDetails data[key]: ', data[key])
+            resultArray.push(data[key])
+          }
+          if (resultArray.length > 0) {
+            commit('storeUserDetails', resultArray[0]) // TODO
+          }
+        }, error => {
+          console.log(error)
+        })
+    },
     fetchReservationForPunter ({ commit, state, dispatch }, userId) {
       if (!state.idToken) {
         console.log('No Id Token - Exiting')
@@ -553,6 +583,10 @@ export default new Vuex.Store({
       console.log('calling setSelectedPubTable action in index.js')
       commit('setSelectedPubTable', payload)
     },
+    setActiveReservationForPub ({ commit }, payload) {
+      console.log('calling setActiveReservationForPub action in index.js')
+      commit('setStateActiveReservationForPub', payload)
+    },
     updatePubFloorArea ({ commit }, payload) {
       commit('updatePubFloorArea', payload)
     },
@@ -633,10 +667,10 @@ export default new Vuex.Store({
     }
   },
   getters: {
-    // user (state) {
-    //  console.log('calling user getter')
-    //  return state.user
-    // },
+    user (state) {
+      console.log('calling user getter')
+      return state.user
+    },
     userId (state) {
       console.log('calling user id getter')
       return state.userId
@@ -674,7 +708,7 @@ export default new Vuex.Store({
     isAuthenticated (state) {
       return state.idToken !== null
     },
-    currentReservation (state) {
+    activeReservationforPub (state) {
       console.log('calling current reservation getter')
       return state.reservation
     },

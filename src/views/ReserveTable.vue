@@ -4,18 +4,21 @@
     <ion-content class="ion-padding">
       <h1>Reserve Table</h1>
       <form @submit.prevent="reserve">
-
         <ion-item>
-            <ion-label position="stacked">Table Reserved</ion-label>
+            <ion-label position="stacked">Table # To Reserve:</ion-label>
             <ion-input-vue readonly>{{ pubTable.tableNum }}</ion-input-vue>
         </ion-item>
         <ion-item>
-            <ion-label position="stacked">Name on Reservation</ion-label>
-            <ion-input-vue readonly>{{ userId }}</ion-input-vue>
+            <ion-label position="stacked">Name on Reservation:</ion-label>
+            <ion-input-vue readonly>{{ user.firstName + ' ' + user.surname  }}</ion-input-vue>
         </ion-item>
         <ion-item>
             <ion-label position="stacked">In Pub:</ion-label>
             <ion-input-vue readonly>{{ pub.pubName }}</ion-input-vue>
+        </ion-item>
+        <ion-item>
+            <ion-label position="stacked">On date:</ion-label>
+            <ion-input-vue readonly>Today</ion-input-vue>
         </ion-item>
 
         <ion-text color="secondary">
@@ -49,11 +52,8 @@ export default {
     pub () {
       return this.$store.getters.pub
     },
-    userId () {
-      return this.$store.getters.userId
-    },
-    reservation () {
-      return this.$store.getters.reservation
+    user () {
+      return this.$store.getters.user
     }
   },
   methods: {
@@ -65,6 +65,11 @@ export default {
       console.log('reservetable.vue: confirm reservation button clicked. submitting a new reservation')
       this.$store.dispatch('createReservation')
       this.$router.replace('home')
+    }
+  },
+  created () {
+    if (!this.user) {
+      this.$store.dispatch('fetchUserDetails')
     }
   }
 

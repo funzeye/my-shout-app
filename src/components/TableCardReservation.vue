@@ -60,6 +60,7 @@ export default {
   },
   methods: {
     reserveTable () {
+      this.$store.dispatch('fetchUserDetails')
       this.$store.dispatch('setSelectedPubTable', this.pubTable)
       this.$router.push({ name: 'reserve-table' })
     },
