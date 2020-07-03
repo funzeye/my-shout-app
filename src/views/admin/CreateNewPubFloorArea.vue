@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import TheHeader from '../components/TheHeader.vue'
+import TheHeader from '@/components/TheHeader.vue'
 import * as allIcons from 'ionicons/icons'
 
 export default {

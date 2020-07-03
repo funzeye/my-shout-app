@@ -22,6 +22,14 @@
                   id="surname"
                   v-model="surname"></ion-input-vue>
         </ion-item>
+        <ion-item>
+        <ion-label>I'm a: <ion-text color="danger">*</ion-text></ion-label>
+        <ion-select-vue @blur="$v.userRole.touch()" interface="alert" placeholder="Publican or Punter" name="userRole" v-model="userRole">
+            <ion-select-option value="punters">Punter</ion-select-option>
+            <ion-select-option value="publicans">Publican</ion-select-option>
+        </ion-select-vue>
+        <ion-note v-if="!$v.userRole" class="error ion-padding" color="danger">required</ion-note>
+      </ion-item>
         <ion-item class="input">
           <ion-label for="email">Email</ion-label>
           <ion-input-vue
@@ -76,6 +84,7 @@ export default {
       email: '',
       password: '',
       confirmPassword: '',
+      userRole: '',
       terms: false
     }
   },
@@ -90,8 +99,10 @@ export default {
     },
     confirmPassword: {
       sameAs: sameAs('password')
+    },
+    userRole: {
+      required
     }
-
   },
   methods: {
     onSubmit () {
@@ -101,7 +112,8 @@ export default {
         confirmPassword: this.confirmPassword,
         terms: this.terms,
         firstName: this.firstName,
-        surname: this.surname
+        surname: this.surname,
+        userRole: this.userRole
       }
       console.log(formData)
       this.$store.dispatch('signup', formData)

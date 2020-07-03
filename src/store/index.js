@@ -12,7 +12,6 @@ export default new Vuex.Store({
     userId: null,
     user: {
       email: '',
-      userId: null,
       firstName: '',
       surname: ''
     },
@@ -40,6 +39,7 @@ export default new Vuex.Store({
     pubFloorArea: {
       name: ''
     },
+    userRoles: [],
     pubFloorAreas: [],
     activeReservationForPub: {
       key: '',
@@ -65,7 +65,6 @@ export default new Vuex.Store({
     },
     storeUserDetails (state, userData) {
       state.user.email = userData.email
-      state.user.userId = userData.userId
       state.user.firstName = userData.firstName
       state.user.surname = userData.surname
     },
@@ -111,6 +110,12 @@ export default new Vuex.Store({
     },
     addNewPubFloorArea (state, pub) {
       state.pubFloorAreas.push(pub)
+    },
+    storeUserRoles (state, userRoles) {
+      state.userRoles = userRoles
+    },
+    addNewUserRoleToCollection (state, userRole) {
+      state.userRoles.push(userRole)
     },
     addNewPubTable (state, pubTable) {
       state.pubTables.push(pubTable)
@@ -179,7 +184,10 @@ export default new Vuex.Store({
           dispatch('storeUserDetails', {
             email: authData.email,
             firstName: authData.firstName,
-            surname: authData.surname,
+            surname: authData.surname
+          })
+          dispatch('addUserToRole', {
+            userRole: authData.userRole,
             userId: res.data.localId
           })
           dispatch('setLogoutTimer', res.data.expiresIn)
@@ -377,7 +385,8 @@ export default new Vuex.Store({
       }
       console.log('fecthing reservation from the DB')
       console.log('for user id:', userId)
-      globalAxios.get('reservations.json' + '?auth=' + state.idToken + '&orderBy="reservedBy"&equalTo="' + userId + '"') // TODO limit to todays date
+      globalAxios.get('reservations.json' + '?auth=' + state.idToken +
+       '&orderBy="reservedBy"&equalTo="' + userId + '"') // TODO limit to todays date
         .then(response => {
           console.log('fetchPub response: ', response)
           const data = response.data
@@ -412,20 +421,54 @@ export default new Vuex.Store({
           console.log(error)
         })
     },
+    fetchUserRoles ({ commit, state }) {
+      if (!state.idToken) {
+        console.log('No Id Token - Exiting')
+        return
+      }
+      console.log('fecthing User Roles from the DB and updating List')
+      globalAxios.get('userRoles.json' + '?auth=' + state.idToken)
+        .then(response => {
+          console.log(response)
+          const data = response.data
+
+          const resultArray = []
+          for (const key in data) {
+            console.log('data:', data)
+            console.log('data[key]:', data[key])
+            console.log('key:', key)
+            resultArray.push(data[key])
+          }
+          commit('storeUserRoles', resultArray)
+        }, error => {
+          console.log(error)
+        })
+    },
     storeUserDetails ({ commit, state }, userData) {
       if (!state.idToken) {
         console.log('No Id Token - Exiting')
         return
       }
-      globalAxios.post('usersDetails.json' + '?auth=' + state.idToken, userData)
+      globalAxios.put('usersDetails/' + state.userId + '.json' + '?auth=' + state.idToken, userData)
         .then(res => {
           console.log(res)
           commit('storeUserDetails', {
             email: userData.email,
-            userId: userData.userId,
             firstName: userData.firstName,
             surname: userData.surname
           })
+        })
+        .catch(error => console.log(error))
+    },
+    addUserToRole ({ commit, state }, userData) {
+      if (!state.idToken) {
+        console.log('No Id Token - Exiting')
+        return
+      }
+      const userRole = userData.userRole
+      globalAxios.put('usersDetails/' + userData.userId + '/roles.json' + '?auth=' + state.idToken, { [userRole]: true })
+        .then(res => {
+          console.log(res)
         })
         .catch(error => console.log(error))
     },
@@ -469,6 +512,20 @@ export default new Vuex.Store({
           commit('addNewPubFloorArea', pubFloorAreaData)
           console.log('pub successfully saved to DB: ', res.data)
           commit('resetPubFloorArea') // no longer need to reset as we immediately go to a new page
+        })
+        .catch(error => console.log(error))
+    },
+    storeUserRole ({ commit, state }, userRole) {
+      if (!state.idToken) {
+        console.log('No Id Token - Exiting')
+        return
+      }
+      console.log('adding new user role area to DB: ', userRole)
+      globalAxios.put('userRoles/' + userRole.roleId + '.json?auth=' + state.idToken, { roleName: userRole.roleName })
+        .then(res => {
+          console.log(res)
+          commit('addNewUserRoleToCollection', userRole)
+          console.log('user role successfully saved to DB: ', res.data)
         })
         .catch(error => console.log(error))
     },
@@ -714,6 +771,11 @@ export default new Vuex.Store({
       console.log('calling pub floor areas getter')
       console.log(state)
       return state.pubFloorAreas
+    },
+    userRoles (state) {
+      console.log('calling user roles getter')
+      console.log(state)
+      return state.userRoles
     },
     pubFloorArea (state) {
       console.log('calling pub floor area getter')

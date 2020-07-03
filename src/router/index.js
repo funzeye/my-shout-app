@@ -3,7 +3,8 @@ import Home from '../views/Home.vue'
 import About from '../views/About.vue'
 import CreateNewPub from '../views/CreateNewPub.vue'
 import CreateNewPubTables from '../views/CreateNewPubTables.vue'
-import CreateNewPubFloorArea from '../views/CreateNewPubFloorArea.vue'
+import CreateUserRoles from '../views/admin/CreateUserRoles.vue'
+import CreateNewPubFloorArea from '../views/admin/CreateNewPubFloorArea.vue'
 import ReserveTable from '../views/ReserveTable.vue'
 import EditTableDetails from '../views/EditTableDetails.vue'
 import TabRoot from '../components/TabRoot.vue'
@@ -73,6 +74,19 @@ const routes = [
     path: '/create-new-pub',
     component: CreateNewPub,
     name: 'create-new-pub',
+    beforeEnter (to, from, next) {
+      var token = store.state.idToken
+      if (token) {
+        next()
+      } else {
+        next('/signin')
+      }
+    }
+  },
+  {
+    path: '/create-user-roles',
+    component: CreateUserRoles,
+    name: 'create-user-roles',
     beforeEnter (to, from, next) {
       var token = store.state.idToken
       if (token) {

@@ -63,7 +63,9 @@ export default {
     },
     reserve () {
       console.log('reserveTable.vue: confirm reservation button clicked. submitting a new reservation')
+      console.log('cancelling all existing reservations for punter')
       this.$store.dispatch('cancelAllReservationsForPunter', this.user.userId)
+      console.log('reserveTable.vue: creating reservation')
       this.$store.dispatch('createReservation')
       this.$router.replace('home')
     }
