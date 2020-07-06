@@ -17,11 +17,11 @@
           <ion-label>No Limit</ion-label>
           <ion-note slot="end">Reserved Until</ion-note>
         </ion-item>
-        <ion-card-content>
-          Making a 'Reservation' will cancel the any other active reservations you currently have
+        <ion-card-content v-if="!reservation.isActive">
+          Clicking 'Reserve' will reserve this table and cancel any other active reservations you currently have
         </ion-card-content>
-        <ion-card-content>
-          {{ reservation }}}}
+        <ion-card-content v-if="reservation.isActive">
+          Clicking 'Cancel' will cancel this reservation and allow it to the reserved by others
         </ion-card-content>
       </template>
   </table-card-base>

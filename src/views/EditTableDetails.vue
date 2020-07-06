@@ -4,9 +4,6 @@
     <ion-content class="ion-padding">
       <h1>Edit Table Details</h1>
       <h2>Table #{{ $route.params.id }}</h2>
-      <h3> pub table: {{ pubTable }} </h3>
-      <h4> pubFloors: {{ pubFloors }} </h4>
-      <h4> pubTable.floor: {{ pubTable.floor }} </h4>
       <form @submit.prevent="submitted">
         <ion-item>
             <ion-label position="stacked">Pub Floor Area Name <ion-text color="danger">*</ion-text></ion-label>

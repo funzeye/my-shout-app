@@ -1,7 +1,7 @@
 <template>
   <ion-tabs>
-        <ion-tab tab="home" id="home">
-          <Home :i="i"/>
+        <ion-tab tab="pub-details" id="pub-details">
+          <PubDetails :i="i"/>
         </ion-tab>
 
         <ion-tab tab="about">
@@ -10,9 +10,9 @@
 
         <template slot="bottom">
           <ion-tab-bar>
-            <ion-tab-button tab="home">
+            <ion-tab-button tab="pub-details">
               <ion-icon :src="i.beer"></ion-icon>
-              <ion-label>Home</ion-label>
+              <ion-label>Pub</ion-label>
               <ion-badge>6</ion-badge>
             </ion-tab-button>
 
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import Home from '../views/Home.vue'
+import PubDetails from '../views/PubDetails.vue'
 import About from '../views/About.vue'
 
 import * as allIcons from 'ionicons/icons'
@@ -39,7 +39,7 @@ export default {
     }
   },
   components: {
-    Home,
+    PubDetails,
     About
   }
 }

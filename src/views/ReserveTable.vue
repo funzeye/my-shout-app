@@ -54,20 +54,23 @@ export default {
     },
     user () {
       return this.$store.getters.user
+    },
+    userId () {
+      return this.$store.getters.userId
     }
   },
   methods: {
     cancel () {
       console.log('reserveTable.vue: cancel button clicked')
-      this.$router.push({ name: 'home' })
+      this.$router.push({ name: 'pub-details' })
     },
     reserve () {
       console.log('reserveTable.vue: confirm reservation button clicked. submitting a new reservation')
       console.log('cancelling all existing reservations for punter')
-      this.$store.dispatch('cancelAllReservationsForPunter', this.user.userId)
+      this.$store.dispatch('cancelAllReservationsForPunter', this.userId)
       console.log('reserveTable.vue: creating reservation')
       this.$store.dispatch('createReservation')
-      this.$router.replace('home')
+      this.$router.replace({ name: 'pub-details', params: { id: this.pub.key } })
     }
   },
   created () {

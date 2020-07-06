@@ -26,6 +26,7 @@ export default new Vuex.Store({
     },
     pub: {
       key: '',
+      hidePub: false,
       userId: '',
       pubName: '',
       addressLine1: '',
@@ -213,10 +214,7 @@ export default new Vuex.Store({
             token: res.data.idToken,
             userId: res.data.localId
           })
-          dispatch('storeUserDetails', {
-            email: authData.email,
-            userId: res.data.localId
-          })
+          dispatch('fetchUserDetails')
           dispatch('setLogoutTimer', res.data.expiresIn)
           router.replace('/')
         })
@@ -252,6 +250,7 @@ export default new Vuex.Store({
           const data = response.data
           const resultArray = []
           for (const key in data) {
+            data[key].key = key
             resultArray.push(data[key])
           }
           commit('storePubs', resultArray)
@@ -304,7 +303,7 @@ export default new Vuex.Store({
               // retrieve user details and append to reservation object as an inner object
               console.log('getting userdetails for user with id of:', data[key].reservedBy)
               globalAxios.get('usersDetails.json' + '?auth=' + state.idToken +
-                '&orderBy="userId"&equalTo="' + data[key].reservedBy + '"')
+                '&orderBy="$key"&equalTo="' + data[key].reservedBy + '"')
                 .then(response => {
                   console.log(response)
                   const userData = response.data
@@ -330,7 +329,7 @@ export default new Vuex.Store({
           console.log(error)
         })
     },
-    fetchPub ({ commit, state, dispatch }, userId) {
+    fetchPubByOwnerId ({ commit, state, dispatch }, userId) {
       if (!state.idToken) {
         console.log('No Id Token - Exiting')
         return
@@ -357,6 +356,33 @@ export default new Vuex.Store({
           console.log(error)
         })
     },
+    fetchPubByPubId ({ commit, state, dispatch }, pubId) {
+      if (!state.idToken) {
+        console.log('No Id Token - Exiting')
+        return
+      }
+      console.log('fecthing pub data from the DB')
+      console.log('for pub with user id:', pubId)
+      globalAxios.get('pubs.json' + '?auth=' + state.idToken + '&orderBy="$key"&equalTo="' + pubId + '"')
+        .then(response => {
+          console.log('fetchPubByPubId response: ', response)
+          const data = response.data
+          const resultArray = []
+          for (const key in data) {
+            console.log('fetchPubByPubId key: ', key)
+            data[key].key = key
+            console.log('fetchPubByPubId data[key]: ', data[key])
+            resultArray.push(data[key])
+          }
+          if (resultArray.length > 0) {
+            commit('updatePub', resultArray[0]) // TODO
+            dispatch('fetchPubTables', state.pub.key)
+            dispatch('fetchReservationsForPub', state.pub.key)
+          }
+        }, error => {
+          console.log(error)
+        })
+    },
     fetchUserDetails ({ commit, state, dispatch }) {
       if (!state.idToken) {
         console.log('No Id Token - Exiting')
@@ -364,7 +390,7 @@ export default new Vuex.Store({
       }
       console.log('fecthing user details data from the DB')
       console.log('for user details with user id:', state.userId)
-      globalAxios.get('usersDetails.json' + '?auth=' + state.idToken + '&orderBy="userId"&equalTo="' + state.userId + '"')
+      globalAxios.get('usersDetails.json' + '?auth=' + state.idToken + '&orderBy="$key"&equalTo="' + state.userId + '"')
         .then(response => {
           console.log('fetchUserDetails response: ', response)
           const data = response.data
@@ -392,13 +418,13 @@ export default new Vuex.Store({
       globalAxios.get('reservations.json' + '?auth=' + state.idToken +
        '&orderBy="reservedBy"&equalTo="' + userId + '"') // TODO limit to todays date
         .then(response => {
-          console.log('fetchPub response: ', response)
+          console.log('fetchReservationForPunter response: ', response)
           const data = response.data
           const resultArray = []
           for (const key in data) {
-            console.log('fetchReservation key: ', key)
+            console.log('fetchReservationForPunter key: ', key)
             data[key].key = key
-            console.log('fetchReservation data[key]: ', data[key])
+            console.log('fetchReservationForPunter data[key]: ', data[key])
             resultArray.push(data[key])
           }
           commit('setCurrentReservation', resultArray[0]) // TODO
@@ -652,6 +678,9 @@ export default new Vuex.Store({
     updatePub ({ commit }, payload) {
       commit('updatePub', payload)
     },
+    setPubs ({ commit }, payload) {
+      commit('storePubs', payload)
+    },
     setSelectedPubTable ({ commit }, payload) {
       console.log('calling setSelectedPubTable action in index.js')
       commit('setSelectedPubTable', payload)
@@ -726,7 +755,7 @@ export default new Vuex.Store({
         .then(res => {
           console.log('new reservatioon data:', res)
           globalAxios.get('usersDetails.json' + '?auth=' + state.idToken +
-          '&orderBy="userId"&equalTo="' + reservation.reservedBy + '"')
+          '&orderBy="$key"&equalTo="' + reservation.reservedBy + '"')
             .then(response => {
               console.log(response)
               const userData = response.data

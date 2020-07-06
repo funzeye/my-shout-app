@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     submitted () {
-      this.$router.replace({ name: 'home' })
+      this.$router.replace({ name: 'pub-details' })
     }
   },
   computed: {

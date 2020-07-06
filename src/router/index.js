@@ -1,11 +1,12 @@
 import Vue from 'vue'
-import Home from '../views/Home.vue'
+import PubDetails from '../views/PubDetails.vue'
 import About from '../views/About.vue'
 import CreateNewPub from '../views/CreateNewPub.vue'
 import CreateNewPubTables from '../views/CreateNewPubTables.vue'
 import CreateUserRoles from '../views/admin/CreateUserRoles.vue'
 import CreateNewPubFloorArea from '../views/admin/CreateNewPubFloorArea.vue'
 import ReserveTable from '../views/ReserveTable.vue'
+import SearchForPub from '../views/SearchForPub.vue'
 import EditTableDetails from '../views/EditTableDetails.vue'
 import TabRoot from '../components/TabRoot.vue'
 import SignUpPage from '../components/auth/SignUp.vue'
@@ -27,12 +28,12 @@ const routes = [
     children: [
       {
         path: '/',
-        redirect: '/tabs/home'
+        redirect: '/tabs/pub-details'
       },
       {
-        path: 'home',
-        component: Home,
-        name: 'home',
+        path: ':id/pub-details',
+        component: PubDetails,
+        name: 'pub-details',
         beforeEnter (to, from, next) {
           var token = store.state.idToken
           if (token) {
@@ -110,6 +111,19 @@ const routes = [
     }
   },
   {
+    path: '/search-for-pub',
+    component: SearchForPub,
+    name: 'search-for-pub',
+    beforeEnter (to, from, next) {
+      var token = store.state.idToken
+      if (token) {
+        next()
+      } else {
+        next('/signin')
+      }
+    }
+  },
+  {
     path: '/create-new-pub-tables',
     component: CreateNewPubTables,
     name: 'create-new-pub-tables',
@@ -158,8 +172,8 @@ const routes = [
       }
     }
   },
-  { path: '/', redirect: '/tabs/home' },
-  { path: '*', redirect: '/tabs/home' }
+  { path: '/', redirect: '/tabs/pub-details' },
+  { path: '*', redirect: '/tabs/pub-details' }
 
   // { path: '' }
 ]
