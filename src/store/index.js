@@ -186,7 +186,11 @@ export default new Vuex.Store({
             firstName: authData.firstName,
             surname: authData.surname
           })
-          dispatch('addUserToRole', {
+          dispatch('addRoleToUsersDetails', {
+            userRole: authData.userRole,
+            userId: res.data.localId
+          })
+          dispatch('addUserToUserRolesMembers', {
             userRole: authData.userRole,
             userId: res.data.localId
           })
@@ -460,13 +464,25 @@ export default new Vuex.Store({
         })
         .catch(error => console.log(error))
     },
-    addUserToRole ({ commit, state }, userData) {
+    addRoleToUsersDetails ({ commit, state }, userData) {
       if (!state.idToken) {
         console.log('No Id Token - Exiting')
         return
       }
       const userRole = userData.userRole
-      globalAxios.put('usersDetails/' + userData.userId + '/roles.json' + '?auth=' + state.idToken, { [userRole]: true })
+      globalAxios.put('usersDetails/' + userData.userId + '/userRoles.json' + '?auth=' + state.idToken, { [userRole]: true })
+        .then(res => {
+          console.log(res)
+        })
+        .catch(error => console.log(error))
+    },
+    addUserToUserRolesMembers ({ commit, state }, userData) {
+      if (!state.idToken) {
+        console.log('No Id Token - Exiting')
+        return
+      }
+      const userRole = userData.userRole
+      globalAxios.put('userRoles/' + userRole + '/members.json' + '?auth=' + state.idToken, { [userData.userId]: true })
         .then(res => {
           console.log(res)
         })

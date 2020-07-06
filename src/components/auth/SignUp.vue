@@ -25,8 +25,8 @@
         <ion-item>
         <ion-label>I'm a: <ion-text color="danger">*</ion-text></ion-label>
         <ion-select-vue @blur="$v.userRole.touch()" interface="alert" placeholder="Publican or Punter" name="userRole" v-model="userRole">
-            <ion-select-option value="punters">Punter</ion-select-option>
-            <ion-select-option value="publicans">Publican</ion-select-option>
+            <ion-select-option value="punter">Punter</ion-select-option>
+            <ion-select-option value="publican">Publican</ion-select-option>
         </ion-select-vue>
         <ion-note v-if="!$v.userRole" class="error ion-padding" color="danger">required</ion-note>
       </ion-item>
