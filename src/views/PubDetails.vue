@@ -4,7 +4,7 @@
     <ion-content class="ion-padding">
       <ion-list>
         <div v-for="pt in pubTables" :key="pt['.key']">
-          <table-card :i="i" :pubTable="pt" :loggedInUserId="userId" :pubFloors="pub.floors" />
+          <table-card :i="i" :pubTable="pt" :loggedInUserId="userId" :pubFloors="pub.floors" :userIsOwner="pub.ownerId === userId"/>
         </div>
       </ion-list>
     </ion-content>

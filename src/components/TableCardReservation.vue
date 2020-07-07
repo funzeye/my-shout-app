@@ -4,13 +4,13 @@
         <ion-button color="danger" size="default" fill="outline" slot="end" @click.prevent="cancelTableReservation">Cancel</ion-button>
       </template>
       <template v-else-if="reservation.isActive && reservation.reservedBy !== loggedInUserId" slot="table-card-action-button">
-        <ion-button size="default" fill="outline" slot="end">Reserved</ion-button>
+        <ion-button size="default" fill="outline" slot="end" color="success" disabled>Reserved</ion-button>
       </template>
       <template v-else slot="table-card-action-button">
         <ion-button size="default" fill="outline" slot="end" @click.prevent="reserveTable">Reserve</ion-button>
       </template>
       <template slot="table-card-other-details">
-        <ion-item v-if="reservation.isActive && reservation.reservedBy === loggedInUserId">
+        <ion-item v-if="reservation.isActive && ((reservation.reservedBy === loggedInUserId) || userIsOwner)">
           <ion-icon :src="i.person" slot="start"></ion-icon>
           <ion-label>{{ reservation.userDetails.firstName + ' ' + reservation.userDetails.surname }}</ion-label>
           <ion-note slot="end">Reserved By</ion-note>
@@ -37,7 +37,7 @@
 import TableCardBase from '../components/TableCardBase.vue'
 
 export default {
-  props: ['i', 'pubTable', 'pubFloors', 'loggedInUserId'],
+  props: ['i', 'pubTable', 'pubFloors', 'loggedInUserId', 'userIsOwner'],
   components: {
     TableCardBase
   },
