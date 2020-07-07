@@ -47,6 +47,8 @@ export default new Vuex.Store({
       key: '',
       tableId: '',
       reservedBy: '',
+      reservedByOwner: false,
+      ownerReservedOnBehalfOf: '',
       reservedAtDate: '',
       isActive: false,
       userDetails: null
@@ -55,6 +57,8 @@ export default new Vuex.Store({
       key: '',
       tableId: '',
       reservedBy: '',
+      reservedByOwner: false,
+      ownerReservedOnBehalfOf: '',
       reservedAtDate: '',
       isActive: false,
       userDetails: null
@@ -155,6 +159,8 @@ export default new Vuex.Store({
         tableId: '',
         reservedBy: '',
         reservedAtDate: '',
+        reservedByOwner: false,
+        ownerReservedOnBehalfOf: '',
         isActive: false,
         userDetails: null
       }
@@ -753,6 +759,8 @@ export default new Vuex.Store({
         pubId: resFromArray.pubId,
         reservedAtDate: resFromArray.reservedAtDate,
         reservedBy: resFromArray.reservedBy,
+        ownerReservedOnBehalfOf: resFromArray.ownerReservedOnBehalfOf,
+        reservedByOwner: resFromArray.reservedByOwner,
         userDetails: null
       }
       const resKey = resFromArray.key
@@ -782,6 +790,8 @@ export default new Vuex.Store({
         pubId: reservationData.pubId,
         reservedAtDate: reservationData.reservedAtDate,
         reservedBy: reservationData.reservedBy,
+        ownerReservedOnBehalfOf: reservationData.ownerReservedOnBehalfOf,
+        reservedByOwner: reservationData.reservedByOwner,
         userDetails: null
       }
       const resKey = reservationData.key
@@ -797,7 +807,7 @@ export default new Vuex.Store({
         })
         .catch(error => console.log(error))
     },
-    createReservation ({ commit, state, dispatch }) {
+    createReservation ({ commit, state, dispatch }, ownerReservedOnBehalfOf) {
       if (!state.idToken) {
         console.log('No Id Token - Exiting')
         return
@@ -806,6 +816,8 @@ export default new Vuex.Store({
         tableId: state.pubTable.key,
         pubId: state.pubTable.pubId,
         reservedBy: state.userId,
+        ownerReservedOnBehalfOf: ownerReservedOnBehalfOf,
+        reservedByOwner: state.pub.ownerId === state.userId,
         reservedAtDate: new Date(),
         isActive: true
       }

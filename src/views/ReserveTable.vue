@@ -10,7 +10,8 @@
         </ion-item>
         <ion-item>
             <ion-label position="stacked">Name on Reservation:</ion-label>
-            <ion-input-vue readonly>{{ user.firstName + ' ' + user.surname  }}</ion-input-vue>
+            <ion-input-vue v-if="pub.ownerId !== userId" readonly>{{ user.firstName + ' ' + user.surname  }}</ion-input-vue>
+            <ion-input-vue v-else v-model="ownerReservedOnBehalfOf"></ion-input-vue>
         </ion-item>
         <ion-item>
             <ion-label position="stacked">In Pub:</ion-label>
@@ -45,6 +46,11 @@ export default {
   components: {
     TheHeader
   },
+  data () {
+    return {
+      ownerReservedOnBehalfOf: null
+    }
+  },
   computed: {
     pubTable () {
       return this.$store.getters.pubTable
@@ -69,7 +75,7 @@ export default {
       console.log('cancelling all existing reservations for punter')
       this.$store.dispatch('cancelOtherReservationForPunter', { userId: this.userId, tableToIgnoreId: this.pubTable.key })
       console.log('reserveTable.vue: creating reservation')
-      this.$store.dispatch('createReservation')
+      this.$store.dispatch('createReservation', this.ownerReservedOnBehalfOf)
       this.$router.replace({ name: 'pub-details', params: { id: this.pub.key } })
     }
   },
