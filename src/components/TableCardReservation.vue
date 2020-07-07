@@ -47,7 +47,7 @@ export default {
     //  return reservations.some(item => item.tableId === this.pubTable.key)
     // },
     reservation () {
-      const reservations = this.$store.getters.reservations
+      const reservations = this.$store.getters.allReservationsForPub
       const reservationsWithThisTableKey = reservations.filter(item => item.tableId === this.pubTable.key)
       if (reservationsWithThisTableKey.length === 1) {
         return reservationsWithThisTableKey[0]
@@ -71,7 +71,7 @@ export default {
       this.$router.push({ name: 'reserve-table' })
     },
     cancelTableReservation () {
-      this.$store.dispatch('cancelReservation', this.pubTable.key)
+      this.$store.dispatch('cancelReservationForCurrentlySelectedPubWithPubId', this.pubTable.key)
     }
   }
 }

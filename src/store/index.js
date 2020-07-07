@@ -43,6 +43,14 @@ export default new Vuex.Store({
     },
     userRoles: [],
     pubFloorAreas: [],
+    activeReservationForPunter: {
+      key: '',
+      tableId: '',
+      reservedBy: '',
+      reservedAtDate: '',
+      isActive: false,
+      userDetails: null
+    },
     activeReservationForPub: {
       key: '',
       tableId: '',
@@ -51,7 +59,7 @@ export default new Vuex.Store({
       isActive: false,
       userDetails: null
     },
-    reservations: []
+    allReservationsForPub: []
   },
   mutations: {
     authUser (state, userData) {
@@ -73,13 +81,13 @@ export default new Vuex.Store({
     },
     removeReservationFromCollection (state, reservationKey) {
       console.log('removing reservation from collection:', reservationKey)
-      console.log('reservation collection before:', state.reservations)
-      state.reservations = state.reservations.filter(item => item.key !== reservationKey)
-      console.log('reservation collection after:', state.reservations)
+      console.log('reservation collection before:', state.allReservationsForPub)
+      state.allReservationsForPub = state.allReservationsForPub.filter(item => item.key !== reservationKey)
+      console.log('reservation collection after:', state.allReservationsForPub)
     },
     addReservationToCollection (state, reservation) {
       console.log('reservation saved to state collection:', reservation)
-      state.reservations.push(reservation)
+      state.allReservationsForPub.push(reservation)
     },
     storePubTable (state, user) {
       state.pubTable = user
@@ -101,9 +109,12 @@ export default new Vuex.Store({
     setCurrentReservation (state, reservation) {
       state.reservation = reservation
     },
-    setReservations (state, reservations) {
-      state.reservations = reservations
-      console.log('state.reservations:', state.reservations)
+    setCurrentReservationForPunter (state, reservation) {
+      state.activeReservationForPunter = reservation
+    },
+    setReservationsForPub (state, reservations) {
+      state.allReservationsForPub = reservations
+      console.log('state.allReservationsForPub:', state.allReservationsForPub)
     },
     storePubFloorAreas (state, pubFloorAreas) {
       state.pubFloorAreas = pubFloorAreas
@@ -139,7 +150,7 @@ export default new Vuex.Store({
       }
     },
     resetCurrentReservation (state) {
-      state.reservation = {
+      state.activeReservationForPub = {
         key: '',
         tableId: '',
         reservedBy: '',
@@ -327,7 +338,7 @@ export default new Vuex.Store({
               console.log('reservation not added as it is not active')
             }
           }
-          commit('setReservations', resultArray) // TODO might speed things up if I add to collection inside loop...
+          commit('setReservationsForPub', resultArray) // TODO might speed things up if I add to collection inside loop...
         }, error => {
           console.log(error)
         })
@@ -411,7 +422,7 @@ export default new Vuex.Store({
           console.log(error)
         })
     },
-    fetchReservationForPunter ({ commit, state, dispatch }, userId) {
+    fetchReservationsForPunter ({ commit, state }, userId) {
       if (!state.idToken) {
         console.log('No Id Token - Exiting')
         return
@@ -419,18 +430,20 @@ export default new Vuex.Store({
       console.log('fecthing reservation from the DB')
       console.log('for user id:', userId)
       globalAxios.get('reservations.json' + '?auth=' + state.idToken +
-       '&orderBy="reservedBy"&equalTo="' + userId + '"') // TODO limit to todays date
+       '&orderBy="reservedBy"&equalTo="' + userId + '"')
         .then(response => {
           console.log('fetchReservationForPunter response: ', response)
           const data = response.data
           const resultArray = []
           for (const key in data) {
-            console.log('fetchReservationForPunter key: ', key)
-            data[key].key = key
-            console.log('fetchReservationForPunter data[key]: ', data[key])
-            resultArray.push(data[key])
+            if (data[key].isActive === true) {
+              console.log('fetchReservationForPunter key: ', key)
+              data[key].key = key
+              console.log('fetchReservationForPunter data[key]: ', data[key])
+              resultArray.push(data[key])
+            }
           }
-          commit('setCurrentReservation', resultArray[0]) // TODO
+          commit('setCurrentReservationForPunter', resultArray[0]) // TODO
         }, error => {
           console.log(error)
         })
@@ -695,29 +708,44 @@ export default new Vuex.Store({
     updatePubFloorArea ({ commit }, payload) {
       commit('updatePubFloorArea', payload)
     },
-    cancelAllReservationsForPunter ({ commit, state, dispatch }, userId) {
+    cancelOtherReservationForPunter ({ commit, state, dispatch }, { userId, tableToIgnoreId }) {
       if (!state.idToken) {
         console.log('No Id Token - Exiting')
         return
       }
-      console.log('cancelling reservations in DB for user: ', userId)
+      console.log('cancelling reservations using cancelOtherReservationForPunter for user: ', userId)
+      globalAxios.get('reservations.json' + '?auth=' + state.idToken +
+       '&orderBy="reservedBy"&equalTo="' + userId + '"')
+        .then(response => {
+          console.log('fetchReservationForPunter response: ', response)
+          const data = response.data
 
-      const resFromArray = state.reservations.filter(res => res.reservedBy === userId)
-      console.log('resFromArray: ', resFromArray)
-      resFromArray.forEach((res) => {
-        console.log('res: ', res)
-        console.log('cancelling reservation in DB for table: ', res.tableId)
-        dispatch('cancelReservation', res.tableId)
-      })
+          const resultArray = []
+          for (const key in data) {
+            if (data[key].isActive === true && data[key].tableId !== tableToIgnoreId) {
+              console.log('fetchReservationForPunter key: ', key)
+              data[key].key = key
+              console.log('fetchReservationForPunter data[key]: ', data[key])
+              resultArray.push(data[key])
+            }
+          }
+
+          console.log('resFromArray: ', resultArray)
+          resultArray.forEach((res) => {
+            console.log('res: ', res)
+            console.log('cancelling reservation in DB for table: ', res.tableId)
+            dispatch('cancelReservation', res)
+          })
+        })
     },
-    cancelReservation ({ commit, state }, pubTableKey) {
+    cancelReservationForCurrentlySelectedPubWithPubId ({ commit, state }, pubTableKey) {
       if (!state.idToken) {
         console.log('No Id Token - Exiting')
         return
       }
       console.log('cancelling reservation in DB for table: ', pubTableKey)
 
-      const resFromArray = state.reservations.filter(res => res.tableId === pubTableKey)[0] // TODO better way to get this??
+      const resFromArray = state.allReservationsForPub.filter(res => res.tableId === pubTableKey)[0] // TODO better way to get this??
       const reservation = {
         tableId: resFromArray.tableId,
         isActive: false,
@@ -740,7 +768,36 @@ export default new Vuex.Store({
         })
         .catch(error => console.log(error))
     },
-    createReservation ({ commit, state }) {
+    cancelReservation ({ commit, state }, reservationData) {
+      if (!state.idToken) {
+        console.log('No Id Token - Exiting')
+        return
+      }
+      console.log('cancelling reservation in DB for table: ', reservationData)
+
+      const reservation = {
+        tableId: reservationData.tableId,
+        isActive: false,
+        key: null,
+        pubId: reservationData.pubId,
+        reservedAtDate: reservationData.reservedAtDate,
+        reservedBy: reservationData.reservedBy,
+        userDetails: null
+      }
+      const resKey = reservationData.key
+
+      // update record but don't delete it
+      globalAxios.patch('reservations/' + resKey + '.json' + '?auth=' + state.idToken, reservation)
+        .then(res => {
+          console.log(res)
+          console.log('reservation successfully cancelled in DB: ', res.data)
+          console.log('about to reset reservation...')
+          commit('resetCurrentReservation')
+          commit('removeReservationFromCollection', resKey)
+        })
+        .catch(error => console.log(error))
+    },
+    createReservation ({ commit, state, dispatch }) {
       if (!state.idToken) {
         console.log('No Id Token - Exiting')
         return
@@ -753,30 +810,34 @@ export default new Vuex.Store({
         isActive: true
       }
 
-      console.log('adding new reservation to DB: ', reservation)
-      globalAxios.post('reservations.json' + '?auth=' + state.idToken, reservation)
-        .then(res => {
-          console.log('new reservatioon data:', res)
-          globalAxios.get('usersDetails.json' + '?auth=' + state.idToken +
-          '&orderBy="$key"&equalTo="' + reservation.reservedBy + '"')
-            .then(response => {
-              console.log(response)
-              const userData = response.data
-              const usesDetailsResultArray = []
-              for (const dataKey in userData) {
-                console.log('fetch user details key inside: ', dataKey)
-                console.log('user details userData[key]: ', userData[dataKey])
-                usesDetailsResultArray.push(userData[dataKey])
-              }
-              reservation.key = res.data.name
-              reservation.userDetails = usesDetailsResultArray[0]
+      try {
+        console.log('adding new reservation to DB: ', reservation)
+        globalAxios.post('reservations.json' + '?auth=' + state.idToken, reservation)
+          .then(res => {
+            console.log('new reservatioon data:', res)
+            globalAxios.get('usersDetails.json' + '?auth=' + state.idToken +
+            '&orderBy="$key"&equalTo="' + reservation.reservedBy + '"')
+              .then(response => {
+                console.log(response)
+                const userData = response.data
+                const usesDetailsResultArray = []
+                for (const dataKey in userData) {
+                  console.log('fetch user details key inside: ', dataKey)
+                  console.log('user details userData[key]: ', userData[dataKey])
+                  usesDetailsResultArray.push(userData[dataKey])
+                }
+                reservation.key = res.data.name
+                reservation.userDetails = usesDetailsResultArray[0]
 
-              // commit('setCurrentReservation', reservation)
-              commit('addReservationToCollection', reservation)
-              console.log('reservation successfully saved to DB: ', res.data)
-            })
-        })
-        .catch(error => console.log(error))
+                // commit('setCurrentReservation', reservation)
+                commit('addReservationToCollection', reservation)
+                console.log('reservation successfully saved to DB: ', res.data)
+              })
+          })
+          .catch(error => console.log(error))
+      } catch (ex) {
+        console.log('error:', ex)
+      }
     },
     logout ({ commit }) {
       router.replace('/signin')
@@ -840,9 +901,9 @@ export default new Vuex.Store({
       console.log('calling current reservation getter')
       return state.reservation
     },
-    reservations (state) {
-      console.log('calling reservations getter')
-      return state.reservations
+    allReservationsForPub (state) {
+      console.log('calling allReservationsForPub getter')
+      return state.allReservationsForPub
     }
   },
   modules: {

@@ -67,7 +67,7 @@ export default {
     reserve () {
       console.log('reserveTable.vue: confirm reservation button clicked. submitting a new reservation')
       console.log('cancelling all existing reservations for punter')
-      this.$store.dispatch('cancelAllReservationsForPunter', this.userId)
+      this.$store.dispatch('cancelOtherReservationForPunter', { userId: this.userId, tableToIgnoreId: this.pubTable.key })
       console.log('reserveTable.vue: creating reservation')
       this.$store.dispatch('createReservation')
       this.$router.replace({ name: 'pub-details', params: { id: this.pub.key } })
