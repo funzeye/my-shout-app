@@ -4,7 +4,7 @@
         <ion-item>
           <ion-icon :src="i.home" slot="start"></ion-icon>
           <ion-label>{{ pub.pubName }}</ion-label>
-          <ion-button size="default" fill="outline" slot="end" @click.prevent="viewPub">Select</ion-button>
+          <ion-button size="default" fill="outline" slot="end" @click.prevent="viewPub">{{ actionName }}</ion-button>
         </ion-item>
         <ion-item>
           <ion-label>Street: {{ pub.addressLine1 }} </ion-label>
@@ -21,7 +21,7 @@
 
 <script>
 export default {
-  props: ['i', 'pub'],
+  props: ['i', 'pub', 'actionName'],
   methods: {
     viewPub () {
       this.$router.push({ name: 'pub-details', params: { id: this.pub.key } })

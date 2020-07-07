@@ -1,13 +1,16 @@
 <template>
   <table-card-base :i="i" :pubTable="pubTable" :pubFloors="pubFloors">
-      <template v-if="reservation.isActive" slot="table-card-action-button">
+      <template v-if="reservation.isActive && reservation.reservedBy === loggedInUserId" slot="table-card-action-button">
         <ion-button color="danger" size="default" fill="outline" slot="end" @click.prevent="cancelTableReservation">Cancel</ion-button>
+      </template>
+      <template v-else-if="reservation.isActive && reservation.reservedBy !== loggedInUserId" slot="table-card-action-button">
+        <ion-button size="default" fill="outline" slot="end">Reserved</ion-button>
       </template>
       <template v-else slot="table-card-action-button">
         <ion-button size="default" fill="outline" slot="end" @click.prevent="reserveTable">Reserve</ion-button>
       </template>
       <template slot="table-card-other-details">
-        <ion-item v-if="reservation.isActive">
+        <ion-item v-if="reservation.isActive && reservation.reservedBy === loggedInUserId">
           <ion-icon :src="i.person" slot="start"></ion-icon>
           <ion-label>{{ reservation.userDetails.firstName + ' ' + reservation.userDetails.surname }}</ion-label>
           <ion-note slot="end">Reserved By</ion-note>
@@ -20,8 +23,11 @@
         <ion-card-content v-if="!reservation.isActive">
           Clicking 'Reserve' will reserve this table and cancel any other active reservations you currently have
         </ion-card-content>
-        <ion-card-content v-if="reservation.isActive">
+        <ion-card-content v-if="reservation.isActive && reservation.reservedBy === loggedInUserId">
           Clicking 'Cancel' will cancel this reservation and allow it to the reserved by others
+        </ion-card-content>
+        <ion-card-content v-if="reservation.isActive && reservation.reservedBy !== loggedInUserId">
+          Table currently unavailable
         </ion-card-content>
       </template>
   </table-card-base>
@@ -31,7 +37,7 @@
 import TableCardBase from '../components/TableCardBase.vue'
 
 export default {
-  props: ['i', 'pubTable', 'pubFloors'],
+  props: ['i', 'pubTable', 'pubFloors', 'loggedInUserId'],
   components: {
     TableCardBase
   },

@@ -1,14 +1,30 @@
 <template>
   <div class="ion-page">
     <the-header />
-    <ion-content>
+    <ion-content class="ion-padding">
+      <template v-if="user.userRoles && user.userRoles.publican === true">
+        <ion-text>
+          <h1 class="ion-padding">Your Pubs</h1>
+        </ion-text>
+        <ion-searchbar show-cancel-button="focus"
+        debounce="300" @ionChange="filterSearchItems($event.target)"></ion-searchbar>
+        <ion-list>
+            <div animated="true" v-show="!p.hidePub" v-for="p in publicansPubs" :key="p['.key']">
+                <pub-card :i="i" :pub="p" actionName="Manage" />
+            </div>
+        </ion-list>
+      </template>
+      <ion-item-divider v-if="user.userRoles && user.userRoles.punter === true && user.userRoles.publican === true">
+      </ion-item-divider>
+      <template v-if="user.userRoles && user.userRoles.punter === true">
         <ion-searchbar show-cancel-button="focus"
         debounce="300" @ionChange="filterSearchItems($event.target)"></ion-searchbar>
         <ion-list>
             <div animated="true" v-show="!p.hidePub" v-for="p in pubs" :key="p['.key']">
-                <pub-card :i="i" :pub="p" />
+                <pub-card :i="i" :pub="p" actionName="Select" />
             </div>
         </ion-list>
+      </template>
     </ion-content>
   </div>
 </template>
@@ -34,11 +50,20 @@ export default {
       get () {
         return this.$store.getters.pubs
       }
+    },
+    publicansPubs () {
+      return this.$store.getters.publicansPubs
+    },
+    user () {
+      return this.$store.getters.user
     }
   },
   created () {
     if (!this.pubs || this.pubs.length === 0) {
       this.$store.dispatch('fetchPubs')
+    }
+    if (!this.user || this.user.email === '') {
+      this.$store.dispatch('fetchUserDetails')
     }
   },
   methods: {

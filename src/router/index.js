@@ -172,8 +172,8 @@ const routes = [
       }
     }
   },
-  { path: '/', redirect: '/tabs/pub-details' },
-  { path: '*', redirect: '/tabs/pub-details' }
+  { path: '/', redirect: '/search-for-pub' },
+  { path: '*', redirect: '/search-for-pub' }
 
   // { path: '' }
 ]

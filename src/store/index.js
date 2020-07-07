@@ -13,7 +13,8 @@ export default new Vuex.Store({
     user: {
       email: '',
       firstName: '',
-      surname: ''
+      surname: '',
+      userRoles: null
     },
     pubs: [],
     pubTables: [],
@@ -27,7 +28,7 @@ export default new Vuex.Store({
     pub: {
       key: '',
       hidePub: false,
-      userId: '',
+      ownerId: '',
       pubName: '',
       addressLine1: '',
       addressLine2: '',
@@ -68,6 +69,7 @@ export default new Vuex.Store({
       state.user.email = userData.email
       state.user.firstName = userData.firstName
       state.user.surname = userData.surname
+      state.user.userRoles = userData.userRoles
     },
     removeReservationFromCollection (state, reservationKey) {
       console.log('removing reservation from collection:', reservationKey)
@@ -150,7 +152,7 @@ export default new Vuex.Store({
     resetPub (state) {
       state.pub = {
         key: '',
-        userId: '',
+        ownerId: '',
         pubName: '',
         addressLine1: '',
         addressLine2: '',
@@ -216,6 +218,7 @@ export default new Vuex.Store({
           })
           dispatch('fetchUserDetails')
           dispatch('setLogoutTimer', res.data.expiresIn)
+
           router.replace('/')
         })
         .catch(error => console.log(error))
@@ -329,33 +332,33 @@ export default new Vuex.Store({
           console.log(error)
         })
     },
-    fetchPubByOwnerId ({ commit, state, dispatch }, userId) {
-      if (!state.idToken) {
-        console.log('No Id Token - Exiting')
-        return
-      }
-      console.log('fecthing pub data from the DB')
-      console.log('for pub with user id:', userId)
-      globalAxios.get('pubs.json' + '?auth=' + state.idToken + '&orderBy="userId"&equalTo="' + userId + '"')
-        .then(response => {
-          console.log('fetchPub response: ', response)
-          const data = response.data
-          const resultArray = []
-          for (const key in data) {
-            console.log('fetchPub key: ', key)
-            data[key].key = key
-            console.log('fetchPub data[key]: ', data[key])
-            resultArray.push(data[key])
-          }
-          if (resultArray.length > 0) {
-            commit('updatePub', resultArray[0]) // TODO
-            dispatch('fetchPubTables', state.pub.key)
-            dispatch('fetchReservationsForPub', state.pub.key)
-          }
-        }, error => {
-          console.log(error)
-        })
-    },
+    // fetchPubsByOwnerId ({ commit, state, dispatch }, ownerId) {
+    //   if (!state.idToken) {
+    //     console.log('No Id Token - Exiting')
+    //     return
+    //   }
+    //   console.log('fecthing pubs data from the DB')
+    //   console.log('for pub with owner id:', ownerId)
+    //   globalAxios.get('pubs.json' + '?auth=' + state.idToken + '&orderBy="ownerId"&equalTo="' + ownerId + '"')
+    //     .then(response => {
+    //       console.log('fetchPub response: ', response)
+    //       const data = response.data
+    //       const resultArray = []
+    //       for (const key in data) {
+    //         console.log('fetchPub key: ', key)
+    //         data[key].key = key
+    //         console.log('fetchPub data[key]: ', data[key])
+    //         resultArray.push(data[key])
+    //       }
+    //       if (resultArray.length > 0) {
+    //         commit('updatePub', resultArray[0]) // TODO
+    //         dispatch('fetchPubTables', state.pub.key)
+    //         dispatch('fetchReservationsForPub', state.pub.key)
+    //       }
+    //     }, error => {
+    //       console.log(error)
+    //     })
+    // },
     fetchPubByPubId ({ commit, state, dispatch }, pubId) {
       if (!state.idToken) {
         console.log('No Id Token - Exiting')
@@ -521,7 +524,7 @@ export default new Vuex.Store({
       }
       console.log('adding new pub to DB: ', pubData)
       const pub = {
-        userId: localStorage.getItem('userId'),
+        ownerId: localStorage.getItem('userId'),
         pubName: pubData.pubName,
         addressLine1: pubData.addressLine1,
         addressLine2: pubData.addressLine2,
@@ -801,6 +804,9 @@ export default new Vuex.Store({
       console.log('calling pubTables getter')
       console.log(state)
       return state.pubTables
+    },
+    publicansPubs (state) {
+      return state.pubs.filter(p => p.ownerId === state.userId)
     },
     pubTable (state) {
       console.log('calling pubTable getter in index.js')
