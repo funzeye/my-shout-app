@@ -28,12 +28,12 @@ const routes = [
     children: [
       {
         path: '/',
-        redirect: '/tabs/pub-details'
+        redirect: '/tabs/search-for-pub'
       },
       {
-        path: ':id/pub-details',
-        component: PubDetails,
-        name: 'pub-details',
+        path: 'search-for-pub',
+        component: SearchForPub,
+        name: 'search-for-pub',
         beforeEnter (to, from, next) {
           var token = store.state.idToken
           if (token) {
@@ -41,7 +41,22 @@ const routes = [
           } else {
             next('/signin')
           }
-        }
+        },
+        children: [
+          {
+            path: '../:id/pub-details',
+            component: PubDetails,
+            name: 'pub-details',
+            beforeEnter (to, from, next) {
+              var token = store.state.idToken
+              if (token) {
+                next()
+              } else {
+                next('/signin')
+              }
+            }
+          }
+        ]
       },
       {
         path: 'about',
@@ -98,22 +113,9 @@ const routes = [
     }
   },
   {
-    path: '/reserve-table',
+    path: '/:id/reserve-table',
     component: ReserveTable,
     name: 'reserve-table',
-    beforeEnter (to, from, next) {
-      var token = store.state.idToken
-      if (token) {
-        next()
-      } else {
-        next('/signin')
-      }
-    }
-  },
-  {
-    path: '/search-for-pub',
-    component: SearchForPub,
-    name: 'search-for-pub',
     beforeEnter (to, from, next) {
       var token = store.state.idToken
       if (token) {
@@ -172,8 +174,8 @@ const routes = [
       }
     }
   },
-  { path: '/', redirect: '/search-for-pub' },
-  { path: '*', redirect: '/search-for-pub' }
+  { path: '/', redirect: 'tabs/search-for-pub' },
+  { path: '*', redirect: 'tabs/search-for-pub' }
 
   // { path: '' }
 ]

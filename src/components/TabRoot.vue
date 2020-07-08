@@ -1,18 +1,18 @@
 <template>
   <ion-tabs>
-        <ion-tab tab="pub-details" id="pub-details">
-          <PubDetails :i="i"/>
+        <ion-tab tab="search-for-pub" id="search-for-pub">
+          <SearchForPub :i="i"/>
         </ion-tab>
 
-        <ion-tab tab="about">
+        <ion-tab tab="about" id="about">
           <About />
         </ion-tab>
 
         <template slot="bottom">
           <ion-tab-bar>
-            <ion-tab-button tab="pub-details">
+            <ion-tab-button tab="search-for-pub">
               <ion-icon :src="i.beer"></ion-icon>
-              <ion-label>Pub</ion-label>
+              <ion-label>Search</ion-label>
               <ion-badge>6</ion-badge>
             </ion-tab-button>
 
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import PubDetails from '../views/PubDetails.vue'
+import SearchForPub from '../views/SearchForPub.vue'
 import About from '../views/About.vue'
 
 import * as allIcons from 'ionicons/icons'
@@ -39,7 +39,7 @@ export default {
     }
   },
   components: {
-    PubDetails,
+    SearchForPub,
     About
   }
 }

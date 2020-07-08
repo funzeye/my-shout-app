@@ -20,8 +20,15 @@
 </template>
 
 <script>
+import * as allIcons from 'ionicons/icons'
+
 export default {
-  props: ['i', 'pub', 'actionName'],
+  props: ['pub', 'actionName'],
+  data () {
+    return {
+      i: allIcons
+    }
+  },
   methods: {
     viewPub () {
       this.$router.push({ name: 'pub-details', params: { id: this.pub.key } })

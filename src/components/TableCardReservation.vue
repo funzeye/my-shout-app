@@ -73,7 +73,7 @@ export default {
     reserveTable () {
       this.$store.dispatch('fetchUserDetails')
       this.$store.dispatch('setSelectedPubTable', this.pubTable)
-      this.$router.push({ name: 'reserve-table' })
+      this.$router.push({ name: 'reserve-table', params: { id: this.pubTable.key }, query: { pubId: this.pubTable.pubId } })
     },
     cancelTableReservation () {
       this.$store.dispatch('cancelReservationForCurrentlySelectedPubWithPubId', this.pubTable.key)

@@ -309,7 +309,7 @@ export default new Vuex.Store({
       globalAxios.get('reservations.json' + '?auth=' + state.idToken +
         '&orderBy="pubId"&equalTo="' + pubKey + '"')
         .then(response => {
-          console.log(response)
+          console.log('fetchReservationsForPub response:', response)
           const data = response.data
           const resultArray = []
           const todaysDate = new Date()
@@ -733,6 +733,9 @@ export default new Vuex.Store({
               data[key].key = key
               console.log('fetchReservationForPunter data[key]: ', data[key])
               resultArray.push(data[key])
+            } else {
+              console.log('not cancelling reservation - data[key]:', data[key])
+              console.log('not cancelling reservation - tableToIgnoreId:', tableToIgnoreId)
             }
           }
 

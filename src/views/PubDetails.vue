@@ -22,14 +22,19 @@
 
 <script>
 import TableCard from '../components/TableCardReservation.vue'
+import * as allIcons from 'ionicons/icons'
 
 export default {
 
   name: 'pub-details',
+  data () {
+    return {
+      i: allIcons
+    }
+  },
   components: {
     TableCard
   },
-  props: ['i'],
   computed: {
     pubTables () {
       return this.$store.getters.pubTables

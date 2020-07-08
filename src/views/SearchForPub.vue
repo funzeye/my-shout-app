@@ -21,26 +21,22 @@
         debounce="300" @ionChange="filterSearchItems($event.target)"></ion-searchbar>
         <ion-list>
             <div animated="true" v-show="!p.hidePub" v-for="p in pubs" :key="p['.key']">
-                <pub-card :i="i" :pub="p" actionName="Select" />
+                <pub-card :pub="p" actionName="Select" />
             </div>
         </ion-list>
       </template>
     </ion-content>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
 import TheHeader from '../components/TheHeader.vue'
-import * as allIcons from 'ionicons/icons'
 import PubCard from '../components/PubCard.vue'
 
 export default {
   name: 'search-for-pub',
-  data () {
-    return {
-      i: allIcons
-    }
-  },
+  props: ['i'],
   components: {
     TheHeader,
     PubCard

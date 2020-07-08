@@ -1,25 +1,33 @@
 <template>
   <div class="ion-page">
-    <the-header />
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Reserve Table</ion-title>
+        <ion-buttons slot="start">
+          <ion-button @click="backToPubDetails">
+            <ion-icon :src="i.arrowBack"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
     <ion-content class="ion-padding">
-      <h1>Reserve Table</h1>
       <form @submit.prevent="reserve">
         <ion-item>
             <ion-label position="stacked">Table # To Reserve:</ion-label>
-            <ion-input-vue readonly>{{ pubTable.tableNum }}</ion-input-vue>
+            <ion-input-vue disabled>{{ pubTable.tableNum }}</ion-input-vue>
         </ion-item>
         <ion-item>
             <ion-label position="stacked">Name on Reservation:</ion-label>
-            <ion-input-vue v-if="pub.ownerId !== userId" readonly>{{ user.firstName + ' ' + user.surname  }}</ion-input-vue>
+            <ion-input-vue type="text" v-if="pub.ownerId !== userId" disabled>{{user.firstName}} {{user.surname}}</ion-input-vue>
             <ion-input-vue v-else v-model="ownerReservedOnBehalfOf"></ion-input-vue>
         </ion-item>
         <ion-item>
             <ion-label position="stacked">In Pub:</ion-label>
-            <ion-input-vue readonly>{{ pub.pubName }}</ion-input-vue>
+            <ion-input-vue disabled>{{ pub.pubName }}</ion-input-vue>
         </ion-item>
         <ion-item>
             <ion-label position="stacked">On date:</ion-label>
-            <ion-input-vue readonly>Today</ion-input-vue>
+            <ion-input-vue disabled>Today</ion-input-vue>
         </ion-item>
 
         <ion-text color="secondary">
@@ -34,21 +42,18 @@
         </div>
       </form>
     </ion-content>
-    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import TheHeader from '../components/TheHeader.vue'
+import * as allIcons from 'ionicons/icons'
 
 export default {
   name: 'reserve-table',
-  components: {
-    TheHeader
-  },
   data () {
     return {
-      ownerReservedOnBehalfOf: null
+      ownerReservedOnBehalfOf: null,
+      i: allIcons
     }
   },
   computed: {
@@ -66,6 +71,9 @@ export default {
     }
   },
   methods: {
+    backToPubDetails () {
+      this.$router.push({ name: 'pub-details', params: { id: this.pub.key } })
+    },
     cancel () {
       console.log('reserveTable.vue: cancel button clicked')
       this.$router.push({ name: 'pub-details', params: { id: this.pub.key } })
@@ -80,8 +88,18 @@ export default {
     }
   },
   created () {
-    if (!this.user) {
+    if (!this.user || this.user.email === '') {
       this.$store.dispatch('fetchUserDetails')
+    }
+    if (!this.pub.key || this.pub.key !== this.$route.query.pubId) {
+      console.log('this.$route.query:', this.$route.query)
+      console.log('no pub state - fetching from DB')
+      this.$store.dispatch('fetchPubByPubId', this.$route.query.pubId)
+    }
+    if (!this.pubTable || this.pubTable.key !== this.$route.params.id) {
+      console.log('this.$route.params:', this.$route.params)
+      console.log('no pubTable state - fetching from DB')
+      this.$store.dispatch('fetchPubTable', this.$route.params.id)
     }
   }
 
