@@ -2,7 +2,7 @@ import Vue from 'vue'
 import PubDetails from '../views/PubDetails.vue'
 import About from '../views/About.vue'
 import CreateNewPub from '../views/CreateNewPub.vue'
-import CreateNewPubTables from '../views/CreateNewPubTables.vue'
+import EditPubTables from '../views/EditPubTables.vue'
 import CreateUserRoles from '../views/admin/CreateUserRoles.vue'
 import CreateNewPubFloorArea from '../views/admin/CreateNewPubFloorArea.vue'
 import ReserveTable from '../views/ReserveTable.vue'
@@ -124,11 +124,11 @@ const routes = [
     }
   },
   {
-    path: '/create-new-pub-tables',
-    component: CreateNewPubTables,
-    name: 'create-new-pub-tables',
+    path: '/edit-pub-tables',
+    component: EditPubTables,
+    name: 'edit-pub-tables',
     beforeEnter (to, from, next) {
-      console.log('navigating to create-new-pub-tables page.')
+      console.log('navigating to edit-pub-tables page.')
       var token = store.state.idToken
       var pub = store.state.pub
       if (!token) {

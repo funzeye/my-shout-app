@@ -58,7 +58,7 @@ export default {
   methods: {
     submitted () {
       this.$store.dispatch('updatePubTable', this.pubTable)
-      this.$router.replace({ name: 'create-new-pub-tables' })
+      this.$router.replace({ name: 'edit-pub-tables' })
     },
     updateTableFloors (e) {
       console.log('updating table floors:', e)

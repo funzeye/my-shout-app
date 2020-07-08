@@ -1,16 +1,21 @@
 <template>
   <div class="ion-page">
-    <the-header />
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Edit Tables</ion-title>
+        <ion-buttons slot="start">
+          <ion-button @click="backToPubDetails">
+            <ion-icon :src="i.arrowBack"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
     <ion-content class="ion-padding">
-      <h1>Edit Table Details for {{ pub.pubName }}</h1>
-      <!-- <h2>{{ pub }} </h2> -->
       <ion-list>
         <div v-for="pt in pubTables" :key="pt['.key']">
-          <!-- {{ pt }} -->
           <table-card :i="i" :pubTable="pt" :pubFloors="pub.floors" />
         </div>
       </ion-list>
-
       <form @submit.prevent="submitted">
         <div class="ion-padding">
           <ion-button expand="block" class="ion-no-margin" type="submit">Complete</ion-button>
@@ -22,14 +27,12 @@
 </template>
 
 <script>
-import TheHeader from '../components/TheHeader.vue'
 import TableCard from '../components/TableCardEdit.vue'
 import * as allIcons from 'ionicons/icons'
 
 export default {
-  name: 'create-new-pub-tables',
+  name: 'edit-pub-tables',
   components: {
-    TheHeader,
     TableCard
   },
   data () {
@@ -39,7 +42,10 @@ export default {
   },
   methods: {
     submitted () {
-      this.$router.replace({ name: 'pub-details' })
+      this.$router.replace({ name: 'pub-details', params: { id: this.pub.key } })
+    },
+    backToPubDetails () {
+      this.$router.replace({ name: 'pub-details', params: { id: this.pub.key } })
     }
   },
   computed: {

@@ -1,6 +1,15 @@
 <template>
   <div class="ion-page">
-    <the-header />
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>{{ pub.pubName }}</ion-title>
+        <ion-buttons v-if="pub.ownerId === userId" slot="end">
+          <ion-button @click="editPubDetails">
+            <ion-icon :src="i.settingsOutline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
     <ion-content class="ion-padding">
       <ion-list>
         <div v-for="pt in pubTables" :key="pt['.key']">
@@ -13,13 +22,11 @@
 
 <script>
 import TableCard from '../components/TableCardReservation.vue'
-import TheHeader from '../components/TheHeader.vue'
 
 export default {
 
   name: 'pub-details',
   components: {
-    TheHeader,
     TableCard
   },
   props: ['i'],
@@ -39,6 +46,11 @@ export default {
     if (!this.pub || this.pub.key !== this.$route.params.id) {
       console.log('fecthing pub linked to pub id of: ', this.$route.params.id)
       this.$store.dispatch('fetchPubByPubId', this.$route.params.id)
+    }
+  },
+  methods: {
+    editPubDetails () {
+      this.$router.push({ name: 'edit-pub-tables' })
     }
   }
 }
