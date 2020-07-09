@@ -1,5 +1,5 @@
 <template>
-  <div class="ion-page">
+  <ion-page>
     <the-header />
     <ion-content class="ion-padding">
       <template v-if="user.userRoles && user.userRoles.publican === true">
@@ -26,8 +26,8 @@
         </ion-list>
       </template>
     </ion-content>
-    <router-view></router-view>
-  </div>
+    <router-view/>
+  </ion-page>
 </template>
 
 <script>
