@@ -53,11 +53,13 @@ export default {
     // },
     reservation () {
       const reservations = this.$store.getters.allReservationsForPub
-      const reservationsWithThisTableKey = reservations.filter(item => item.tableId === this.pubTable.key)
-      if (reservationsWithThisTableKey.length === 1) {
-        return reservationsWithThisTableKey[0]
-      } else if (reservationsWithThisTableKey.length > 1) {
-        console.log('Error: 2 active reservations found for same table')
+      if (reservations && reservations.length > 0) {
+        const reservationsWithThisTableKey = reservations.filter(item => item.table.tableId === this.pubTable.key)
+        if (reservationsWithThisTableKey.length === 1) {
+          return reservationsWithThisTableKey[0]
+        } else if (reservationsWithThisTableKey.length > 1) {
+          console.log('Error: 2 active reservations found for same table')
+        }
       }
       return {
         isActive: false,

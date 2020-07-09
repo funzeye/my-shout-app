@@ -3,6 +3,7 @@ import PubDetails from '../views/PubDetails.vue'
 import About from '../views/About.vue'
 import CreateNewPub from '../views/CreateNewPub.vue'
 import EditPubTables from '../views/EditPubTables.vue'
+import BookedTables from '../views/BookedTables.vue'
 import CreateUserRoles from '../views/admin/CreateUserRoles.vue'
 import CreateNewPubFloorArea from '../views/admin/CreateNewPubFloorArea.vue'
 import ReserveTable from '../views/ReserveTable.vue'
@@ -62,6 +63,19 @@ const routes = [
         path: 'about',
         component: About,
         name: 'about',
+        beforeEnter (to, from, next) {
+          var token = store.state.idToken
+          if (token) {
+            next()
+          } else {
+            next('/signin')
+          }
+        }
+      },
+      {
+        path: 'booked-tables',
+        component: BookedTables,
+        name: 'booked-tables',
         beforeEnter (to, from, next) {
           var token = store.state.idToken
           if (token) {
