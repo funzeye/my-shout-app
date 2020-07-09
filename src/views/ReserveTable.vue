@@ -17,9 +17,9 @@
             <ion-input-vue disabled>{{ pubTable.tableNum }}</ion-input-vue>
         </ion-item>
         <ion-item>
-            <ion-label position="stacked">Name on Reservation:</ion-label>
-            <ion-input-vue type="text" v-if="pub.ownerId !== userId" disabled>{{user.firstName}} {{user.surname}}</ion-input-vue>
-            <ion-input-vue v-else v-model="ownerReservedOnBehalfOf"></ion-input-vue>
+            <ion-label position="stacked">Name on Reservation: <ion-text v-if="pub.ownerId === userId" color="danger">*</ion-text></ion-label>
+            <ion-input-vue v-if="pub.ownerId !== userId" type="text"  disabled>{{user.firstName}} {{user.surname}}</ion-input-vue>
+            <ion-input-vue v-else autofocus="true" v-model="ownerReservedOnBehalfOf" placeholder="Please add name of person here"></ion-input-vue>
         </ion-item>
         <ion-item>
             <ion-label position="stacked">In Pub:</ion-label>
@@ -35,7 +35,7 @@
         </ion-text>
 
         <div class="ion-padding">
-            <ion-button expand="block" class="ion-no-margin" type="submit">Confirm Reservation</ion-button>
+            <ion-button expand="block" class="ion-no-margin" :disabled="$v.$invalid && pub.ownerId === userId" type="submit">Confirm Reservation</ion-button>
         </div>
         <div class="ion-padding">
             <ion-button expand="block" class="ion-no-margin" @click.prevent="cancel">Cancel</ion-button>
@@ -47,6 +47,7 @@
 
 <script>
 import * as allIcons from 'ionicons/icons'
+import { required } from 'vuelidate/lib/validators'
 
 export default {
   name: 'reserve-table',
@@ -54,6 +55,11 @@ export default {
     return {
       ownerReservedOnBehalfOf: null,
       i: allIcons
+    }
+  },
+  validations: {
+    ownerReservedOnBehalfOf: {
+      required
     }
   },
   computed: {

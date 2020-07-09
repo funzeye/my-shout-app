@@ -1,7 +1,12 @@
 <template>
+  <div class="ion-page">
   <ion-tabs>
-        <ion-tab tab="search-for-pub" id="search-for-pub">
+        <!--<ion-tab tab="search-for-pub" id="search-for-pub">
           <SearchForPub :i="i"/>
+        </ion-tab>-->
+
+        <ion-tab tab="search-for-pub" :routes="['search-for-pub', 'pub-details']" :to="{name:'search-for-pub'}">
+          <ion-vue-router name="searchRoute"></ion-vue-router>
         </ion-tab>
 
         <ion-tab tab="booked-tables" id="booked-tables">
@@ -34,10 +39,11 @@
           </ion-tab-bar>
         </template>
       </ion-tabs>
+    </div>
 </template>
 
 <script>
-import SearchForPub from '../views/SearchForPub.vue'
+// import SearchForPub from '../views/SearchForPub.vue'
 import About from '../views/About.vue'
 import BookedTables from '../views/BookedTables.vue'
 
@@ -51,7 +57,7 @@ export default {
     }
   },
   components: {
-    SearchForPub,
+    // SearchForPub,
     About,
     BookedTables
   }

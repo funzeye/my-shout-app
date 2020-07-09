@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import PubDetails from '../views/PubDetails.vue'
 import About from '../views/About.vue'
 import CreateNewPub from '../views/CreateNewPub.vue'
 import EditPubTables from '../views/EditPubTables.vue'
@@ -7,7 +6,6 @@ import BookedTables from '../views/BookedTables.vue'
 import CreateUserRoles from '../views/admin/CreateUserRoles.vue'
 import CreateNewPubFloorArea from '../views/admin/CreateNewPubFloorArea.vue'
 import ReserveTable from '../views/ReserveTable.vue'
-import SearchForPub from '../views/SearchForPub.vue'
 import EditTableDetails from '../views/EditTableDetails.vue'
 import TabRoot from '../components/TabRoot.vue'
 import SignUpPage from '../components/auth/SignUp.vue'
@@ -33,7 +31,9 @@ const routes = [
       },
       {
         path: 'search-for-pub',
-        component: SearchForPub,
+        components: {
+          searchRoute: () => import('@/views/SearchForPub.vue')
+        },
         name: 'search-for-pub',
         beforeEnter (to, from, next) {
           var token = store.state.idToken
@@ -42,22 +42,25 @@ const routes = [
           } else {
             next('/signin')
           }
+        }// ,
+        // children: [
+        //
+        // ]
+      },
+      {
+        path: ':id/pub-details',
+        components: {
+          searchRoute: () => import('@/views/PubDetails.vue')
         },
-        children: [
-          {
-            path: '../:id/pub-details',
-            component: PubDetails,
-            name: 'pub-details',
-            beforeEnter (to, from, next) {
-              var token = store.state.idToken
-              if (token) {
-                next()
-              } else {
-                next('/signin')
-              }
-            }
+        name: 'pub-details',
+        beforeEnter (to, from, next) {
+          var token = store.state.idToken
+          if (token) {
+            next()
+          } else {
+            next('/signin')
           }
-        ]
+        }
       },
       {
         path: 'about',

@@ -1,5 +1,5 @@
 <template>
-  <ion-page>
+  <div class="ion-page">
     <ion-header>
       <ion-toolbar>
         <ion-title>{{ pub.pubName }}</ion-title>
@@ -17,7 +17,7 @@
         </div>
       </ion-list>
     </ion-content>
-  </ion-page>
+  </div>
 </template>
 
 <script>
