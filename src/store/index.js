@@ -745,10 +745,14 @@ export default new Vuex.Store({
         .then(response => {
           console.log('fetchReservationForPunter response: ', response)
           const data = response.data
-
           const resultArray = []
+          const todaysDate = new Date()
           for (const key in data) {
-            if (data[key].isActive === true && data[key].tableId !== tableToIgnoreId) {
+            const reservedAtDateStringAsDate = new Date(data[key].reservedAtDate)
+            const reservationIsToday = todaysDate.getDate() === reservedAtDateStringAsDate.getDate() &&
+            todaysDate.getMonth() === reservedAtDateStringAsDate.getMonth() &&
+            todaysDate.getFullYear() === reservedAtDateStringAsDate.getFullYear()
+            if (data[key].isActive === true && reservationIsToday && data[key].tableId !== tableToIgnoreId) {
               console.log('fetchReservationForPunter key: ', key)
               data[key].key = key
               console.log('fetchReservationForPunter data[key]: ', data[key])
