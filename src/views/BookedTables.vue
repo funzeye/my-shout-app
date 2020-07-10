@@ -26,7 +26,7 @@
                 </ion-item>
             </ion-card-content>
         </ion-card>
-        <ion-card v-if="previousReservations">
+        <ion-card v-if="previousReservations && previousReservations.length > 0">
             <ion-card-header>
                 <ion-card-title>Previous Bookings</ion-card-title>
             </ion-card-header>

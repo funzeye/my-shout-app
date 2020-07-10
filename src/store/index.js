@@ -50,7 +50,6 @@ export default new Vuex.Store({
       reservedByOwner: false,
       ownerReservedOnBehalfOf: '',
       reservedAtDate: '',
-      isActive: false,
       userDetails: null
     },
     activeReservationForPub: {
@@ -60,7 +59,6 @@ export default new Vuex.Store({
       reservedByOwner: false,
       ownerReservedOnBehalfOf: '',
       reservedAtDate: '',
-      isActive: false,
       userDetails: null
     },
     previousReservationsForPunter: [],
@@ -158,6 +156,9 @@ export default new Vuex.Store({
         name: ''
       }
     },
+    resetReservationsForPubCollection (state) {
+      state.allReservationsForPub = []
+    },
     resetCurrentReservation (state) {
       state.activeReservationForPub = {
         key: '',
@@ -166,7 +167,6 @@ export default new Vuex.Store({
         reservedAtDate: '',
         reservedByOwner: false,
         ownerReservedOnBehalfOf: '',
-        isActive: false,
         userDetails: null
       }
       console.log('current reservation state reset to nothing')
@@ -311,6 +311,7 @@ export default new Vuex.Store({
       }
       console.log('fecthing pub table reservation data from the DB and updating List')
       console.log('for pub with key:', pubKey)
+      commit('resetReservationsForPubCollection')
       globalAxios.get('reservations.json' + '?auth=' + state.idToken +
         '&orderBy="pub/pubId"&equalTo="' + pubKey + '"')
         .then(response => {
@@ -320,17 +321,18 @@ export default new Vuex.Store({
           const todaysDate = new Date()
           for (const key in data) {
             console.log('reserved at date:', data[key].reservedAtDate)
+            console.log('reserved key:', key)
             const reservedAtDateStringAsDate = new Date(data[key].reservedAtDate)
             const reservationIsToday = todaysDate.getDate() === reservedAtDateStringAsDate.getDate() &&
               todaysDate.getMonth() === reservedAtDateStringAsDate.getMonth() &&
               todaysDate.getFullYear() === reservedAtDateStringAsDate.getFullYear()
-            if (data[key].isActive && reservationIsToday) {
+            if (!data[key].isCancelled && reservationIsToday) {
               // retrieve user details and append to reservation object as an inner object
               console.log('getting userdetails for user with id of:', data[key].reservedBy)
               globalAxios.get('usersDetails.json' + '?auth=' + state.idToken +
                 '&orderBy="$key"&equalTo="' + data[key].reservedBy + '"')
                 .then(response => {
-                  console.log(response)
+                  console.log('.get(usersDetails.json:', response)
                   const userData = response.data
                   const usesDetailsResultArray = []
                   for (const dataKey in userData) {
@@ -346,8 +348,10 @@ export default new Vuex.Store({
                 })
             } else if (!reservationIsToday) {
               console.log('reservation not added as it is not todays date')
-            } else if (!data[key].isActive) {
-              console.log('reservation not added as it is not active')
+            } else if (data[key].isCancelled) {
+              console.log('reservation not added as it is a cancelled reservation')
+            } else {
+              console.log('reservation not added for unknown reason')
             }
           }
           //  commit('setReservationsForPub', resultArray) // TODO might speed things up if I add to collection inside loop...
@@ -388,7 +392,7 @@ export default new Vuex.Store({
         return
       }
       console.log('fecthing pub data from the DB')
-      console.log('for pub with user id:', pubId)
+      console.log('for pub with pub id:', pubId)
       globalAxios.get('pubs.json' + '?auth=' + state.idToken + '&orderBy="$key"&equalTo="' + pubId + '"')
         .then(response => {
           console.log('fetchPubByPubId response: ', response)
@@ -456,12 +460,12 @@ export default new Vuex.Store({
             const reservationIsToday = todaysDate.getDate() === reservedAtDateStringAsDate.getDate() &&
             todaysDate.getMonth() === reservedAtDateStringAsDate.getMonth() &&
             todaysDate.getFullYear() === reservedAtDateStringAsDate.getFullYear()
-            if (data[key].isActive === true && reservationIsToday) {
+            if (!data[key].isCancelled && reservationIsToday) {
               console.log('adding active reservation for punter - fetchReservationsForPunter key: ', key)
               data[key].key = key
               console.log('adding active reservation for punter - fetchReservationsForPunter data[key]: ', data[key])
               resultArray.push(data[key])
-            } else if (data[key].isActive) {
+            } else if (!data[key].isCancelled) {
               console.log('adding previous reservation for punter - fetchReservationsForPunter key: ', key)
               data[key].key = key
               console.log('adding previous reservation for punter - fetchReservationsForPunter data[key]: ', data[key])
@@ -752,7 +756,7 @@ export default new Vuex.Store({
             const reservationIsToday = todaysDate.getDate() === reservedAtDateStringAsDate.getDate() &&
             todaysDate.getMonth() === reservedAtDateStringAsDate.getMonth() &&
             todaysDate.getFullYear() === reservedAtDateStringAsDate.getFullYear()
-            if (data[key].isActive === true && reservationIsToday && data[key].tableId !== tableToIgnoreId) {
+            if (!data[key].isCancelled === true && reservationIsToday && data[key].tableId !== tableToIgnoreId) {
               console.log('fetchReservationForPunter key: ', key)
               data[key].key = key
               console.log('fetchReservationForPunter data[key]: ', data[key])
@@ -786,7 +790,8 @@ export default new Vuex.Store({
           tableId: resFromArray.table.tableId,
           tableNum: resFromArray.table.tableNum
         },
-        isActive: false,
+        isCancelled: true,
+        cancelledAtDate: new Date(),
         key: null,
         pub: {
           pubId: resFromArray.pub.pubId,
@@ -824,7 +829,8 @@ export default new Vuex.Store({
           tableId: reservationData.table.tableId,
           tableNum: reservationData.table.tableNum
         },
-        isActive: false,
+        isCancelled: true,
+        cancelledAtDate: new Date(),
         key: null,
         pub: {
           pubId: reservationData.pub.pubId,
@@ -854,15 +860,6 @@ export default new Vuex.Store({
         console.log('No Id Token - Exiting')
         return
       }
-      // const reservation = {
-      //   tableId: state.pubTable.key,
-      //   pubId: state.pubTable.pubId,
-      //   reservedBy: state.userId,
-      //   ownerReservedOnBehalfOf: ownerReservedOnBehalfOf,
-      //   reservedByOwner: state.pub.ownerId === state.userId,
-      //   reservedAtDate: new Date(),
-      //   isActive: true
-      // }
       const reservation = {
         table: {
           tableId: state.pubTable.key,
@@ -876,8 +873,7 @@ export default new Vuex.Store({
         reservedBy: state.userId,
         ownerReservedOnBehalfOf: ownerReservedOnBehalfOf,
         reservedByOwner: state.pub.ownerId === state.userId,
-        reservedAtDate: new Date(),
-        isActive: true
+        reservedAtDate: new Date()
       }
 
       try {
