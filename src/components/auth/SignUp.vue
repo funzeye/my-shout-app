@@ -9,56 +9,63 @@
       <h1>Sign Up</h1>
       <form @submit.prevent="onSubmit">
         <ion-item class="input">
-          <ion-label for="firstName">First name</ion-label>
+          <ion-label for="firstName">First name <ion-text color="danger">*</ion-text></ion-label>
           <ion-input-vue
                   type="text"
                   id="firstName"
+                  @ionBlur="$v.firstName.$touch(true)"
                   v-model="firstName"></ion-input-vue>
         </ion-item>
+        <ion-note v-if="$v.firstName.$invalid && $v.firstName.$dirty" class="error ion-padding" color="danger">Valid name required</ion-note>
         <ion-item class="input">
-          <ion-label for="surname">Surname</ion-label>
+          <ion-label for="surname">Surname <ion-text color="danger">*</ion-text></ion-label>
           <ion-input-vue
                   type="text"
                   id="surname"
+                  @ionBlur="$v.surname.$touch(true)"
                   v-model="surname"></ion-input-vue>
         </ion-item>
+        <ion-note v-if="$v.surname.$invalid && $v.surname.$dirty" class="error ion-padding" color="danger">Valid name required</ion-note>
+
         <ion-item>
         <ion-label>I'm a: <ion-text color="danger">*</ion-text></ion-label>
-        <ion-select-vue @blur="$v.userRole.touch()" interface="alert" placeholder="Publican or Punter" name="userRole" v-model="userRole">
+        <ion-select-vue @ionBlur="$v.userRole.$touch(true)" interface="alert" placeholder="Publican or Punter" name="userRole"
+          v-model="userRole">
             <ion-select-option value="punter">Punter</ion-select-option>
             <ion-select-option value="publican">Publican</ion-select-option>
         </ion-select-vue>
-        <ion-note v-if="!$v.userRole" class="error ion-padding" color="danger">required</ion-note>
+        <ion-note v-if="$v.userRole.$invalid && $v.userRole.$dirty" class="error ion-padding" color="danger">required</ion-note>
       </ion-item>
         <ion-item class="input">
           <ion-label for="email">Email</ion-label>
           <ion-input-vue
                   type="email"
                   id="email"
-                  @blur="$v.email.touch()"
-                  v-model="email"></ion-input-vue>
+                  debounce="300"
+                  @ionBlur="setEmailLostFocus"
+                  v-model="email"
+                  @ionFocus="email_not_focused = false"></ion-input-vue>
         </ion-item>
-        <ion-note v-if="!$v.email.email" class="error ion-padding" color="danger">Valid Email Required</ion-note>
-
+        <ion-note v-if="!$v.email.email && email_not_focused" class="error ion-padding" color="danger">Valid Email Required</ion-note>
+        <ion-note v-if="!$v.email.unique" class="error ion-padding" color="danger">Email Already Taken</ion-note>
         <ion-item class="input">
           <ion-label for="password">Password</ion-label>
           <ion-input-vue
                   type="password"
                   id="password"
-                  @blur="$v.password.touch()"
+                  @ionBlur="$v.password.$touch(true)"
                   v-model="password"></ion-input-vue>
         </ion-item>
         <ion-note v-if="!$v.password.minLen" class="error ion-padding" color="danger">Must be at least 6 characters long</ion-note>
-
         <ion-item class="input">
           <ion-label for="confirm-password">Confirm Password</ion-label>
           <ion-input-vue
                   type="password"
                   id="confirm-password"
-                  @blur="$v.confirmPassword.touch()"
+                  @ionBlur="$v.confirmPassword.$touch(true)"
                   v-model="confirmPassword"></ion-input-vue>
         </ion-item>
-        <ion-note v-if="!$v.confirmPassword.sameAs" class="error ion-padding" color="danger">Passwords do not match</ion-note>
+        <ion-note v-if="!$v.confirmPassword.sameAs && $v.password.$dirty" class="error ion-padding" color="danger">Passwords do not match</ion-note>
 
         <ion-item class="input">
           <ion-label>Accept Terms of Use</ion-label>
@@ -75,6 +82,7 @@
 
 <script>
 import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
+import axios from '@/axios-auth'
 
 export default {
   data () {
@@ -85,13 +93,38 @@ export default {
       password: '',
       confirmPassword: '',
       userRole: '',
-      terms: false
+      terms: false,
+      email_not_focused: false
     }
   },
   validations: {
     email: {
       required,
-      email
+      email,
+      unique: val => {
+        const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
+        if (emailRegex.test(val)) {
+          if (val === '') {
+            return true
+          }
+          return axios.post(':createAuthUri?key=AIzaSyB8-xAjyYMTR0Jt1-H-ayS9FDINW4JdAhQ', {
+            identifier: val,
+            continueUri: window.location.href
+          })
+            .then(response => {
+              // console.log(response)
+              return !response.data.registered
+            }
+            )
+            .catch((ex) => {
+              // console.log('error:', ex)
+              return true
+            }
+            )
+        }
+        return true
+      }
     },
     password: {
       required,
@@ -102,6 +135,14 @@ export default {
     },
     userRole: {
       required
+    },
+    firstName: {
+      required,
+      minLen: minLength(2)
+    },
+    surname: {
+      required,
+      minLen: minLength(2)
     }
   },
   methods: {
@@ -117,6 +158,11 @@ export default {
       }
       console.log(formData)
       this.$store.dispatch('signup', formData)
+    },
+    setEmailLostFocus () {
+      console.log('email lost focus')
+      this.$v.email.$touch(true)
+      this.email_not_focused = true
     }
   }
 }
