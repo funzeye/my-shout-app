@@ -14,7 +14,8 @@ export default new Vuex.Store({
       email: '',
       firstName: '',
       surname: '',
-      userRoles: null
+      userRoles: null,
+      phone: ''
     },
     pubs: [],
     pubTables: [],
@@ -78,6 +79,7 @@ export default new Vuex.Store({
     },
     storeUserDetails (state, userData) {
       state.user.email = userData.email
+      state.user.phone = userData.phone
       state.user.firstName = userData.firstName
       state.user.surname = userData.surname
       state.user.userRoles = userData.userRoles
@@ -215,7 +217,8 @@ export default new Vuex.Store({
           dispatch('storeUserDetails', {
             email: authData.email,
             firstName: authData.firstName,
-            surname: authData.surname
+            surname: authData.surname,
+            phone: authData.phone
           })
           console.log('add user role to user details in DB')
           dispatch('addRoleToUsersDetails', {
@@ -540,7 +543,8 @@ export default new Vuex.Store({
           commit('storeUserDetails', {
             email: userData.email,
             firstName: userData.firstName,
-            surname: userData.surname
+            surname: userData.surname,
+            phone: userData.phone
           })
         })
         .catch(error => console.log(error))

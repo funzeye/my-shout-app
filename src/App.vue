@@ -17,3 +17,16 @@ export default {
   }
 }
 </script>
+
+<style lang="css">
+
+ion-tab ion-content {
+  --ion-background-color: #f1f2f8;
+}
+ion-searchbar{
+  --background: #fff !important;
+}
+ion-card, ion-card > ion-item, ion-card > ion-card-header, ion-card > ion-card-content{
+  --background: #fff !important;
+}
+</style>

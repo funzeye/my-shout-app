@@ -15,6 +15,10 @@
           <ion-label>{{ reservation.userDetails.firstName + ' ' + reservation.userDetails.surname }}</ion-label>
           <ion-note slot="end">Reserved By Punter</ion-note>
         </ion-item>
+        <ion-item v-if="!reservation.isCancelled && reservation.reservedBy && !reservation.reservedByOwner && ((reservation.reservedBy === loggedInUserId) || userIsOwner)">
+          <ion-icon :src="i.call" slot="start"></ion-icon>
+          <ion-label>{{ reservation.userDetails.phone }}</ion-label>
+        </ion-item>
         <ion-item v-else-if="!reservation.isCancelled && reservation.reservedBy && reservation.reservedByOwner && userIsOwner">
           <ion-icon :src="i.person" slot="start"></ion-icon>
           <ion-label>{{ reservation.ownerReservedOnBehalfOf }}</ion-label>

@@ -12,7 +12,7 @@
             </ion-card-header>
 
             <ion-card-content>
-                <ion-item v-if="activeReservation" lines="none">
+                <ion-item v-if="activeReservation && activeReservation.pub" lines="none">
                     <ion-label>
                         <h2>{{ activeReservation.pub.pubName }}</h2>
                         <h3>{{ activeReservation.table.seats }} seats &#64; table &#35; {{ activeReservation.table.tableNum }}</h3>

@@ -27,6 +27,17 @@
         </ion-item>
         <ion-note v-if="$v.surname.$invalid && $v.surname.$dirty" class="error ion-padding" color="danger">Valid name required</ion-note>
 
+        <ion-note v-if="$v.firstName.$invalid && $v.firstName.$dirty" class="error ion-padding" color="danger">Valid name required</ion-note>
+        <ion-item class="input">
+          <ion-label for="surname">Phone <ion-text color="danger">*</ion-text></ion-label>
+          <ion-input-vue
+                  type="number"
+                  id="phone"
+                  @ionBlur="$v.phone.$touch(true)"
+                  v-model="phone"></ion-input-vue>
+        </ion-item>
+        <ion-note v-if="$v.phone.$invalid && $v.phone.$dirty" class="error ion-padding" color="danger">Valid number required</ion-note>
+
         <ion-item>
         <ion-label>I'm a: <ion-text color="danger">*</ion-text></ion-label>
         <ion-select-vue @ionBlur="$v.userRole.$touch(true)" interface="action-sheet" placeholder="Publican or Punter" name="userRole"
@@ -89,6 +100,7 @@ export default {
     return {
       firstName: '',
       surname: '',
+      phone: '',
       email: '',
       password: '',
       confirmPassword: '',
@@ -143,6 +155,9 @@ export default {
     surname: {
       required,
       minLen: minLength(2)
+    },
+    phone: {
+      required
     }
   },
   methods: {
@@ -154,7 +169,8 @@ export default {
         terms: this.terms,
         firstName: this.firstName,
         surname: this.surname,
-        userRole: this.userRole
+        userRole: this.userRole,
+        phone: this.phone
       }
       console.log(formData)
       this.$store.dispatch('signup', formData)
