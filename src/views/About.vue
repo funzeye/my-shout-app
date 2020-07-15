@@ -2,7 +2,8 @@
   <div class="ion-page">
     <the-header />
     <ion-content class="ion-padding">
-      <h1>About Page</h1>
+      <h1>Profile Page</h1>
+      <p>Coming soon...</p>
     </ion-content>
   </div>
 </template>

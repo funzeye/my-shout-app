@@ -6,13 +6,26 @@
         <ion-text>
           <h1 class="ion-padding">Your Pubs</h1>
         </ion-text>
-        <ion-searchbar show-cancel-button="focus"
-        debounce="300" @ionChange="filterSearchItems($event.target)"></ion-searchbar>
-        <ion-list>
-            <div animated="true" v-show="!p.hidePub" v-for="p in publicansPubs" :key="p['.key']">
-                <pub-card :i="i" :pub="p" actionName="Manage" />
-            </div>
-        </ion-list>
+        <template v-if="publicansPubs && publicansPubs.length > 0">
+          <ion-searchbar show-cancel-button="focus"
+          debounce="300" @ionChange="filterSearchItems($event.target)"></ion-searchbar>
+          <ion-list>
+              <div animated="true" v-show="!p.hidePub" v-for="p in publicansPubs" :key="p['.key']">
+                  <pub-card :i="i" :pub="p" actionName="Manage" />
+              </div>
+          </ion-list>
+        </template>
+        <template v-else>
+          <ion-item>
+            <ion-label>
+              You have no pub of your own added.
+            </ion-label>
+            <ion-button expand="block" @click="createNewPub">
+              <ion-icon :src="i.addOutline" slot="start" style="color:white"></ion-icon>
+              Add New Pub
+            </ion-button>
+          </ion-item>
+        </template>
       </template>
       <ion-item-divider v-if="user.userRoles && user.userRoles.punter === true && user.userRoles.publican === true">
       </ion-item-divider>
@@ -32,10 +45,15 @@
 <script>
 import TheHeader from '../components/TheHeader.vue'
 import PubCard from '../components/PubCard.vue'
+import * as allIcons from 'ionicons/icons'
 
 export default {
   name: 'search-for-pub',
-  props: ['i'],
+  data () {
+    return {
+      i: allIcons
+    }
+  },
   components: {
     TheHeader,
     PubCard
@@ -80,6 +98,9 @@ export default {
         })
         console.log('pubs:', this.pubs)
       })
+    },
+    createNewPub () {
+      this.$router.push({ name: 'create-new-pub' })
     }
   }
 }

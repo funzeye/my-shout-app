@@ -7,7 +7,7 @@
       <form @submit.prevent="submitted">
         <ion-item>
             <ion-label position="stacked">Pub Floor Area Name <ion-text color="danger">*</ion-text></ion-label>
-            <ion-select-vue value="" interface="alert" placeholder="e.g. Lounge" name="pubFloorArea" v-model="pubTable.pubFloorArea">
+            <ion-select-vue value="" interface="action-sheet" placeholder="e.g. Lounge" name="pubFloorArea" v-model="pubTable.pubFloorArea">
                 <ion-select-option v-for="pfa in pubFloorAreas" :key="pfa['.key']" :value="pfa.name">{{ pfa.name }}</ion-select-option>
             </ion-select-vue>
         </ion-item>

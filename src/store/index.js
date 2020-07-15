@@ -82,6 +82,9 @@ export default new Vuex.Store({
       state.user.surname = userData.surname
       state.user.userRoles = userData.userRoles
     },
+    storeUserDetailsUserRole (state, userRole) {
+      state.user.userRoles = userRole
+    },
     removeReservationFromCollection (state, reservationKey) {
       console.log('removing reservation from collection:', reservationKey)
       console.log('reservation collection before:', state.allReservationsForPub)
@@ -203,18 +206,24 @@ export default new Vuex.Store({
           })
           const now = new Date()
           const expirationDate = new Date(now.getTime() + res.data.expiresIn * 1000)
+          console.log('seeting localStorage variables')
           localStorage.setItem('token', res.data.idToken)
           localStorage.setItem('userId', res.data.localId)
           localStorage.setItem('expirationDate', expirationDate.getTime())
+
+          console.log('storing user details in DB')
           dispatch('storeUserDetails', {
             email: authData.email,
             firstName: authData.firstName,
             surname: authData.surname
           })
+          console.log('add user role to user details in DB')
           dispatch('addRoleToUsersDetails', {
             userRole: authData.userRole,
             userId: res.data.localId
           })
+
+          console.log('add user id to user roles in DB')
           dispatch('addUserToUserRolesMembers', {
             userRole: authData.userRole,
             userId: res.data.localId
@@ -541,10 +550,12 @@ export default new Vuex.Store({
         console.log('No Id Token - Exiting')
         return
       }
+      console.log('adding role to userDetails', userData)
       const userRole = userData.userRole
       globalAxios.put('usersDetails/' + userData.userId + '/userRoles.json' + '?auth=' + state.idToken, { [userRole]: true })
         .then(res => {
-          console.log(res)
+          console.log('addRoleToUsersDetails response:', res)
+          commit('storeUserDetailsUserRole', res.data)
         })
         .catch(error => console.log(error))
     },
@@ -553,10 +564,11 @@ export default new Vuex.Store({
         console.log('No Id Token - Exiting')
         return
       }
+      console.log('addUserToUserRolesMembers data:', userData)
       const userRole = userData.userRole
       globalAxios.put('userRoles/' + userRole + '/members.json' + '?auth=' + state.idToken, { [userData.userId]: true })
         .then(res => {
-          console.log(res)
+          console.log('addUserToUserRolesMembers response:', userData)
         })
         .catch(error => console.log(error))
     },

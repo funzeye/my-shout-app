@@ -29,15 +29,15 @@
 
         <ion-item>
         <ion-label>I'm a: <ion-text color="danger">*</ion-text></ion-label>
-        <ion-select-vue @ionBlur="$v.userRole.$touch(true)" interface="alert" placeholder="Publican or Punter" name="userRole"
+        <ion-select-vue @ionBlur="$v.userRole.$touch(true)" interface="action-sheet" placeholder="Publican or Punter" name="userRole"
           v-model="userRole">
             <ion-select-option value="punter">Punter</ion-select-option>
             <ion-select-option value="publican">Publican</ion-select-option>
         </ion-select-vue>
         <ion-note v-if="$v.userRole.$invalid && $v.userRole.$dirty" class="error ion-padding" color="danger">required</ion-note>
       </ion-item>
-        <ion-item class="input">
-          <ion-label for="email">Email</ion-label>
+      <ion-item class="input">
+          <ion-label for="email">Email <ion-text color="danger">*</ion-text></ion-label>
           <ion-input-vue
                   type="email"
                   id="email"
@@ -49,7 +49,7 @@
         <ion-note v-if="!$v.email.email && email_not_focused" class="error ion-padding" color="danger">Valid Email Required</ion-note>
         <ion-note v-if="!$v.email.unique" class="error ion-padding" color="danger">Email Already Taken</ion-note>
         <ion-item class="input">
-          <ion-label for="password">Password</ion-label>
+          <ion-label for="password">Password <ion-text color="danger">*</ion-text></ion-label>
           <ion-input-vue
                   type="password"
                   id="password"
@@ -58,7 +58,7 @@
         </ion-item>
         <ion-note v-if="!$v.password.minLen" class="error ion-padding" color="danger">Must be at least 6 characters long</ion-note>
         <ion-item class="input">
-          <ion-label for="confirm-password">Confirm Password</ion-label>
+          <ion-label for="confirm-password">Confirm Password <ion-text color="danger">*</ion-text></ion-label>
           <ion-input-vue
                   type="password"
                   id="confirm-password"
