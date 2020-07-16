@@ -143,7 +143,7 @@ const routes = [
     }
   },
   {
-    path: '/edit-pub-tables',
+    path: '/:id/edit-pub-tables',
     component: EditPubTables,
     name: 'edit-pub-tables',
     beforeEnter (to, from, next) {
@@ -162,7 +162,7 @@ const routes = [
       }
     },
     children: [{
-      path: ':id/edit-table-details',
+      path: ':tableNum/edit-table-details',
       component: EditTableDetails,
       name: 'edit-table-details'
     }]

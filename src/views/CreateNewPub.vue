@@ -136,7 +136,7 @@ export default {
       console.log(newPub)
 
       this.$store.dispatch('storePub', newPub)
-      this.$router.replace('edit-pub-tables')
+      this.$router.replace({ name: 'edit-pub-tables', params: { id: this.pub.key } })
     }
   },
   created () {
