@@ -56,7 +56,7 @@ export default {
     //  return reservations.some(item => item.tableId === this.pubTable.key)
     // },
     reservation () {
-      const reservations = this.$store.getters.allReservationsForPub
+      const reservations = this.$store.getters.allTodaysReservationsForPub
       if (reservations && reservations.length > 0) {
         const reservationsWithThisTableKey = reservations.filter(item => item.table.tableId === this.pubTable.key)
         if (reservationsWithThisTableKey.length === 1) {

@@ -6,22 +6,17 @@
           </ion-toolbar>
       </ion-header>
       <ion-content>
-          <ion-card>
+          <ion-card v-if="activeReservation && activeReservation.pub">
             <ion-card-header>
                 <ion-card-title>Active Booking</ion-card-title>
             </ion-card-header>
 
             <ion-card-content>
-                <ion-item v-if="activeReservation && activeReservation.pub" lines="none">
+                <ion-item lines="none">
                     <ion-label>
                         <h2>{{ activeReservation.pub.pubName }}</h2>
                         <h3>{{ activeReservation.table.seats }} seats &#64; table &#35; {{ activeReservation.table.tableNum }}</h3>
                         <p>on {{ new Date(activeReservation.reservedAtDate).toDateString() }}</p>
-                    </ion-label>
-                </ion-item>
-                <ion-item v-else lines="none">
-                    <ion-label>
-                        No active bookings
                     </ion-label>
                 </ion-item>
             </ion-card-content>
@@ -58,6 +53,9 @@ export default {
     },
     activeReservation () {
       return this.$store.getters.activeReservationForPunter
+    },
+    allTodaysReservationsForPub () {
+      return this.$store.getters.allTodaysReservationsForPub
     },
     previousReservations () {
       return this.$store.getters.previousReservationsForPunter

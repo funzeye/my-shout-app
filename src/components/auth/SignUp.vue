@@ -87,6 +87,9 @@
           <ion-button type="submit" :disabled="$v.$invalid">Submit</ion-button>
         </div>
       </form>
+      <ion-router-link href="/signin">
+          Already have an account? Sign In
+        </ion-router-link>
     </ion-content>
   </div>
 </template>

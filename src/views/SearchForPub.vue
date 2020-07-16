@@ -4,7 +4,7 @@
     <ion-content class="ion-padding">
       <template v-if="user.userRoles && user.userRoles.publican === true">
         <ion-text>
-          <h1 class="ion-padding">Your Pubs</h1>
+          <h1 class="ion-padding">Your Pub</h1>
         </ion-text>
         <template v-if="publicansPubs && publicansPubs.length > 0">
           <ion-searchbar show-cancel-button="focus"

@@ -29,6 +29,9 @@
           <ion-button type="submit" :disabled="$v.$invalid">Submit</ion-button>
         </div>
       </form>
+       <ion-router-link href="/signup">
+          Sign Up
+        </ion-router-link>
     </ion-content>
   </div>
 </template>

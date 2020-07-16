@@ -63,7 +63,7 @@ export default new Vuex.Store({
       userDetails: null
     },
     previousReservationsForPunter: [],
-    allReservationsForPub: []
+    allTodaysReservationsForPub: []
   },
   mutations: {
     authUser (state, userData) {
@@ -89,13 +89,13 @@ export default new Vuex.Store({
     },
     removeReservationFromCollection (state, reservationKey) {
       console.log('removing reservation from collection:', reservationKey)
-      console.log('reservation collection before:', state.allReservationsForPub)
-      state.allReservationsForPub = state.allReservationsForPub.filter(item => item.key !== reservationKey)
-      console.log('reservation collection after:', state.allReservationsForPub)
+      console.log('reservation collection before:', state.allTodaysReservationsForPub)
+      state.allTodaysReservationsForPub = state.allTodaysReservationsForPub.filter(item => item.key !== reservationKey)
+      console.log('reservation collection after:', state.allTodaysReservationsForPub)
     },
     addReservationToCollection (state, reservation) {
       console.log('reservation saved to state collection:', reservation)
-      state.allReservationsForPub.push(reservation)
+      state.allTodaysReservationsForPub.push(reservation)
     },
     storePubTable (state, user) {
       state.pubTable = user
@@ -125,8 +125,8 @@ export default new Vuex.Store({
     },
     setReservationsForPub (state, reservations) {
       console.log('parameter:', reservations)
-      state.allReservationsForPub = reservations
-      console.log('state.allReservationsForPub:', state.allReservationsForPub)
+      state.allTodaysReservationsForPub = reservations
+      console.log('state.allTodaysReservationsForPub:', state.allTodaysReservationsForPub)
     },
     storePubFloorAreas (state, pubFloorAreas) {
       state.pubFloorAreas = pubFloorAreas
@@ -162,7 +162,7 @@ export default new Vuex.Store({
       }
     },
     resetReservationsForPubCollection (state) {
-      state.allReservationsForPub = []
+      state.allTodaysReservationsForPub = []
     },
     resetCurrentReservation (state) {
       state.activeReservationForPub = {
@@ -556,7 +556,7 @@ export default new Vuex.Store({
       }
       console.log('adding role to userDetails', userData)
       const userRole = userData.userRole
-      globalAxios.put('usersDetails/' + userData.userId + '/userRoles.json' + '?auth=' + state.idToken, { [userRole]: true })
+      globalAxios.patch('usersDetails/' + userData.userId + '/userRoles.json' + '?auth=' + state.idToken, { [userRole]: true })
         .then(res => {
           console.log('addRoleToUsersDetails response:', res)
           commit('storeUserDetailsUserRole', res.data)
@@ -570,7 +570,7 @@ export default new Vuex.Store({
       }
       console.log('addUserToUserRolesMembers data:', userData)
       const userRole = userData.userRole
-      globalAxios.put('userRoles/' + userRole + '/members.json' + '?auth=' + state.idToken, { [userData.userId]: true })
+      globalAxios.patch('userRoles/' + userRole + '/members.json' + '?auth=' + state.idToken, { [userData.userId]: true })
         .then(res => {
           console.log('addUserToUserRolesMembers response:', userData)
         })
@@ -798,7 +798,7 @@ export default new Vuex.Store({
       }
       console.log('cancelling reservation in DB for table: ', pubTableKey)
 
-      const resFromArray = state.allReservationsForPub.filter(res => res.table.tableId === pubTableKey)[0] // TODO better way to get this??
+      const resFromArray = state.allTodaysReservationsForPub.filter(res => res.table.tableId === pubTableKey)[0] // TODO better way to get this??
       console.log('resFromArray:', resFromArray)
       const reservation = {
         table: {
@@ -991,9 +991,9 @@ export default new Vuex.Store({
       console.log('calling previousReservationsForPunter getter')
       return state.previousReservationsForPunter
     },
-    allReservationsForPub (state) {
-      console.log('calling allReservationsForPub getter')
-      return state.allReservationsForPub
+    allTodaysReservationsForPub (state) {
+      console.log('calling allTodaysReservationsForPub getter')
+      return state.allTodaysReservationsForPub
     }
   },
   modules: {
