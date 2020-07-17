@@ -10,6 +10,8 @@ export default new Vuex.Store({
   state: {
     idToken: null,
     userId: null,
+    isPublican: false,
+    isPunter: false,
     user: {
       email: '',
       firstName: '',
@@ -63,7 +65,7 @@ export default new Vuex.Store({
       userDetails: null
     },
     previousReservationsForPunter: [],
-    allTodaysReservationsForPub: []
+    allReservationsForPub: []
   },
   mutations: {
     authUser (state, userData) {
@@ -73,6 +75,10 @@ export default new Vuex.Store({
     clearAuthData (state) {
       state.idToken = null
       state.userId = null
+    },
+    setUserType (state, userRoles) {
+      state.isPublican = userRoles.isPublican
+      state.isPunter = userRoles.isPunter
     },
     setStateActiveReservationForPub (state, reservation) {
       state.activeReservationForPub = reservation
@@ -89,13 +95,13 @@ export default new Vuex.Store({
     },
     removeReservationFromCollection (state, reservationKey) {
       console.log('removing reservation from collection:', reservationKey)
-      console.log('reservation collection before:', state.allTodaysReservationsForPub)
-      state.allTodaysReservationsForPub = state.allTodaysReservationsForPub.filter(item => item.key !== reservationKey)
-      console.log('reservation collection after:', state.allTodaysReservationsForPub)
+      console.log('reservation collection before:', state.allReservationsForPub)
+      state.allReservationsForPub = state.allReservationsForPub.filter(item => item.key !== reservationKey)
+      console.log('reservation collection after:', state.allReservationsForPub)
     },
     addReservationToCollection (state, reservation) {
       console.log('reservation saved to state collection:', reservation)
-      state.allTodaysReservationsForPub.push(reservation)
+      state.allReservationsForPub.push(reservation)
     },
     storePubTable (state, user) {
       state.pubTable = user
@@ -125,8 +131,8 @@ export default new Vuex.Store({
     },
     setReservationsForPub (state, reservations) {
       console.log('parameter:', reservations)
-      state.allTodaysReservationsForPub = reservations
-      console.log('state.allTodaysReservationsForPub:', state.allTodaysReservationsForPub)
+      state.allReservationsForPub = reservations
+      console.log('state.allReservationsForPub:', state.allReservationsForPub)
     },
     storePubFloorAreas (state, pubFloorAreas) {
       state.pubFloorAreas = pubFloorAreas
@@ -162,7 +168,7 @@ export default new Vuex.Store({
       }
     },
     resetReservationsForPubCollection (state) {
-      state.allTodaysReservationsForPub = []
+      state.allReservationsForPub = []
     },
     resetCurrentReservation (state) {
       state.activeReservationForPub = {
@@ -330,15 +336,8 @@ export default new Vuex.Store({
           console.log('fetchReservationsForPub response:', response)
           const data = response.data
           // const resultArray = []
-          const todaysDate = new Date()
           for (const key in data) {
-            console.log('reserved at date:', data[key].reservedAtDate)
-            console.log('reserved key:', key)
-            const reservedAtDateStringAsDate = new Date(data[key].reservedAtDate)
-            const reservationIsToday = todaysDate.getDate() === reservedAtDateStringAsDate.getDate() &&
-              todaysDate.getMonth() === reservedAtDateStringAsDate.getMonth() &&
-              todaysDate.getFullYear() === reservedAtDateStringAsDate.getFullYear()
-            if (!data[key].isCancelled && reservationIsToday) {
+            if (!data[key].isCancelled) {
               // retrieve user details and append to reservation object as an inner object
               console.log('getting userdetails for user with id of:', data[key].reservedBy)
               globalAxios.get('usersDetails.json' + '?auth=' + state.idToken +
@@ -358,8 +357,6 @@ export default new Vuex.Store({
                   // resultArray.push(data[key])
                   commit('addReservationToCollection', data[key])
                 })
-            } else if (!reservationIsToday) {
-              console.log('reservation not added as it is not todays date')
             } else if (data[key].isCancelled) {
               console.log('reservation not added as it is a cancelled reservation')
             } else {
@@ -425,7 +422,7 @@ export default new Vuex.Store({
           console.log(error)
         })
     },
-    fetchUserDetails ({ commit, state, dispatch }) {
+    fetchUserDetails ({ commit, state }) {
       if (!state.idToken) {
         console.log('No Id Token - Exiting')
         return
@@ -444,7 +441,20 @@ export default new Vuex.Store({
             resultArray.push(data[key])
           }
           if (resultArray.length > 0) {
-            commit('storeUserDetails', resultArray[0]) // TODO
+            const foundUser = resultArray[0]
+            commit('storeUserDetails', foundUser) // TODO
+            if (foundUser.userRoles.punter === true) {
+              localStorage.setItem('isPunter', true)
+            } else {
+              localStorage.setItem('isPunter', false)
+            }
+
+            if (foundUser.userRoles.publican === true) {
+              localStorage.setItem('isPublican', true)
+            } else {
+              localStorage.setItem('isPublican', false)
+            }
+            commit('setUserType', { isPublican: foundUser.userRoles.publican === true, isPunter: foundUser.userRoles.punter === true })
           }
         }, error => {
           console.log(error)
@@ -453,6 +463,11 @@ export default new Vuex.Store({
     fetchReservationsForPunter ({ commit, state }, userId) {
       if (!state.idToken) {
         console.log('No Id Token - Exiting')
+        return
+      }
+      console.log('localStorage.getItem("isPunter")', localStorage.getItem('isPunter'))
+      if (localStorage.getItem('isPunter') === 'false') {
+        console.log('current user is not a punter - Exiting')
         return
       }
       console.log('fecthing reservation from the DB')
@@ -798,7 +813,7 @@ export default new Vuex.Store({
       }
       console.log('cancelling reservation in DB for table: ', pubTableKey)
 
-      const resFromArray = state.allTodaysReservationsForPub.filter(res => res.table.tableId === pubTableKey)[0] // TODO better way to get this??
+      const resFromArray = state.allReservationsForPub.filter(res => res.table.tableId === pubTableKey)[0] // TODO better way to get this??
       console.log('resFromArray:', resFromArray)
       const reservation = {
         table: {
@@ -927,6 +942,8 @@ export default new Vuex.Store({
       localStorage.removeItem('token')
       localStorage.removeItem('userId')
       localStorage.removeItem('expirationDate')
+      localStorage.removeItem('isPublican')
+      localStorage.removeItem('isPunter')
     }
   },
   getters: {
@@ -938,6 +955,14 @@ export default new Vuex.Store({
       console.log('calling user id getter')
       return state.userId
     },
+    isPublican (state) {
+      console.log('calling isPublican getter')
+      return state.isPublican
+    },
+    isPunter (state) {
+      console.log('calling isPunter getter')
+      return state.isPunter
+    },
     pubs (state) {
       console.log('calling pubs getter')
       console.log(state)
@@ -948,8 +973,8 @@ export default new Vuex.Store({
       console.log(state)
       return state.pubTables
     },
-    publicansPubs (state) {
-      return state.pubs.filter(p => p.ownerId === state.userId)
+    publicansPub (state) {
+      return state.pubs.find(p => p.ownerId === state.userId)
     },
     pubTable (state) {
       console.log('calling pubTable getter in index.js')
@@ -991,9 +1016,20 @@ export default new Vuex.Store({
       console.log('calling previousReservationsForPunter getter')
       return state.previousReservationsForPunter
     },
+    allReservationsForPub (state) {
+      console.log('calling allReservationsForPub getter')
+      return state.allReservationsForPub
+    },
     allTodaysReservationsForPub (state) {
       console.log('calling allTodaysReservationsForPub getter')
-      return state.allTodaysReservationsForPub
+      const todaysDate = new Date()
+      return state.allReservationsForPub.filter(p => {
+        const reservedAtDateStringAsDate = new Date(p.reservedAtDate)
+        const reservationIsToday = todaysDate.getDate() === reservedAtDateStringAsDate.getDate() &&
+        todaysDate.getMonth() === reservedAtDateStringAsDate.getMonth() &&
+        todaysDate.getFullYear() === reservedAtDateStringAsDate.getFullYear()
+        return reservationIsToday
+      })
     }
   },
   modules: {

@@ -6,14 +6,8 @@
         <ion-text>
           <h1 class="ion-padding">Your Pub</h1>
         </ion-text>
-        <template v-if="publicansPubs && publicansPubs.length > 0">
-          <ion-searchbar show-cancel-button="focus"
-          debounce="300" @ionChange="filterSearchItems($event.target)"></ion-searchbar>
-          <ion-list>
-              <div animated="true" v-show="!p.hidePub" v-for="p in publicansPubs" :key="p['.key']">
-                  <pub-card :i="i" :pub="p" actionName="Manage" />
-              </div>
-          </ion-list>
+        <template v-if="publicansPub && publicansPub.key !== ''">
+          <pub-card :i="i" :pub="publicansPub" actionName="Manage" />
         </template>
         <template v-else>
           <ion-item>
@@ -64,8 +58,8 @@ export default {
         return this.$store.getters.pubs
       }
     },
-    publicansPubs () {
-      return this.$store.getters.publicansPubs
+    publicansPub () {
+      return this.$store.getters.publicansPub
     },
     user () {
       return this.$store.getters.user

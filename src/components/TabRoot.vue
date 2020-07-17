@@ -21,13 +21,13 @@
           <ion-tab-bar>
 
             <ion-tab-button tab="search-for-pub">
-              <ion-icon :src="i.search"></ion-icon>
-              <ion-label>Search</ion-label>
+              <ion-icon :src="i.home"></ion-icon>
+              <ion-label>Pub</ion-label>
             </ion-tab-button>
 
             <ion-tab-button tab="booked-tables">
               <ion-icon :src="i.beer"></ion-icon>
-              <ion-label>Booked</ion-label>
+              <ion-label>Bookings</ion-label>
               <!--<ion-badge>6</ion-badge>-->
             </ion-tab-button>
 
