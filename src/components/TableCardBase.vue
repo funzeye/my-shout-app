@@ -9,7 +9,7 @@
         <ion-item>
           <ion-icon :src="i.layers" slot="start"></ion-icon>
           <ion-label v-if="pubTable.floor === 0">Ground Floor</ion-label>
-          <ion-label v-else>Floor #: {{ pubFloors.lower }}</ion-label>
+          <ion-label v-else>Floor #: {{ pubTable.floor }}</ion-label>
         </ion-item>
         <ion-item>
           <ion-icon :src="i.location" slot="start"></ion-icon>

@@ -14,7 +14,7 @@
         </ion-tab>
 
         <ion-tab tab="about" id="about">
-          <About />
+          <About :i="i"/>
         </ion-tab>
 
         <template slot="bottom">

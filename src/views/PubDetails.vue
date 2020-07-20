@@ -4,7 +4,7 @@
       <ion-toolbar>
         <ion-title>{{ pub.pubName }}</ion-title>
         <ion-buttons v-if="pub.ownerId === userId" slot="end">
-          <ion-button @click="editPubDetails">
+          <ion-button @click="editPub">
             <ion-icon :src="i.settingsOutline"></ion-icon>
           </ion-button>
         </ion-buttons>
@@ -58,8 +58,8 @@ export default {
     }
   },
   methods: {
-    editPubDetails () {
-      this.$router.push({ name: 'edit-pub-tables', params: { id: this.pub.key } })
+    editPub () {
+      this.$router.push({ name: 'edit-pub', params: { id: this.pub.key } })
     }
   }
 }

@@ -4,7 +4,7 @@
       <ion-toolbar>
         <ion-title>Edit Tables</ion-title>
         <ion-buttons slot="start">
-          <ion-button @click="backToPubDetails">
+          <ion-button @click="backToEditPub">
             <ion-icon :src="i.arrowBack"></ion-icon>
           </ion-button>
         </ion-buttons>
@@ -44,8 +44,8 @@ export default {
     submitted () {
       this.$router.replace({ name: 'pub-details', params: { id: this.pub.key } })
     },
-    backToPubDetails () {
-      this.$router.replace({ name: 'pub-details', params: { id: this.pub.key } })
+    backToEditPub () {
+      this.$router.replace({ name: 'edit-pub', params: { id: this.pub.key } })
     }
   },
   computed: {

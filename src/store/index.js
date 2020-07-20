@@ -39,7 +39,9 @@ export default new Vuex.Store({
       county: '',
       eircode: '',
       numOfTables: '',
-      floors: { lower: 0, upper: 0 }
+      floors: { lower: 0, upper: 0 },
+      timeToArrivalLimitOn: true,
+      timeToArrivalLimitInMinutes: 30
     },
     pubFloorArea: {
       name: ''
@@ -117,6 +119,14 @@ export default new Vuex.Store({
       Vue.set(state.pubTables, foundIndex, pubTable)
       console.log('state.pubTables: ', state.pubTables)
     },
+    updatePubInPubsCollection (state, pub) {
+      console.log('updating pub in pubs array with key:', pub.key)
+      var foundIndex = state.pubs.findIndex(x => x.key === pub.key)
+      console.log('foundIndex: ', foundIndex)
+      console.log('updated pubTable details: ', pub)
+      Vue.set(state.pubs, foundIndex, pub)
+      console.log('state.pubs: ', state.pubs)
+    },
     storePubs (state, pubs) {
       state.pubs = pubs
     },
@@ -187,13 +197,16 @@ export default new Vuex.Store({
         key: '',
         ownerId: '',
         pubName: '',
+        hidePub: false,
         addressLine1: '',
         addressLine2: '',
         townCity: '',
         county: '',
         eircode: '',
         numOfTables: '',
-        floors: { lower: 0, upper: 0 }
+        floors: { lower: 0, upper: 0 },
+        timeToArrivalLimitOn: true,
+        timeToArrivalLimitInMinutes: 30
       }
     }
   },
@@ -606,7 +619,9 @@ export default new Vuex.Store({
         county: pubData.county,
         eircode: pubData.eircode,
         numOfTables: pubData.numOfTables,
-        floors: { lower: pubData.floors.lower, upper: pubData.floors.upper }
+        floors: { lower: pubData.floors.lower, upper: pubData.floors.upper },
+        timeToArrivalLimitOn: pubData.timeToArrivalLimitOn,
+        timeToArrivalLimitInMinutes: pubData.timeToArrivalLimitInMinutes
       }
       globalAxios.post('pubs.json' + '?auth=' + state.idToken, pub)
         .then(res => {
@@ -615,6 +630,23 @@ export default new Vuex.Store({
           commit('addNewPub', pubData)
           console.log('pub successfully saved to DB: ', res.data)
           dispatch('storePubTables', res.data.name)
+          // commit('resetPub') // no longer need to reset as we immediately go to a new page
+        })
+        .catch(error => console.log(error))
+    },
+    updatePubDetailsInDb ({ commit, state, dispatch }, pubData) {
+      if (!state.idToken) {
+        console.log('No Id Token - Exiting')
+        return
+      }
+      console.log('updating pub in DB: ', pubData)
+
+      globalAxios.patch('pubs/' + pubData.key + '/.json' + '?auth=' + state.idToken, pubData)
+        .then(res => {
+          console.log('updating pub response:', res)
+          commit('updatePubInPubsCollection', pubData)
+          console.log('pub successfully updated in DB: ', res.data)
+          // dispatch('storePubTables', res.data.name)
           // commit('resetPub') // no longer need to reset as we immediately go to a new page
         })
         .catch(error => console.log(error))
