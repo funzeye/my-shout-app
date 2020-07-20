@@ -923,6 +923,11 @@ export default new Vuex.Store({
         console.log('No Id Token - Exiting')
         return
       }
+      let arrivalLimitTime = null
+      if (state.pub.timeToArrivalLimitOn) {
+        arrivalLimitTime = new Date()
+        arrivalLimitTime.setMinutes(arrivalLimitTime.getMinutes() + state.pub.timeToArrivalLimitInMinutes)
+      }
       const reservation = {
         table: {
           tableId: state.pubTable.key,
@@ -936,7 +941,8 @@ export default new Vuex.Store({
         reservedBy: state.userId,
         ownerReservedOnBehalfOf: ownerReservedOnBehalfOf,
         reservedByOwner: state.pub.ownerId === state.userId,
-        reservedAtDate: new Date()
+        reservedAtDate: new Date(),
+        timeToArrivalLimit: arrivalLimitTime
       }
 
       try {

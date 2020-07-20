@@ -1,6 +1,8 @@
 <template>
   <table-card-base :i="i" :pubTable="pubTable" :pubFloors="pubFloors">
-      <template v-if="!reservation.isCancelled && reservation.reservedBy === loggedInUserId" slot="table-card-action-button">
+      <template v-if="(!reservation.isCancelled && reservation.reservedBy === loggedInUserId) ||
+        (!reservation.isCancelled && userIsOwner && reservation.reservedBy && reservation.timeToArrivalLimit && new Date(reservation.timeToArrivalLimit).getTime() < new Date().getTime())"
+        slot="table-card-action-button">
         <ion-button color="danger" size="default" fill="outline" slot="end" @click.prevent="cancelTableReservation">Cancel</ion-button>
       </template>
       <template v-else-if="!reservation.isCancelled && reservation.reservedBy && reservation.reservedBy !== loggedInUserId" slot="table-card-action-button">
@@ -47,6 +49,21 @@ import TableCardBase from '../components/TableCardBase.vue'
 
 export default {
   props: ['i', 'pubTable', 'pubFloors', 'loggedInUserId', 'userIsOwner'],
+  data () {
+    return {
+      reservedButUnlocked () {
+        // 1 check that logged in user is onwer of pub
+        if (this.userIsOwner) {
+          // 2 check that reservation exists for this table
+          if (this.reservation.reservedBy !== null && this.reservation.reservedBy !== '') {
+            // 3 check arrival limit has passed
+            return this.reservation.timeToArrivalLimit > new Date()
+          }
+        }
+        return false
+      }
+    }
+  },
   components: {
     TableCardBase
   },
