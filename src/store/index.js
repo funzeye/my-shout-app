@@ -147,7 +147,7 @@ export default new Vuex.Store({
     storePubFloorAreas (state, pubFloorAreas) {
       state.pubFloorAreas = pubFloorAreas
     },
-    addNewPub (state, pub) {
+    addNewPubToPubsCollection (state, pub) {
       state.pubs.push(pub)
     },
     addNewPubFloorArea (state, pub) {
@@ -626,8 +626,9 @@ export default new Vuex.Store({
       globalAxios.post('pubs.json' + '?auth=' + state.idToken, pub)
         .then(res => {
           console.log('adding new pub response:', res)
-          pubData.key = res.data.name
-          commit('addNewPub', pubData)
+          pub.key = res.data.name
+          commit('addNewPubToPubsCollection', pub)
+          commit('updatePub', pub)
           console.log('pub successfully saved to DB: ', res.data)
           dispatch('storePubTables', res.data.name)
           // commit('resetPub') // no longer need to reset as we immediately go to a new page

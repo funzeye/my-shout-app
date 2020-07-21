@@ -1,7 +1,8 @@
 <template>
   <table-card-base :i="i" :pubTable="pubTable" :pubFloors="pubFloors">
       <template v-if="(!reservation.isCancelled && reservation.reservedBy === loggedInUserId) ||
-        (!reservation.isCancelled && userIsOwner && reservation.reservedBy && reservation.timeToArrivalLimit && new Date(reservation.timeToArrivalLimit).getTime() < new Date().getTime())"
+        (!reservation.isCancelled && userIsOwner && reservation.reservedBy && reservation.timeToArrivalLimit && new Date(reservation.timeToArrivalLimit).getTime() < new Date().getTime()) ||
+        (!reservation.isCancelled && userIsOwner && reservation.reservedBy && !reservation.timeToArrivalLimit)"
         slot="table-card-action-button">
         <ion-button color="danger" size="default" fill="outline" slot="end" @click.prevent="cancelTableReservation">Cancel</ion-button>
       </template>
