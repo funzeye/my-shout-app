@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import About from '../views/About.vue'
 import CreateNewPub from '../views/CreateNewPub.vue'
+import ChangeEmail from '../views/ChangeEmail.vue'
 import EditPub from '../views/EditPub.vue'
 import EditPubDetails from '../views/EditPubDetails.vue'
 import EditPubTables from '../views/EditPubTables.vue'
@@ -122,6 +123,19 @@ const routes = [
     path: '/create-user-roles',
     component: CreateUserRoles,
     name: 'create-user-roles',
+    beforeEnter (to, from, next) {
+      var token = store.state.idToken
+      if (token) {
+        next()
+      } else {
+        next('/signin')
+      }
+    }
+  },
+  {
+    path: '/:userId/change-email',
+    component: ChangeEmail,
+    name: 'change-email',
     beforeEnter (to, from, next) {
       var token = store.state.idToken
       if (token) {

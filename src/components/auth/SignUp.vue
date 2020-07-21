@@ -56,10 +56,10 @@
                   @ionBlur="setEmailLostFocus"
                   v-model="email"
                   @ionFocus="email_not_focused = false"></ion-input-vue>
-        </ion-item>
-        <ion-note v-if="!$v.email.email && email_not_focused" class="error ion-padding" color="danger">Valid Email Required</ion-note>
-        <ion-note v-if="!$v.email.unique" class="error ion-padding" color="danger">Email Already Taken</ion-note>
-        <ion-item class="input">
+      </ion-item>
+      <ion-note v-if="!$v.email.email && email_not_focused" class="error ion-padding" color="danger">Valid Email Required</ion-note>
+      <ion-note v-if="!$v.email.unique" class="error ion-padding" color="danger">Email Already Taken</ion-note>
+      <ion-item class="input">
           <ion-label for="password">Password <ion-text color="danger">*</ion-text></ion-label>
           <ion-input-vue
                   type="password"

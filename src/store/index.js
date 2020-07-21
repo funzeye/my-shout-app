@@ -92,6 +92,9 @@ export default new Vuex.Store({
       state.user.surname = userData.surname
       state.user.userRoles = userData.userRoles
     },
+    storeUserDetailsEmail (state, email) {
+      state.user.email = email
+    },
     storeUserDetailsUserRole (state, userRole) {
       state.user.userRoles = userRole
     },
@@ -275,6 +278,41 @@ export default new Vuex.Store({
           router.replace('/')
         })
         .catch(error => console.log(error))
+    },
+    changeEmail ({ commit, state, dispatch }, newData) {
+      console.log('id token:', state.idToken)
+      console.log('email:', newData.newEmail)
+      axios.post(':update?key=AIzaSyB8-xAjyYMTR0Jt1-H-ayS9FDINW4JdAhQ',
+        { idToken: state.idToken, email: newData.newEmail, returnSecureToken: true })
+        .then(res => {
+          console.log('response:', res)
+          console.log('res.data.email:', res.data.email)
+          const now = new Date()
+          const expirationDate = new Date(now.getTime() + res.data.expiresIn * 1000)
+          localStorage.setItem('token', res.data.idToken)
+          localStorage.setItem('userId', res.data.localId)
+          localStorage.setItem('expirationDate', expirationDate.getTime())
+          commit('authUser', {
+            token: res.data.idToken,
+            userId: res.data.localId
+          })
+          dispatch('storeUserDetailsEmail', { email: newData.newEmail })
+          dispatch('setLogoutTimer', res.data.expiresIn)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    sendPasswordEmailReset ({ commit, state, dispatch }, emailToSendTo) {
+      axios.post(':sendOobCode?key=AIzaSyB8-xAjyYMTR0Jt1-H-ayS9FDINW4JdAhQ',
+        { requestType: 'PASSWORD_RESET', email: emailToSendTo })
+        .then(res => {
+          console.log('response:', res)
+          dispatch('logout')
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     tryAutoSignin ({ commit, dispatch }) {
       const token = localStorage.getItem('token')
@@ -576,6 +614,20 @@ export default new Vuex.Store({
           })
         })
         .catch(error => console.log(error))
+    },
+    storeUserDetailsEmail ({ commit, state }, userData) {
+      if (!state.idToken) {
+        console.log('No Id Token - Exiting')
+        return
+      }
+      globalAxios.patch('usersDetails/' + state.userId + '.json' + '?auth=' + state.idToken, userData)
+        .then(res => {
+          console.log(res)
+          commit('storeUserDetailsEmail', userData.email)
+        })
+        .catch(error => {
+          console.log(error.message)
+        })
     },
     addRoleToUsersDetails ({ commit, state }, userData) {
       if (!state.idToken) {
