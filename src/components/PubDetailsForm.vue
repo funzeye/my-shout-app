@@ -11,38 +11,38 @@
         <ion-input-vue placeholder="Address Line 2 (Optional)" v-model="pub.addressLine2"></ion-input-vue>
         <ion-input-vue @ionBlur="$v.pub.townCity.$touch(true)" placeholder="Town/City" v-model="pub.townCity"></ion-input-vue>
         <ion-select-vue @ionBlur="$v.pub.county.$touch(true)" value="" interface="action-sheet" placeholder="County" name="county" v-model="pub.county">
-            <ion-select-option value="mayo">Mayo</ion-select-option>
-            <ion-select-option value="sligo">Sligo</ion-select-option>
-            <ion-select-option value="galway">Galway</ion-select-option>
-            <ion-select-option value="roscommon">Roscommon</ion-select-option>
-            <ion-select-option value="leitrim">Leitrim</ion-select-option>
-            <ion-select-option value="donegal">Donegal</ion-select-option>
-            <ion-select-option value="cavan">Cavan</ion-select-option>
-            <ion-select-option value="monaghan">Monaghan</ion-select-option>
-            <ion-select-option value="cork">Cork</ion-select-option>
-            <ion-select-option value="kerry">Kerry</ion-select-option>
-            <ion-select-option value="limerick">Limerick</ion-select-option>
-            <ion-select-option value="clare">Clare</ion-select-option>
-            <ion-select-option value="tipperary">Tipperary</ion-select-option>
-            <ion-select-option value="waterford">Waterford</ion-select-option>
-            <ion-select-option value="dublin">Dublin</ion-select-option>
-            <ion-select-option value="louth">Louth</ion-select-option>
-            <ion-select-option value="kilkenny">Kilkenny</ion-select-option>
-            <ion-select-option value="carlow">Carlow</ion-select-option>
-            <ion-select-option value="wexford">Wexford</ion-select-option>
-            <ion-select-option value="wicklow">Wicklow</ion-select-option>
-            <ion-select-option value="laois">Laois</ion-select-option>
-            <ion-select-option value="longford">Longford</ion-select-option>
-            <ion-select-option value="westmeath">Westmeath</ion-select-option>
-            <ion-select-option value="meath">Meath</ion-select-option>
-            <ion-select-option value="offaly">Offaly</ion-select-option>
-            <ion-select-option value="kildare">Kildare</ion-select-option>
+          <ion-select-option value="carlow">Carlow</ion-select-option>
+          <ion-select-option value="cavan">Cavan</ion-select-option>
+          <ion-select-option value="cork">Cork</ion-select-option>
+          <ion-select-option value="clare">Clare</ion-select-option>
+          <ion-select-option value="donegal">Donegal</ion-select-option>
+          <ion-select-option value="dublin">Dublin</ion-select-option>
+          <ion-select-option value="galway">Galway</ion-select-option>
+          <ion-select-option value="kerry">Kerry</ion-select-option>
+          <ion-select-option value="kildare">Kildare</ion-select-option>
+          <ion-select-option value="kilkenny">Kilkenny</ion-select-option>
+          <ion-select-option value="laois">Laois</ion-select-option>
+          <ion-select-option value="leitrim">Leitrim</ion-select-option>
+          <ion-select-option value="limerick">Limerick</ion-select-option>
+          <ion-select-option value="longford">Longford</ion-select-option>
+          <ion-select-option value="louth">Louth</ion-select-option>
+          <ion-select-option value="mayo">Mayo</ion-select-option>
+          <ion-select-option value="meath">Meath</ion-select-option>
+          <ion-select-option value="monaghan">Monaghan</ion-select-option>
+          <ion-select-option value="offaly">Offaly</ion-select-option>
+          <ion-select-option value="roscommon">Roscommon</ion-select-option>
+          <ion-select-option value="sligo">Sligo</ion-select-option>
+          <ion-select-option value="tipperary">Tipperary</ion-select-option>
+          <ion-select-option value="waterford">Waterford</ion-select-option>
+          <ion-select-option value="westmeath">Westmeath</ion-select-option>
+          <ion-select-option value="wexford">Wexford</ion-select-option>
+          <ion-select-option value="wicklow">Wicklow</ion-select-option>
         </ion-select-vue>
         <ion-input-vue placeholder="Eircode (Optional)" v-model="pub.eircode"></ion-input-vue>
       </ion-item>
       <ion-note v-if="$v.pub.county.$invalid && $v.pub.county.$dirty" class="error ion-padding" color="danger">county is required</ion-note>
 
-      <ion-item>
+      <ion-item :disabled="allTodaysReservationsForPub && allTodaysReservationsForPub.length > 0">
         <ion-label position="stacked">Tables Reservable (Total Number)<ion-text color="danger">*</ion-text></ion-label>
         <ion-input-vue
           @ionBlur="$v.pub.numOfTables.$touch(true)"
@@ -52,6 +52,7 @@
         </ion-input-vue>
         <ion-note v-if="!$v.pub.numOfTables.minVal" class="error ion-padding" color="danger">Must add at least 1 table</ion-note>
       </ion-item>
+      <ion-note v-if="allTodaysReservationsForPub && allTodaysReservationsForPub.length > 0" class="error ion-padding" color="danger">Cannot change number of tables while some tables are currently reserved</ion-note>
       <ion-item>
           <ion-label position="stacked">Floors</ion-label>
           <ion-range ref="floors" id="dual-range"
@@ -70,7 +71,7 @@
       </ion-item>
 
       <ion-item-group>
-        <ion-item>
+        <ion-item lines="none">
             <ion-label>Time to Arrival Limit</ion-label>
             <ion-toggle
             @ionChange="changeTimeArrivalLimitOn"
@@ -130,6 +131,9 @@ export default {
       set (pub) {
         this.$store.dispatch('updatePub', pub)
       }
+    },
+    allTodaysReservationsForPub () {
+      return this.$store.getters.allTodaysReservationsForPub
     }
   },
   methods: {

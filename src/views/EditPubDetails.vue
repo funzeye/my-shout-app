@@ -2,7 +2,7 @@
     <div class="ion-page">
         <ion-header>
             <ion-toolbar>
-                <ion-title>Pub Settings</ion-title>
+                <ion-title>Pub Details</ion-title>
                 <ion-buttons slot="start">
                 <ion-button @click="backToEditPub">
                     <ion-icon :src="i.arrowBack"></ion-icon>
