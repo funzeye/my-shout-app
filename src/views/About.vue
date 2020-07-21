@@ -13,7 +13,7 @@
       <ion-item>
         <ion-button @click="changePassword">Send Password Reset Email</ion-button>
       </ion-item>
-      <ion-note class="ion-padding" style="display:block">Clicking this will log you out and an email will be sent to the above address</ion-note>
+      <ion-note class="ion-padding" style="display:block">Clicking 'Reset' will log you out and an email will be sent to the above address</ion-note>
 
     </ion-content>
   </div>

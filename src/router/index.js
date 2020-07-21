@@ -12,6 +12,7 @@ import ReserveTable from '../views/ReserveTable.vue'
 import EditTableDetails from '../views/EditTableDetails.vue'
 import TabRoot from '../components/TabRoot.vue'
 import SignUpPage from '../components/auth/SignUp.vue'
+import ForgotPassword from '../components/auth/ForgotPassword.vue'
 import SignInPage from '../components/auth/SignIn.vue'
 
 import store from '../store'
@@ -226,6 +227,18 @@ const routes = [
   {
     path: '/signup',
     component: SignUpPage,
+    beforeEnter (to, from, next) {
+      var token = store.state.idToken
+      if (token) {
+        next('/')
+      } else {
+        next()
+      }
+    }
+  },
+  {
+    path: '/forgotpassword',
+    component: ForgotPassword,
     beforeEnter (to, from, next) {
       var token = store.state.idToken
       if (token) {

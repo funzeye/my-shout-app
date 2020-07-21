@@ -6,7 +6,7 @@
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
-      <h1>Sign In</h1>
+      <h1>Reset Password</h1>
       <form @submit.prevent="onSubmit">
         <ion-item class="input">
           <ion-label for="email">Email <ion-text color="danger">*</ion-text></ion-label>
@@ -18,29 +18,11 @@
                   @ionFocus="email_not_focused = false"></ion-input-vue>
         </ion-item>
         <ion-note v-if="!$v.email.email && email_not_focused" class="error ion-padding" color="danger">Valid Email Required</ion-note>
-        <ion-item class="input">
-          <ion-label for="password">Password <ion-text color="danger">*</ion-text></ion-label>
-          <ion-input-vue
-                  type="password"
-                  id="password"
-                  v-model="password"></ion-input-vue>
-        </ion-item>
+
         <div class="ion-padding">
-          <ion-button type="submit" :disabled="$v.$invalid">Submit</ion-button>
+          <ion-button type="submit" :disabled="$v.$invalid">Send Password Reset Email</ion-button>
         </div>
       </form>
-      <ion-grid>
-      <ion-row class="ion-justify-content-center">
-      <ion-router-link href="/signup">
-        Sign Up
-      </ion-router-link>
-      </ion-row>
-      <ion-row class="ion-justify-content-center ion-padding-top">
-      <ion-router-link href="/forgotpassword">
-        Forgot Password?
-      </ion-router-link>
-      </ion-row>
-      </ion-grid>
     </ion-content>
   </div>
 </template>
@@ -52,7 +34,6 @@ export default {
   data () {
     return {
       email: '',
-      password: '',
       email_not_focused: false
     }
   },
@@ -60,19 +41,15 @@ export default {
     email: {
       required,
       email
-    },
-    password: {
-      required
     }
   },
   methods: {
     onSubmit () {
       const formData = {
-        email: this.email,
-        password: this.password
+        email: this.email
       }
       console.log(formData)
-      this.$store.dispatch('signin', formData)
+      this.$store.dispatch('sendPasswordEmailReset', this.email)
     },
     setEmailLostFocus () {
       this.$v.email.$touch(true)
