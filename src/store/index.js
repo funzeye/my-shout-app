@@ -414,38 +414,10 @@ export default new Vuex.Store({
               console.log('reservation not added for unknown reason')
             }
           }
-          //  commit('setReservationsForPub', resultArray) // TODO might speed things up if I add to collection inside loop...
         }, error => {
           console.log(error)
         })
     },
-    // fetchPubsByOwnerId ({ commit, state, dispatch }, ownerId) {
-    //   if (!state.idToken) {
-    //     console.log('No Id Token - Exiting')
-    //     return
-    //   }
-    //   console.log('fecthing pubs data from the DB')
-    //   console.log('for pub with owner id:', ownerId)
-    //   globalAxios.get('pubs.json' + '?auth=' + state.idToken + '&orderBy="ownerId"&equalTo="' + ownerId + '"')
-    //     .then(response => {
-    //       console.log('fetchPub response: ', response)
-    //       const data = response.data
-    //       const resultArray = []
-    //       for (const key in data) {
-    //         console.log('fetchPub key: ', key)
-    //         data[key].key = key
-    //         console.log('fetchPub data[key]: ', data[key])
-    //         resultArray.push(data[key])
-    //       }
-    //       if (resultArray.length > 0) {
-    //         commit('updatePub', resultArray[0]) // TODO
-    //         dispatch('fetchPubTables', state.pub.key)
-    //         dispatch('fetchReservationsForPub', state.pub.key)
-    //       }
-    //     }, error => {
-    //       console.log(error)
-    //     })
-    // },
     fetchPubByPubId ({ commit, state, dispatch }, pubId) {
       if (!state.idToken) {
         console.log('No Id Token - Exiting')
@@ -465,7 +437,7 @@ export default new Vuex.Store({
             resultArray.push(data[key])
           }
           if (resultArray.length > 0) {
-            commit('updatePub', resultArray[0]) // TODO
+            commit('updatePub', resultArray[0])
             dispatch('fetchPubTables', state.pub.key)
             dispatch('fetchReservationsForPub', state.pub.key)
           }
@@ -493,7 +465,7 @@ export default new Vuex.Store({
           }
           if (resultArray.length > 0) {
             const foundUser = resultArray[0]
-            commit('storeUserDetails', foundUser) // TODO
+            commit('storeUserDetails', foundUser)
             if (foundUser.userRoles.punter === true) {
               localStorage.setItem('isPunter', true)
             } else {
@@ -550,8 +522,12 @@ export default new Vuex.Store({
               previousReservationsForPunterArray.push(data[key])
             }
           }
-          commit('setCurrentReservationForPunter', resultArray[0]) // TODO
-          commit('setPreviousReservationsForPunter', previousReservationsForPunterArray)
+          if (resultArray.length > 0) {
+            commit('setCurrentReservationForPunter', resultArray[0])
+          }
+          if (previousReservationsForPunterArray.length > 0) {
+            commit('setPreviousReservationsForPunter', previousReservationsForPunterArray)
+          }
         }, error => {
           console.log(error)
         })
@@ -816,27 +792,6 @@ export default new Vuex.Store({
           console.log(error)
         })
     },
-    // fetchUser ({ commit, state }) {
-    //  if (!state.idToken) {
-    //     console.log('No Id Token - Exiting')
-    //     return
-    //   }
-    //   console.log('fecthing user data from the DB and updating List')
-    //   globalAxios.get('users.json' + '?auth=' + state.idToken)
-    //     .then(response => {
-    //       console.log(response)
-    //       const data = response.data
-    //       const users = []
-    //       for (const key in data) {
-    //         const user = data[key]
-    //         user.id = key
-    //         users.push(user)
-    //       }
-    //       // commit('storeUser', users[0]) // TODO not a good real world example - should be getting the exact user - not the first one in list!
-    //     }, error => {
-    //       console.log(error)
-    //     })
-    // },
     updatePub ({ commit }, payload) {
       commit('updatePub', payload)
     },
@@ -898,7 +853,7 @@ export default new Vuex.Store({
       }
       console.log('cancelling reservation in DB for table: ', pubTableKey)
 
-      const resFromArray = state.allReservationsForPub.filter(res => res.table.tableId === pubTableKey)[0] // TODO better way to get this??
+      const resFromArray = state.allReservationsForPub.filter(res => res.table.tableId === pubTableKey)[0]
       console.log('resFromArray:', resFromArray)
       const reservation = {
         table: {
