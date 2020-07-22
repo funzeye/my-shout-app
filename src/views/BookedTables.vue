@@ -32,8 +32,11 @@
                 <ion-item>
                     <ion-label>
                         <ion-label>
-                        <h2>{{ ar.userDetails.firstName + ' ' + ar.userDetails.surname }}</h2>
-                        <h2>{{ ar.userDetails.phone }}</h2>
+                        <h2 v-if="ar.ownerReservedOnBehalfOf">{{ ar.ownerReservedOnBehalfOf }}</h2>
+                        <div v-else ar.ownerReservedOnBehalfOf>
+                          <h2>{{ ar.userDetails.firstName + ' ' + ar.userDetails.surname }}</h2>
+                          <h2>{{ ar.userDetails.phone }}</h2>
+                        </div>
                         <h3>{{ ar.table.seats }} seats &#64; table &#35; {{ ar.table.tableNum }}</h3>
                         <p>on {{ new Date(ar.reservedAtDate).toDateString() }}</p>
                     </ion-label>

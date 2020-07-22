@@ -1,46 +1,59 @@
 <template>
   <table-card-base :i="i" :pubTable="pubTable" :pubFloors="pubFloors">
+      <template slot="table-card-other-details">
+        <div>
+          <ion-item lines="none" v-if="!reservation.isCancelled && reservation.reservedBy && !reservation.reservedByOwner && ((reservation.reservedBy === loggedInUserId) || userIsOwner)">
+            <ion-label position="stacked">Reserved By Punter:</ion-label>
+            <ion-text>{{ reservation.userDetails.firstName + ' ' + reservation.userDetails.surname }}</ion-text>
+          </ion-item>
+          <ion-item  lines="none" v-if="!reservation.isCancelled && reservation.reservedBy && !reservation.reservedByOwner && ((reservation.reservedBy === loggedInUserId) || userIsOwner)">
+            <ion-label position="stacked">Phone Number:</ion-label>
+            <ion-text>{{ reservation.userDetails.phone }}</ion-text>
+          </ion-item>
+          <ion-item  lines="none" v-else-if="!reservation.isCancelled && reservation.reservedBy && reservation.reservedByOwner && userIsOwner">
+            <ion-label position="stacked">Reserved By Publican For:</ion-label>
+            <ion-text>{{ reservation.ownerReservedOnBehalfOf }}</ion-text>
+          </ion-item>
+          <ion-item  lines="none" v-if="!reservation.isCancelled && reservation.reservedBy ">
+            <ion-label position="stacked">Reserved Until:</ion-label>
+            <ion-text>No Limit</ion-text>
+          </ion-item>
+        </div>
+      </template>
       <template v-if="(!reservation.isCancelled && reservation.reservedBy === loggedInUserId) ||
         (!reservation.isCancelled && userIsOwner && reservation.reservedBy && reservation.timeToArrivalLimit && new Date(reservation.timeToArrivalLimit).getTime() < new Date().getTime()) ||
         (!reservation.isCancelled && userIsOwner && reservation.reservedBy && !reservation.timeToArrivalLimit)"
         slot="table-card-action-button">
-        <ion-button color="danger" size="default" fill="outline" slot="end" @click.prevent="cancelTableReservation">Cancel</ion-button>
+        <div  class="ion-padding-vertical">
+          <ion-button expand="block" color="danger" size="default" fill="outline" @click.prevent="cancelTableReservation">Cancel</ion-button>
+        </div>
       </template>
       <template v-else-if="!reservation.isCancelled && reservation.reservedBy && reservation.reservedBy !== loggedInUserId" slot="table-card-action-button">
-        <ion-button size="default" fill="outline" slot="end" color="success" disabled>Reserved</ion-button>
+        <div class="ion-padding-vertical">
+          <ion-button expand="block"  size="default" fill="outline" color="success" disabled>Reserved</ion-button>
+        </div>
       </template>
       <template v-else slot="table-card-action-button">
-        <ion-button size="default" fill="outline" slot="end" @click.prevent="reserveTable">Reserve</ion-button>
+        <div class="ion-padding-vertical">
+          <ion-button slot="start" expand="block" size="default" fill="outline" @click.prevent="reserveTable">Reserve</ion-button>
+        </div>
       </template>
-      <template slot="table-card-other-details">
-        <ion-item v-if="!reservation.isCancelled && reservation.reservedBy && !reservation.reservedByOwner && ((reservation.reservedBy === loggedInUserId) || userIsOwner)">
-          <ion-icon :src="i.person" slot="start"></ion-icon>
-          <ion-label>{{ reservation.userDetails.firstName + ' ' + reservation.userDetails.surname }}</ion-label>
-          <ion-note slot="end">Reserved By Punter</ion-note>
-        </ion-item>
-        <ion-item v-if="!reservation.isCancelled && reservation.reservedBy && !reservation.reservedByOwner && ((reservation.reservedBy === loggedInUserId) || userIsOwner)">
-          <ion-icon :src="i.call" slot="start"></ion-icon>
-          <ion-label>{{ reservation.userDetails.phone }}</ion-label>
-        </ion-item>
-        <ion-item v-else-if="!reservation.isCancelled && reservation.reservedBy && reservation.reservedByOwner && userIsOwner">
-          <ion-icon :src="i.person" slot="start"></ion-icon>
-          <ion-label>{{ reservation.ownerReservedOnBehalfOf }}</ion-label>
-          <ion-note slot="end">Reserved By Publican</ion-note>
-        </ion-item>
-        <ion-item v-if="!reservation.isCancelled && reservation.reservedBy ">
-          <ion-icon :src="i.alarm" slot="start"></ion-icon>
-          <ion-label>No Limit</ion-label>
-          <ion-note slot="end">Reserved Until</ion-note>
-        </ion-item>
-        <ion-card-content v-if="!reservation.isCancelled && !reservation.reservedBy">
+      <template slot="table-card-action-button-info">
+        <div class="info-text ion-text-center ion-text-sm-start" v-if="!reservation.isCancelled && !reservation.reservedBy  && !userIsOwner">
           Clicking 'Reserve' will reserve this table and cancel any other active reservations you currently have
-        </ion-card-content>
-        <ion-card-content v-if="!reservation.isCancelled && reservation.reservedBy === loggedInUserId">
-          Clicking 'Cancel' will cancel this reservation and allow it to the reserved by others
-        </ion-card-content>
-        <ion-card-content v-if="!reservation.isCancelled && reservation.reservedBy && reservation.reservedBy !== loggedInUserId">
-          Table currently unavailable
-        </ion-card-content>
+        </div>
+        <div class="info-text ion-text-center ion-text-sm-start" v-if="!reservation.isCancelled && !reservation.reservedBy && userIsOwner">
+          Clicking 'Reserve' will reserve this table on behalf of your customer
+        </div>
+        <div class="info-text ion-text-center ion-text-sm-start" v-if="!reservation.isCancelled && reservation.reservedBy === loggedInUserId">
+          Clicking 'Cancel' will cancel this reservation and allow it to be reserved by others
+        </div>
+        <div class="info-text ion-text-center ion-text-sm-start" v-if="!reservation.isCancelled && reservation.reservedBy && reservation.reservedBy !== loggedInUserId  && !userIsOwner">
+          Table currently unavailable.
+        </div>
+        <div class="info-text ion-text-center ion-text-sm-start" v-if="!reservation.isCancelled && reservation.reservedBy && reservation.reservedBy !== loggedInUserId && userIsOwner">
+          Table currently unavailable. If 'time to arrival' limit has passed you can 'Cancel' this booking to free up the table for others. Otherwise you must wait.
+        </div>
       </template>
   </table-card-base>
 </template>

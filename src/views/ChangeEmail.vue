@@ -12,7 +12,7 @@
       </ion-header>
     <ion-content class="ion-padding">
       <form @submit.prevent="onSubmit">
-        <ion-item>
+        <ion-item class="ion-padding-bottom">
             <ion-label position="stacked">Current Email:</ion-label>
             <ion-text>{{ user.email }}</ion-text>
         </ion-item>

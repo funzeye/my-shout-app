@@ -1,25 +1,32 @@
 <template>
   <div>
-      <ion-card>
-        <ion-item>
-          <ion-icon :src="i.beer" slot="start"></ion-icon>
-          <ion-label>Table #: {{ pubTable.tableNum }}</ion-label>
+      <ion-card class="table-card">
+        <ion-card-header>
+          <ion-card-subtitle>{{ pubTable.pubFloorArea }}</ion-card-subtitle>
+          <ion-card-title>Table # {{ pubTable.tableNum }}</ion-card-title>
+          <ion-grid>
+            <ion-row v-if="pubTable.floor === 0" class="ion-justify-content-start ion-padding-top">
+                <div>
+                  <ion-text>Ground Floor</ion-text>
+                </div>
+            </ion-row>
+            <ion-row class="ion-padding-top" v-else>
+                <div>
+                  <ion-text>Floor #: {{ pubTable.floor }}</ion-text>
+                </div>
+            </ion-row>
+            <ion-row>
+                <div>
+                  <ion-text>No. of Seats: {{ pubTable.seats }}</ion-text>
+                </div>
+            </ion-row>
+          </ion-grid>
+        </ion-card-header>
+        <ion-card-content>
+          <slot name="table-card-other-details"></slot>
           <slot name="table-card-action-button"></slot>
-        </ion-item>
-        <ion-item>
-          <ion-icon :src="i.layers" slot="start"></ion-icon>
-          <ion-label v-if="pubTable.floor === 0">Ground Floor</ion-label>
-          <ion-label v-else>Floor #: {{ pubTable.floor }}</ion-label>
-        </ion-item>
-        <ion-item>
-          <ion-icon :src="i.location" slot="start"></ion-icon>
-          <ion-label>Area: {{ pubTable.pubFloorArea }} </ion-label>
-        </ion-item>
-        <ion-item>
-          <ion-icon :src="i.people" slot="start"></ion-icon>
-          <ion-label>No. of Seats: {{ pubTable.seats }}</ion-label>
-        </ion-item>
-        <slot name="table-card-other-details"></slot>
+          <slot name="table-card-action-button-info"></slot>
+        </ion-card-content>
       </ion-card>
   </div>
 </template>
@@ -29,3 +36,10 @@ export default {
   props: ['i', 'pubTable', 'pubFloors']
 }
 </script>
+
+<style lang="css">
+.info-text {
+  font-size: smaller;
+}
+
+</style>

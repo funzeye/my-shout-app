@@ -1,20 +1,15 @@
 <template>
   <div>
-      <ion-card>
-        <ion-item>
-          <ion-icon :src="i.home" slot="start"></ion-icon>
-          <ion-label>{{ pub.pubName }}</ion-label>
-          <ion-button size="default" fill="outline" slot="end" @click.prevent="viewPub">{{ actionName }}</ion-button>
-        </ion-item>
-        <ion-item>
-          <ion-label>Street: {{ pub.addressLine1 }} </ion-label>
-        </ion-item>
-        <ion-item>
-          <ion-label>Town/City: {{ pub.townCity }} </ion-label>
-        </ion-item>
-        <ion-item>
-          <ion-label>County: {{ pub.county }} </ion-label>
-        </ion-item>
+      <ion-card button="true" @click.prevent="viewPub">
+        <ion-card-header>
+          <ion-card-subtitle>Pub</ion-card-subtitle>
+          <ion-card-title>{{ pub.pubName }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content class="ion-text-capitalize">
+          <div>
+          {{pub.addressLine1 }}, {{ pub.townCity }}, {{ pub.county }}
+          </div>
+        </ion-card-content>
       </ion-card>
   </div>
 </template>

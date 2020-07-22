@@ -23,10 +23,35 @@ export default {
 ion-tab ion-content {
   --ion-background-color: #f1f2f8;
 }
-ion-searchbar{
+ion-searchbar {
   --background: #fff !important;
 }
-ion-card, ion-card > ion-item, ion-card > ion-card-header, ion-card > ion-card-content{
-  --background: #fff !important;
+
+ion-card {
+  --ion-item-background: #fff;
+}
+ion-card ion-card-header {
+  --background: #406c6c;
+}
+
+ion-card ion-card-title {
+  --color: #fff;
+}
+
+ion-card-header ion-text {
+  --background: #406c6c;
+  color: #eee;
+}
+
+ion-card ion-card-subtitle {
+  --color: #88b4b3
+}
+
+ion-card-header+.card-content-md {
+    padding-top: 16px;
+}
+
+ion-card-content ion-label{
+  color: #666 !important
 }
 </style>

@@ -31,7 +31,7 @@
         </ion-item>
 
         <ion-text color="secondary">
-            <p>There is NO time limit on this reservation. Once Reserved it will stay reserved unless you cancel or leave. You can stay at table as long as you want.</p>
+            <p>There is NO time limit on this reservation. Once Reserved it will stay reserved unless freed by punter or publican. You can stay at table as long as you want.</p>
         </ion-text>
 
         <div class="ion-padding">
