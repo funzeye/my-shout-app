@@ -1,6 +1,6 @@
 {
-  "appId": "com.kivey.myfirstionicvueapp",
-  "appName": "MYFirstIonicVueApp",
+  "appId": "ie.kiv.myshout",
+  "appName": "My Shout!",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "dist",

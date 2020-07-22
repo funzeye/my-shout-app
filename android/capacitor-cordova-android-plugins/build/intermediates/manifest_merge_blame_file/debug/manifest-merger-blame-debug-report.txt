@@ -7,12 +7,12 @@
 7
 8    <uses-sdk
 9        android:minSdkVersion="21"
-9-->C:\Users\User\Desktop\Ionic_Vue_Projects\first-ionic-vue-app\android\capacitor-cordova-android-plugins\src\main\AndroidManifest.xml
+9-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\capacitor-cordova-android-plugins\src\main\AndroidManifest.xml
 10        android:targetSdkVersion="29" />
-10-->C:\Users\User\Desktop\Ionic_Vue_Projects\first-ionic-vue-app\android\capacitor-cordova-android-plugins\src\main\AndroidManifest.xml
+10-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\capacitor-cordova-android-plugins\src\main\AndroidManifest.xml
 11
 12    <application>
-12-->C:\Users\User\Desktop\Ionic_Vue_Projects\first-ionic-vue-app\android\capacitor-cordova-android-plugins\src\main\AndroidManifest.xml:5:1-7:15
+12-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\capacitor-cordova-android-plugins\src\main\AndroidManifest.xml:5:1-7:15
 13    </application>
 14
 15</manifest>
