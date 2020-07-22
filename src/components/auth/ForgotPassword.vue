@@ -9,7 +9,7 @@
       <h1>Reset Password</h1>
       <form @submit.prevent="onSubmit">
         <ion-item class="input">
-          <ion-label for="email">Email <ion-text color="danger">*</ion-text></ion-label>
+          <ion-label for="email">Email:</ion-label>
           <ion-input-vue
                   type="email"
                   id="email"
@@ -23,6 +23,18 @@
           <ion-button type="submit" :disabled="$v.$invalid">Send Password Reset Email</ion-button>
         </div>
       </form>
+      <ion-grid>
+      <ion-row class="ion-justify-content-center ion-padding-vertical">
+      <ion-router-link href="/signin">
+        Sign In
+      </ion-router-link>
+      </ion-row>
+      <ion-row class="ion-justify-content-center ion-padding-top">
+      <ion-router-link href="/signup">
+        Sign Up
+      </ion-router-link>
+      </ion-row>
+      </ion-grid>
     </ion-content>
   </div>
 </template>

@@ -3,6 +3,11 @@
     <ion-header>
           <ion-toolbar>
               <ion-title>Your Profile</ion-title>
+              <ion-buttons slot="end">
+                <ion-button v-if="auth" @click="onLogout">
+                  Logout
+                </ion-button>
+              </ion-buttons>
           </ion-toolbar>
       </ion-header>
     <ion-content class="ion-padding">
@@ -29,6 +34,9 @@ export default {
     },
     userId () {
       return this.$store.getters.userId
+    },
+    auth () {
+      return this.$store.getters.isAuthenticated
     }
   },
   methods: {
@@ -37,6 +45,9 @@ export default {
     },
     changePassword () {
       this.$store.dispatch('sendPasswordEmailReset', this.user.email)
+    },
+    onLogout: function () {
+      this.$store.dispatch('logout')
     }
   }
 }

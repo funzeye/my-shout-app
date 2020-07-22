@@ -9,7 +9,7 @@
       <h1>Sign In</h1>
       <form @submit.prevent="onSubmit">
         <ion-item class="input">
-          <ion-label for="email">Email <ion-text color="danger">*</ion-text></ion-label>
+          <ion-label for="email">Email: <ion-text color="danger">*</ion-text></ion-label>
           <ion-input-vue
                   type="email"
                   id="email"
@@ -19,7 +19,7 @@
         </ion-item>
         <ion-note v-if="!$v.email.email && email_not_focused" class="error ion-padding" color="danger">Valid Email Required</ion-note>
         <ion-item class="input">
-          <ion-label for="password">Password <ion-text color="danger">*</ion-text></ion-label>
+          <ion-label for="password">Password: <ion-text color="danger">*</ion-text></ion-label>
           <ion-input-vue
                   type="password"
                   id="password"
@@ -30,7 +30,7 @@
         </div>
       </form>
       <ion-grid>
-      <ion-row class="ion-justify-content-center">
+      <ion-row class="ion-justify-content-center ion-padding-vertical">
       <ion-router-link href="/signup">
         Sign Up
       </ion-router-link>
