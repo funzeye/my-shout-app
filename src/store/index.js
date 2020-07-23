@@ -10,6 +10,7 @@ export default new Vuex.Store({
   state: {
     idToken: null,
     userId: null,
+    refreshToken: null,
     isPublican: false,
     isPunter: false,
     user: {
@@ -73,10 +74,12 @@ export default new Vuex.Store({
     authUser (state, userData) {
       state.idToken = userData.token
       state.userId = userData.userId
+      state.refreshToken = userData.refreshToken
     },
     clearAuthData (state) {
       state.idToken = null
       state.userId = null
+      state.refreshToken = null
     },
     setUserType (state, userRoles) {
       state.isPublican = userRoles.isPublican
@@ -214,9 +217,30 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    setLogoutTimer ({ commit, dispatch }, expirationTime) {
-      setTimeout(() => {
-        dispatch('logout')
+    setLogoutTimer ({ commit, dispatch, state }, expirationTime) {
+      var timer = setTimeout(() => {
+        console.log('timeout elapsed - refreshing token...')
+        console.log('timeout elapsed - token is:', state.idToken)
+        console.log('timeout elapsed - refresh token is:', state.refreshToken)
+        axios.post('https://securetoken.googleapis.com/v1/token?key=AIzaSyB8-xAjyYMTR0Jt1-H-ayS9FDINW4JdAhQ',
+          { grant_type: 'refresh_token', refresh_token: state.refreshToken })
+          .then(res => {
+            console.log('refreshing token:', res)
+            const now = new Date()
+            const expirationDate = new Date(now.getTime() + res.data.expires_in * 1000)
+            console.log('setting localStorage variables')
+            localStorage.setItem('token', res.data.id_token)
+            localStorage.setItem('refreshToken', res.data.refresh_token)
+            localStorage.setItem('expirationDate', expirationDate.getTime())
+            commit('authUser', {
+              token: res.data.id_token,
+              userId: res.data.user_id,
+              refreshToken: res.data.refresh_token
+            })
+            clearTimeout(timer)
+            dispatch('setLogoutTimer', res.data.expires_in)
+          })
+          .catch(error => console.log(error))
       }, expirationTime * 1000)
     },
     signup ({ commit, dispatch }, authData) {
@@ -226,6 +250,7 @@ export default new Vuex.Store({
           console.log(res)
           commit('authUser', {
             token: res.data.idToken,
+            refreshToken: res.data.refreshToken,
             userId: res.data.localId
           })
           const now = new Date()
@@ -233,6 +258,7 @@ export default new Vuex.Store({
           console.log('seeting localStorage variables')
           localStorage.setItem('token', res.data.idToken)
           localStorage.setItem('userId', res.data.localId)
+          localStorage.setItem('refreshToken', res.data.refreshToken)
           localStorage.setItem('expirationDate', expirationDate.getTime())
 
           console.log('storing user details in DB')
@@ -267,10 +293,12 @@ export default new Vuex.Store({
           const expirationDate = new Date(now.getTime() + res.data.expiresIn * 1000)
           localStorage.setItem('token', res.data.idToken)
           localStorage.setItem('userId', res.data.localId)
+          localStorage.setItem('refreshToken', res.data.refreshToken)
           localStorage.setItem('expirationDate', expirationDate.getTime())
           commit('authUser', {
             token: res.data.idToken,
-            userId: res.data.localId
+            userId: res.data.localId,
+            refreshToken: res.data.refreshToken
           })
           dispatch('fetchUserDetails')
           dispatch('setLogoutTimer', res.data.expiresIn)
@@ -291,10 +319,12 @@ export default new Vuex.Store({
           const expirationDate = new Date(now.getTime() + res.data.expiresIn * 1000)
           localStorage.setItem('token', res.data.idToken)
           localStorage.setItem('userId', res.data.localId)
+          localStorage.setItem('refreshToken', res.data.refreshToken)
           localStorage.setItem('expirationDate', expirationDate.getTime())
           commit('authUser', {
             token: res.data.idToken,
-            userId: res.data.localId
+            userId: res.data.localId,
+            refreshToken: res.data.refreshToken
           })
           dispatch('storeUserDetailsEmail', { email: newData.newEmail })
           dispatch('setLogoutTimer', res.data.expiresIn)
@@ -326,10 +356,13 @@ export default new Vuex.Store({
       }
 
       const userId = localStorage.getItem('userId')
+      const refreshToken = localStorage.getItem('refreshToken')
+
       dispatch('setLogoutTimer', (expirationDate - now) / 1000)
       commit('authUser', {
         token: token,
-        userId: userId
+        userId: userId,
+        refreshToken: refreshToken
       })
     },
     fetchPubs ({ commit, state }) {
@@ -987,6 +1020,7 @@ export default new Vuex.Store({
       commit('clearAuthData')
       localStorage.removeItem('token')
       localStorage.removeItem('userId')
+      localStorage.removeItem('refreshToken')
       localStorage.removeItem('expirationDate')
       localStorage.removeItem('isPublican')
       localStorage.removeItem('isPunter')
