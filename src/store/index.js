@@ -6,8 +6,8 @@ import router from '../router'
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
-  state: {
+function initialState () {
+  return {
     idToken: null,
     userId: null,
     refreshToken: null,
@@ -69,8 +69,19 @@ export default new Vuex.Store({
     },
     previousReservationsForPunter: [],
     allReservationsForPub: []
-  },
+  }
+}
+
+export default new Vuex.Store({
+  state: initialState,
   mutations: {
+    resetState (state) {
+      // acquire initial state
+      const s = initialState()
+      Object.keys(s).forEach(key => {
+        state[key] = s[key]
+      })
+    },
     authUser (state, userData) {
       state.idToken = userData.token
       state.userId = userData.userId
@@ -1017,13 +1028,13 @@ export default new Vuex.Store({
     },
     logout ({ commit }) {
       router.replace('/signin')
-      commit('clearAuthData')
       localStorage.removeItem('token')
       localStorage.removeItem('userId')
       localStorage.removeItem('refreshToken')
       localStorage.removeItem('expirationDate')
       localStorage.removeItem('isPublican')
       localStorage.removeItem('isPunter')
+      commit('resetState')
     }
   },
   getters: {
