@@ -101,7 +101,7 @@ export default {
       this.email_not_focused = true
     },
     backToProfile () {
-      this.$router.replace({ name: 'about' })
+      this.$router.replace({ name: 'profile' })
     }
   },
   created () {

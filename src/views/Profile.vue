@@ -27,7 +27,7 @@
 <script>
 
 export default {
-  name: 'about',
+  name: 'profile',
   computed: {
     user () {
       return this.$store.getters.user

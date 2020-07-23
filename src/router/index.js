@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import About from '../views/About.vue'
+import Profile from '../views/Profile.vue'
 import CreateNewPub from '../views/CreateNewPub.vue'
 import ChangeEmail from '../views/ChangeEmail.vue'
 import EditPub from '../views/EditPub.vue'
@@ -67,9 +67,9 @@ const routes = [
         }
       },
       {
-        path: 'about',
-        component: About,
-        name: 'about',
+        path: 'profile',
+        component: Profile,
+        name: 'profile',
         beforeEnter (to, from, next) {
           var token = store.state.idToken
           if (token) {
