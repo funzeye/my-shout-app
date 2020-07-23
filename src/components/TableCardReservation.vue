@@ -10,9 +10,13 @@
             <ion-label position="stacked">Phone Number:</ion-label>
             <ion-text>{{ reservation.userDetails.phone }}</ion-text>
           </ion-item>
-          <ion-item  lines="none" v-else-if="!reservation.isCancelled && reservation.reservedBy && reservation.reservedByOwner && userIsOwner">
+          <ion-item  lines="none" v-if="!reservation.isCancelled && reservation.reservedBy && reservation.reservedByOwner && userIsOwner">
             <ion-label position="stacked">Reserved By Publican For:</ion-label>
             <ion-text>{{ reservation.ownerReservedOnBehalfOf }}</ion-text>
+          </ion-item>
+          <ion-item  lines="none" v-if="!reservation.isCancelled && reservation.reservedBy && reservation.reservedByOwner && userIsOwner">
+            <ion-label position="stacked">Phone Number:</ion-label>
+            <ion-text>{{ reservation.ownerReservedOnBehalfOfPhone }}</ion-text>
           </ion-item>
           <ion-item  lines="none" v-if="!reservation.isCancelled && reservation.reservedBy ">
             <ion-label position="stacked">Reserved Until:</ion-label>

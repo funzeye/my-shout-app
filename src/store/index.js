@@ -55,6 +55,7 @@ function initialState () {
       reservedBy: '',
       reservedByOwner: false,
       ownerReservedOnBehalfOf: '',
+      ownerReservedOnBehalfOfPhone: '',
       reservedAtDate: '',
       userDetails: null
     },
@@ -64,6 +65,7 @@ function initialState () {
       reservedBy: '',
       reservedByOwner: false,
       ownerReservedOnBehalfOf: '',
+      ownerReservedOnBehalfOfPhone: '',
       reservedAtDate: '',
       userDetails: null
     },
@@ -205,6 +207,7 @@ export default new Vuex.Store({
         reservedAtDate: '',
         reservedByOwner: false,
         ownerReservedOnBehalfOf: '',
+        ownerReservedOnBehalfOfPhone: '',
         userDetails: null
       }
       console.log('current reservation state reset to nothing')
@@ -915,6 +918,7 @@ export default new Vuex.Store({
         reservedAtDate: resFromArray.reservedAtDate,
         reservedBy: resFromArray.reservedBy,
         ownerReservedOnBehalfOf: resFromArray.ownerReservedOnBehalfOf,
+        ownerReservedOnBehalfOfPhone: resFromArray.ownerReservedOnBehalfOfPhone,
         reservedByOwner: resFromArray.reservedByOwner,
         userDetails: null
       }
@@ -954,6 +958,7 @@ export default new Vuex.Store({
         reservedAtDate: reservationData.reservedAtDate,
         reservedBy: reservationData.reservedBy,
         ownerReservedOnBehalfOf: reservationData.ownerReservedOnBehalfOf,
+        ownerReservedOnBehalfOfPhone: reservationData.ownerReservedOnBehalfOfPhone,
         reservedByOwner: reservationData.reservedByOwner,
         userDetails: null
       }
@@ -970,7 +975,7 @@ export default new Vuex.Store({
         })
         .catch(error => console.log(error))
     },
-    createReservation ({ commit, state, dispatch }, ownerReservedOnBehalfOf) {
+    createReservation ({ commit, state, dispatch }, onBehalfOf) {
       if (!state.idToken) {
         console.log('No Id Token - Exiting')
         return
@@ -991,7 +996,8 @@ export default new Vuex.Store({
           pubName: state.pub.pubName
         },
         reservedBy: state.userId,
-        ownerReservedOnBehalfOf: ownerReservedOnBehalfOf,
+        ownerReservedOnBehalfOf: onBehalfOf.ownerReservedOnBehalfOf,
+        ownerReservedOnBehalfOfPhone: onBehalfOf.ownerReservedOnBehalfOfPhone,
         reservedByOwner: state.pub.ownerId === state.userId,
         reservedAtDate: new Date(),
         timeToArrivalLimit: arrivalLimitTime

@@ -21,6 +21,10 @@
             <ion-input-vue v-if="pub.ownerId !== userId" type="text"  disabled>{{user.firstName}} {{user.surname}}</ion-input-vue>
             <ion-input-vue v-else autofocus="true" v-model="ownerReservedOnBehalfOf" placeholder="Please add name of person here"></ion-input-vue>
         </ion-item>
+        <ion-item v-if="pub.ownerId === userId">
+            <ion-label position="stacked">Their Phone Number: <ion-text color="danger">*</ion-text></ion-label>
+            <ion-input-vue type="number" v-model="ownerReservedOnBehalfOfPhone" placeholder="Please add number of person here"></ion-input-vue>
+        </ion-item>
         <ion-item>
             <ion-label position="stacked">In Pub:</ion-label>
             <ion-input-vue disabled>{{ pub.pubName }}</ion-input-vue>
@@ -54,11 +58,15 @@ export default {
   data () {
     return {
       ownerReservedOnBehalfOf: null,
+      ownerReservedOnBehalfOfPhone: null,
       i: allIcons
     }
   },
   validations: {
     ownerReservedOnBehalfOf: {
+      required
+    },
+    ownerReservedOnBehalfOfPhone: {
       required
     }
   },
@@ -91,7 +99,7 @@ export default {
         this.$store.dispatch('cancelOtherReservationForPunter', { userId: this.userId, tableToIgnoreId: this.pubTable.key })
       }
       console.log('reserveTable.vue: creating reservation')
-      this.$store.dispatch('createReservation', this.ownerReservedOnBehalfOf)
+      this.$store.dispatch('createReservation', { ownerReservedOnBehalfOf: this.ownerReservedOnBehalfOf, ownerReservedOnBehalfOfPhone: this.ownerReservedOnBehalfOfPhone })
       this.$router.replace({ name: 'pub-details', params: { id: this.pub.key } })
     }
   },
