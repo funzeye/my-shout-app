@@ -6,8 +6,8 @@
           <ion-vue-router name="searchRoute"></ion-vue-router>
         </ion-tab>
 
-        <ion-tab tab="booked-tables" id="booked-tables">
-          <BookedTables :i="i"/>
+        <ion-tab tab="booked-tables" :routes="['booked-tables']" id="booked-tables">
+          <ion-vue-router name="bookedTablesRoute"></ion-vue-router>
         </ion-tab>
 
         <ion-tab tab="profile" id="profile">
@@ -41,7 +41,6 @@
 
 <script>
 import Profile from '../views/Profile.vue'
-import BookedTables from '../views/BookedTables.vue'
 
 import * as allIcons from 'ionicons/icons'
 
@@ -53,8 +52,7 @@ export default {
     }
   },
   components: {
-    Profile,
-    BookedTables
+    Profile
   }
 }
 </script>

@@ -5,7 +5,6 @@ import ChangeEmail from '../views/ChangeEmail.vue'
 import EditPub from '../views/EditPub.vue'
 import EditPubDetails from '../views/EditPubDetails.vue'
 import EditPubTables from '../views/EditPubTables.vue'
-import BookedTables from '../views/BookedTables.vue'
 import CreateUserRoles from '../views/admin/CreateUserRoles.vue'
 import CreateNewPubFloorArea from '../views/admin/CreateNewPubFloorArea.vue'
 import ReserveTable from '../views/ReserveTable.vue'
@@ -81,7 +80,9 @@ const routes = [
       },
       {
         path: 'booked-tables',
-        component: BookedTables,
+        components: {
+          bookedTablesRoute: () => import('@/views/BookedTables.vue')
+        },
         name: 'booked-tables',
         beforeEnter (to, from, next) {
           var token = store.state.idToken

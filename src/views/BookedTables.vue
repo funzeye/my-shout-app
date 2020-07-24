@@ -33,7 +33,8 @@
                     <ion-label>
                         <ion-label>
                         <h2 v-if="ar.ownerReservedOnBehalfOf">{{ ar.ownerReservedOnBehalfOf }}</h2>
-                        <div v-else ar.ownerReservedOnBehalfOf>
+                        <h2 v-if="ar.ownerReservedOnBehalfOfPhone">{{ ar.ownerReservedOnBehalfOfPhone }}</h2>
+                        <div v-else>
                           <h2>{{ ar.userDetails.firstName + ' ' + ar.userDetails.surname }}</h2>
                           <h2>{{ ar.userDetails.phone }}</h2>
                         </div>
@@ -70,6 +71,8 @@
 </template>
 
 <script>
+// import { loadingController } from '@ionic/core'
+
 export default {
   name: 'booked-tables',
   computed: {
@@ -104,6 +107,12 @@ export default {
     }
   },
   created () {
+    // const loading = await loadingController.create({
+    //   duration: 700
+    // })
+
+    // await loading.present()
+    console.log('bookedTables created method called')
     if (this.user.email === '') {
       this.$store.dispatch('fetchUserDetails', this.userId)
     }
@@ -111,7 +120,9 @@ export default {
       this.$store.dispatch('fetchPubs')
     }
     this.$store.dispatch('fetchReservationsForPunter', this.userId)
-    this.$store.dispatch('fetchReservationsForPub', this.publicansPub.key)
+    if (this.publicansPub && this.publicansPub.key) {
+      this.$store.dispatch('fetchReservationsForPub', this.publicansPub.key)
+    }
   }
 }
 </script>

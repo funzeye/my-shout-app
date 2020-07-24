@@ -66,6 +66,8 @@ export default {
     }
   },
   created () {
+    console.log('search-for-pub created method called')
+
     if (!this.pubs || this.pubs.length === 0) {
       this.$store.dispatch('fetchPubs')
     }

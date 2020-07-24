@@ -536,11 +536,13 @@ export default new Vuex.Store({
         return
       }
       console.log('localStorage.getItem("isPunter")', localStorage.getItem('isPunter'))
-      if (localStorage.getItem('isPunter') === 'false') {
+      if (localStorage.getItem('isPunter') === null || localStorage.getItem('isPunter') === 'false') {
         console.log('current user is not a punter - Exiting')
         return
+      } else {
+        console.log('isPunter:', localStorage.getItem('isPunter'))
       }
-      console.log('fecthing reservation from the DB')
+      console.log('fecthing reservations from the DB for punter')
       console.log('for user id:', userId)
       globalAxios.get('reservations.json' + '?auth=' + state.idToken +
        '&orderBy="reservedBy"&equalTo="' + userId + '"')
