@@ -10,15 +10,24 @@
           <pub-card :i="i" :pub="publicansPub" actionName="Manage" />
         </template>
         <template v-else>
-          <ion-item>
-            <ion-label>
-              You have no pub of your own added.
-            </ion-label>
-            <ion-button expand="block" @click="createNewPub">
-              <ion-icon :src="i.addOutline" slot="start" style="color:white"></ion-icon>
-              Add New Pub
-            </ion-button>
-          </ion-item>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-label>
+                  You have no pub of your own added.
+                </ion-label>
+              </ion-col>
+              <ion-col>
+                <!--<ion-button expand="block" @click="createNewPub">
+                <ion-icon :src="i.addOutline" slot="start"></ion-icon>
+                Add New Pub
+                </ion-button>-->
+                  <ion-button expand="block" @click="createNewPub">
+                    Add New Pub
+                  </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
         </template>
       </template>
       <ion-item-divider v-if="user.userRoles && user.userRoles.punter === true && user.userRoles.publican === true">

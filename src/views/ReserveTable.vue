@@ -86,11 +86,11 @@ export default {
   },
   methods: {
     backToPubDetails () {
-      this.$router.push({ name: 'pub-details', params: { id: this.pub.key } })
+      this.$router.replace({ name: 'pub-details', params: { id: this.pub.key } })
     },
     cancel () {
       console.log('reserveTable.vue: cancel button clicked')
-      this.$router.push({ name: 'pub-details', params: { id: this.pub.key } })
+      this.$router.replace({ name: 'pub-details', params: { id: this.pub.key } })
     },
     reserve () {
       console.log('reserveTable.vue: confirm reservation button clicked. submitting a new reservation')

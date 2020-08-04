@@ -3,7 +3,7 @@
     <the-header />
     <ion-content class="ion-padding">
       <h1>Edit Table Details</h1>
-      <h2>Table #{{ $route.params.tableNum }}</h2>
+      <h2>Table #{{ pubTable.tableNum }}</h2>
       <form @submit.prevent="submitted">
         <ion-item>
             <ion-label position="stacked">Pub Floor Area Name <ion-text color="danger">*</ion-text></ion-label>

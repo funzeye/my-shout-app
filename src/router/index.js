@@ -1,14 +1,7 @@
 import Vue from 'vue'
-import Profile from '../views/Profile.vue'
 import CreateNewPub from '../views/CreateNewPub.vue'
-import ChangeEmail from '../views/ChangeEmail.vue'
-import EditPub from '../views/EditPub.vue'
-import EditPubDetails from '../views/EditPubDetails.vue'
-import EditPubTables from '../views/EditPubTables.vue'
 import CreateUserRoles from '../views/admin/CreateUserRoles.vue'
 import CreateNewPubFloorArea from '../views/admin/CreateNewPubFloorArea.vue'
-import ReserveTable from '../views/ReserveTable.vue'
-import EditTableDetails from '../views/EditTableDetails.vue'
 import TabRoot from '../components/TabRoot.vue'
 import SignUpPage from '../components/auth/SignUp.vue'
 import ForgotPassword from '../components/auth/ForgotPassword.vue'
@@ -66,9 +59,129 @@ const routes = [
         }
       },
       {
+        path: ':id/reserve-table',
+        components: {
+          searchRoute: () => import('@/views/ReserveTable.vue')
+        },
+        name: 'reserve-table',
+        beforeEnter (to, from, next) {
+          var token = store.state.idToken
+          if (token) {
+            next()
+          } else {
+            next('/signin')
+          }
+        }
+      },
+      {
+        path: ':id/edit-pub',
+        components: {
+          searchRoute: () => import('@/views/EditPub.vue')
+        },
+        name: 'edit-pub',
+        beforeEnter (to, from, next) {
+          console.log('navigating to edit-pub page.')
+          var token = store.state.idToken
+          var pub = store.state.pub
+          if (!token) {
+            console.log('token not found - re-directing to sign in')
+            next('/signin')
+          } else if (!pub.pubName) {
+            console.log('pub name not found - re-directing to home page')
+            next('/')
+          } else {
+            console.log('pub name found - continuing to pub tables page')
+            next()
+          }
+        }
+      },
+      {
+        path: '/:id/edit-pub-tables',
+        components: {
+          searchRoute: () => import('@/views/EditPubTables.vue')
+        },
+        name: 'edit-pub-tables',
+        beforeEnter (to, from, next) {
+          console.log('navigating to edit-pub-tables page.')
+          var token = store.state.idToken
+          var pub = store.state.pub
+          if (!token) {
+            console.log('token not found - re-directing to sign in')
+            next('/signin')
+          } else if (!pub.pubName) {
+            console.log('pub name not found - re-directing to home page')
+            next('/')
+          } else {
+            console.log('pub name found - continuing to pub tables page')
+            next()
+          }
+        }
+      },
+      {
+        path: '/:id/edit-pub-details',
+        components: {
+          searchRoute: () => import('@/views/EditPubDetails.vue')
+        },
+        name: 'edit-pub-details',
+        beforeEnter (to, from, next) {
+          console.log('navigating to edit-pub-details page.')
+          var token = store.state.idToken
+          var pub = store.state.pub
+          if (!token) {
+            console.log('token not found - re-directing to sign in')
+            next('/signin')
+          } else if (!pub.pubName) {
+            console.log('pub name not found - re-directing to home page')
+            next('/')
+          } else {
+            console.log('pub name found - continuing to pub tables page')
+            next()
+          }
+        }
+      },
+      {
+        path: '/:id/edit-table-details',
+        components: {
+          searchRoute: () => import('@/views/EditTableDetails.vue')
+        },
+        name: 'edit-table-details',
+        beforeEnter (to, from, next) {
+          console.log('navigating to edit-table-details page.')
+          var token = store.state.idToken
+          var pub = store.state.pub
+          if (!token) {
+            console.log('token not found - re-directing to sign in')
+            next('/signin')
+          } else if (!pub.pubName) {
+            console.log('pub name not found - re-directing to home page')
+            next('/')
+          } else {
+            console.log('pub name found - continuing to edit table page')
+            next()
+          }
+        }
+      },
+      {
         path: 'profile',
-        component: Profile,
+        components: {
+          profileRoute: () => import('@/views/Profile.vue')
+        },
         name: 'profile',
+        beforeEnter (to, from, next) {
+          var token = store.state.idToken
+          if (token) {
+            next()
+          } else {
+            next('/signin')
+          }
+        }
+      },
+      {
+        path: ':userId/change-email',
+        components: {
+          profileRoute: () => import('@/views/ChangeEmail.vue')
+        },
+        name: 'change-email',
         beforeEnter (to, from, next) {
           var token = store.state.idToken
           if (token) {
@@ -133,97 +246,6 @@ const routes = [
         next('/signin')
       }
     }
-  },
-  {
-    path: '/:userId/change-email',
-    component: ChangeEmail,
-    name: 'change-email',
-    beforeEnter (to, from, next) {
-      var token = store.state.idToken
-      if (token) {
-        next()
-      } else {
-        next('/signin')
-      }
-    }
-  },
-  {
-    path: '/:id/reserve-table',
-    component: ReserveTable,
-    name: 'reserve-table',
-    beforeEnter (to, from, next) {
-      var token = store.state.idToken
-      if (token) {
-        next()
-      } else {
-        next('/signin')
-      }
-    }
-  },
-  {
-    path: '/:id/edit-pub',
-    component: EditPub,
-    name: 'edit-pub',
-    beforeEnter (to, from, next) {
-      console.log('navigating to edit-pub page.')
-      var token = store.state.idToken
-      var pub = store.state.pub
-      if (!token) {
-        console.log('token not found - re-directing to sign in')
-        next('/signin')
-      } else if (!pub.pubName) {
-        console.log('pub name not found - re-directing to home page')
-        next('/')
-      } else {
-        console.log('pub name found - continuing to pub tables page')
-        next()
-      }
-    }
-  },
-  {
-    path: '/:id/edit-pub-details',
-    component: EditPubDetails,
-    name: 'edit-pub-details',
-    beforeEnter (to, from, next) {
-      console.log('navigating to edit-pub-details page.')
-      var token = store.state.idToken
-      var pub = store.state.pub
-      if (!token) {
-        console.log('token not found - re-directing to sign in')
-        next('/signin')
-      } else if (!pub.pubName) {
-        console.log('pub name not found - re-directing to home page')
-        next('/')
-      } else {
-        console.log('pub name found - continuing to pub tables page')
-        next()
-      }
-    }
-  },
-  {
-    path: '/:id/edit-pub-tables',
-    component: EditPubTables,
-    name: 'edit-pub-tables',
-    beforeEnter (to, from, next) {
-      console.log('navigating to edit-pub-tables page.')
-      var token = store.state.idToken
-      var pub = store.state.pub
-      if (!token) {
-        console.log('token not found - re-directing to sign in')
-        next('/signin')
-      } else if (!pub.pubName) {
-        console.log('pub name not found - re-directing to home page')
-        next('/')
-      } else {
-        console.log('pub name found - continuing to pub tables page')
-        next()
-      }
-    },
-    children: [{
-      path: ':tableNum/edit-table-details',
-      component: EditTableDetails,
-      name: 'edit-table-details'
-    }]
   },
   {
     path: '/signup',

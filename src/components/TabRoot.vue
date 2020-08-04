@@ -2,7 +2,7 @@
   <div class="ion-page">
   <ion-tabs>
 
-        <ion-tab tab="search-for-pub" :routes="['search-for-pub', 'pub-details']" :to="{name:'search-for-pub'}">
+        <ion-tab tab="search-for-pub" :routes="['search-for-pub', 'pub-details', 'reserve-table', 'edit-pub', 'edit-pub-tables', 'edit-table-details', 'edit-pub-details']" :to="{name:'search-for-pub'}">
           <ion-vue-router name="searchRoute"></ion-vue-router>
         </ion-tab>
 
@@ -10,8 +10,8 @@
           <ion-vue-router name="bookedTablesRoute"></ion-vue-router>
         </ion-tab>
 
-        <ion-tab tab="profile" id="profile">
-          <Profile :i="i"/>
+        <ion-tab tab="profile" :routes="['profile', 'change-email']" id="profile">
+          <ion-vue-router name="profileRoute"></ion-vue-router>
         </ion-tab>
 
         <template slot="bottom">
@@ -40,8 +40,6 @@
 </template>
 
 <script>
-import Profile from '../views/Profile.vue'
-
 import * as allIcons from 'ionicons/icons'
 
 export default {
@@ -50,9 +48,6 @@ export default {
     return {
       i: allIcons
     }
-  },
-  components: {
-    Profile
   }
 }
 </script>

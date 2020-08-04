@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.fbff6ea79657d668dd1f916b6dbe2cea.js"
+  "/precache-manifest.1e4f9c412047c586158e2b4226e6ba8e.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "first-ionic-vue-app"});

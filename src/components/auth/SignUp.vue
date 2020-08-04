@@ -78,10 +78,10 @@
         </ion-item>
         <ion-note v-if="!$v.confirmPassword.sameAs && $v.password.$dirty" class="error ion-padding" color="danger">Passwords do not match</ion-note>
 
-        <ion-item class="input">
+        <!--<ion-item class="input">
           <ion-label>Accept Terms of Use</ion-label>
           <ion-checkbox slot="start" color="primary" id="terms" v-model="terms"></ion-checkbox>
-        </ion-item>
+        </ion-item>-->
 
         <div class="ion-padding">
           <ion-button type="submit" :disabled="$v.$invalid">Submit</ion-button>

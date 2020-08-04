@@ -79,224 +79,223 @@
 44-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:9:9-54
 45        android:supportsRtl="true"
 45-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:10:9-35
-46        android:testOnly="true"
-47        android:theme="@style/AppTheme" >
-47-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:11:9-40
-48        <activity
-48-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:13:9-32:20
-49            android:name="com.kivey.myfirstionicvueapp.MainActivity"
-49-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:15:13-69
-50            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
-50-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:14:13-129
-51            android:label="@string/title_activity_main"
-51-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:16:13-56
-52            android:launchMode="singleTask"
-52-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:18:13-44
-53            android:theme="@style/AppTheme.NoActionBarLaunch" >
-53-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:17:13-62
-54            <intent-filter>
-54-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:20:13-23:29
-55                <action android:name="android.intent.action.MAIN" />
-55-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:21:17-69
-55-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:21:25-66
-56
-57                <category android:name="android.intent.category.LAUNCHER" />
-57-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:22:17-77
-57-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:22:27-74
-58            </intent-filter>
-59            <intent-filter>
-59-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:25:13-30:29
-60                <action android:name="android.intent.action.VIEW" />
-60-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:26:17-69
-60-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:26:25-66
-61
-62                <category android:name="android.intent.category.DEFAULT" />
-62-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:27:17-76
-62-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:27:27-73
-63                <category android:name="android.intent.category.BROWSABLE" />
-63-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:28:17-78
-63-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:28:27-75
-64
-65                <data android:scheme="@string/custom_url_scheme" />
-65-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:29:17-68
-65-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:29:23-65
-66            </intent-filter>
-67        </activity>
-68
-69        <provider
-70            android:name="androidx.core.content.FileProvider"
-70-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:35:13-62
-71            android:authorities="com.kivey.myfirstionicvueapp.fileprovider"
-71-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:36:13-64
-72            android:exported="false"
-72-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:37:13-37
-73            android:grantUriPermissions="true" >
-73-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:38:13-47
-74            <meta-data
-74-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:39:13-41:64
-75                android:name="android.support.FILE_PROVIDER_PATHS"
-75-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:40:17-67
-76                android:resource="@xml/file_paths" />
-76-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:41:17-51
-77        </provider>
-78
-79        <service
-79-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:16:9-18:40
-80            android:name="com.getcapacitor.plugin.background.BackgroundTaskService"
-80-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:17:13-84
-81            android:exported="false" />
-81-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:18:13-37
-82
-83        <receiver android:name="com.getcapacitor.plugin.notification.TimedNotificationPublisher" />
-83-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:20:9-100
-83-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:20:19-97
-84        <receiver android:name="com.getcapacitor.plugin.notification.NotificationDismissReceiver" />
-84-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:21:9-101
-84-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:21:19-98
-85
-86        <meta-data
-86-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:23:9-25:37
-87            android:name="firebase_messaging_auto_init_enabled"
-87-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:24:13-64
-88            android:value="false" />
-88-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:25:13-34
-89
-90        <service
-90-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:27:9-33:19
-91            android:name="com.getcapacitor.CapacitorFirebaseMessagingService"
-91-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:28:13-78
-92            android:stopWithTask="false" >
-92-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:29:13-41
-93            <intent-filter>
-93-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:30:13-32:29
-94                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-94-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:31:17-78
-94-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:31:25-75
-95            </intent-filter>
-96        </service>
-97        <!--
-98             FirebaseMessagingService performs security checks at runtime,
-99             but set to not exported to explicitly avoid allowing another app to call it.
-100        -->
-101        <service
-101-->[com.google.firebase:firebase-messaging:20.1.2] C:\Users\User\.gradle\caches\transforms-2\files-2.1\ec0d34db7bfab328a67bc775742a1d9e\jetified-firebase-messaging-20.1.2\AndroidManifest.xml:28:9-34:19
-102            android:name="com.google.firebase.messaging.FirebaseMessagingService"
-102-->[com.google.firebase:firebase-messaging:20.1.2] C:\Users\User\.gradle\caches\transforms-2\files-2.1\ec0d34db7bfab328a67bc775742a1d9e\jetified-firebase-messaging-20.1.2\AndroidManifest.xml:29:13-82
-103            android:exported="false" >
-103-->[com.google.firebase:firebase-messaging:20.1.2] C:\Users\User\.gradle\caches\transforms-2\files-2.1\ec0d34db7bfab328a67bc775742a1d9e\jetified-firebase-messaging-20.1.2\AndroidManifest.xml:30:13-37
-104            <intent-filter android:priority="-500" >
-104-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:30:13-32:29
-105                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-105-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:31:17-78
-105-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:31:25-75
-106            </intent-filter>
-107        </service>
-108        <service
-108-->[com.google.firebase:firebase-messaging:20.1.2] C:\Users\User\.gradle\caches\transforms-2\files-2.1\ec0d34db7bfab328a67bc775742a1d9e\jetified-firebase-messaging-20.1.2\AndroidManifest.xml:35:9-41:19
-109            android:name="com.google.firebase.components.ComponentDiscoveryService"
-109-->[com.google.firebase:firebase-messaging:20.1.2] C:\Users\User\.gradle\caches\transforms-2\files-2.1\ec0d34db7bfab328a67bc775742a1d9e\jetified-firebase-messaging-20.1.2\AndroidManifest.xml:36:13-84
-110            android:directBootAware="true"
-110-->[com.google.firebase:firebase-common:19.3.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\d5ae2f905dca277d72c2333071856016\jetified-firebase-common-19.3.0\AndroidManifest.xml:34:13-43
-111            android:exported="false" >
-111-->[com.google.firebase:firebase-messaging:20.1.2] C:\Users\User\.gradle\caches\transforms-2\files-2.1\ec0d34db7bfab328a67bc775742a1d9e\jetified-firebase-messaging-20.1.2\AndroidManifest.xml:37:13-37
-112            <meta-data
-112-->[com.google.firebase:firebase-messaging:20.1.2] C:\Users\User\.gradle\caches\transforms-2\files-2.1\ec0d34db7bfab328a67bc775742a1d9e\jetified-firebase-messaging-20.1.2\AndroidManifest.xml:38:13-40:85
-113                android:name="com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingRegistrar"
-113-->[com.google.firebase:firebase-messaging:20.1.2] C:\Users\User\.gradle\caches\transforms-2\files-2.1\ec0d34db7bfab328a67bc775742a1d9e\jetified-firebase-messaging-20.1.2\AndroidManifest.xml:39:17-119
-114                android:value="com.google.firebase.components.ComponentRegistrar" />
-114-->[com.google.firebase:firebase-messaging:20.1.2] C:\Users\User\.gradle\caches\transforms-2\files-2.1\ec0d34db7bfab328a67bc775742a1d9e\jetified-firebase-messaging-20.1.2\AndroidManifest.xml:40:17-82
-115            <meta-data
-115-->[com.google.firebase:firebase-datatransport:17.0.3] C:\Users\User\.gradle\caches\transforms-2\files-2.1\ec6ed60bc769c1397d2bb4044e417511\jetified-firebase-datatransport-17.0.3\AndroidManifest.xml:28:13-30:85
-116                android:name="com.google.firebase.components:com.google.firebase.datatransport.TransportRegistrar"
-116-->[com.google.firebase:firebase-datatransport:17.0.3] C:\Users\User\.gradle\caches\transforms-2\files-2.1\ec6ed60bc769c1397d2bb4044e417511\jetified-firebase-datatransport-17.0.3\AndroidManifest.xml:29:17-115
-117                android:value="com.google.firebase.components.ComponentRegistrar" />
-117-->[com.google.firebase:firebase-datatransport:17.0.3] C:\Users\User\.gradle\caches\transforms-2\files-2.1\ec6ed60bc769c1397d2bb4044e417511\jetified-firebase-datatransport-17.0.3\AndroidManifest.xml:30:17-82
-118            <meta-data
-118-->[com.google.firebase:firebase-iid:20.1.1] C:\Users\User\.gradle\caches\transforms-2\files-2.1\2af03360c2f1d9c4749c1d75a7057ee7\jetified-firebase-iid-20.1.1\AndroidManifest.xml:32:13-34:85
-119                android:name="com.google.firebase.components:com.google.firebase.iid.Registrar"
-119-->[com.google.firebase:firebase-iid:20.1.1] C:\Users\User\.gradle\caches\transforms-2\files-2.1\2af03360c2f1d9c4749c1d75a7057ee7\jetified-firebase-iid-20.1.1\AndroidManifest.xml:33:17-96
-120                android:value="com.google.firebase.components.ComponentRegistrar" />
-120-->[com.google.firebase:firebase-iid:20.1.1] C:\Users\User\.gradle\caches\transforms-2\files-2.1\2af03360c2f1d9c4749c1d75a7057ee7\jetified-firebase-iid-20.1.1\AndroidManifest.xml:34:17-82
-121            <meta-data
-121-->[com.google.firebase:firebase-installations:16.0.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\a9f39591fd7e3606aa03e1dd4d0c2ad4\jetified-firebase-installations-16.0.0\AndroidManifest.xml:17:13-19:85
-122                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar"
-122-->[com.google.firebase:firebase-installations:16.0.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\a9f39591fd7e3606aa03e1dd4d0c2ad4\jetified-firebase-installations-16.0.0\AndroidManifest.xml:18:17-127
-123                android:value="com.google.firebase.components.ComponentRegistrar" />
-123-->[com.google.firebase:firebase-installations:16.0.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\a9f39591fd7e3606aa03e1dd4d0c2ad4\jetified-firebase-installations-16.0.0\AndroidManifest.xml:19:17-82
-124        </service>
-125
-126        <receiver
-126-->[com.google.firebase:firebase-iid:20.1.1] C:\Users\User\.gradle\caches\transforms-2\files-2.1\2af03360c2f1d9c4749c1d75a7057ee7\jetified-firebase-iid-20.1.1\AndroidManifest.xml:37:9-44:20
-127            android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
-127-->[com.google.firebase:firebase-iid:20.1.1] C:\Users\User\.gradle\caches\transforms-2\files-2.1\2af03360c2f1d9c4749c1d75a7057ee7\jetified-firebase-iid-20.1.1\AndroidManifest.xml:38:13-78
-128            android:exported="true"
-128-->[com.google.firebase:firebase-iid:20.1.1] C:\Users\User\.gradle\caches\transforms-2\files-2.1\2af03360c2f1d9c4749c1d75a7057ee7\jetified-firebase-iid-20.1.1\AndroidManifest.xml:39:13-36
-129            android:permission="com.google.android.c2dm.permission.SEND" >
-129-->[com.google.firebase:firebase-iid:20.1.1] C:\Users\User\.gradle\caches\transforms-2\files-2.1\2af03360c2f1d9c4749c1d75a7057ee7\jetified-firebase-iid-20.1.1\AndroidManifest.xml:40:13-73
-130            <intent-filter>
-130-->[com.google.firebase:firebase-iid:20.1.1] C:\Users\User\.gradle\caches\transforms-2\files-2.1\2af03360c2f1d9c4749c1d75a7057ee7\jetified-firebase-iid-20.1.1\AndroidManifest.xml:41:13-43:29
-131                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-131-->[com.google.firebase:firebase-iid:20.1.1] C:\Users\User\.gradle\caches\transforms-2\files-2.1\2af03360c2f1d9c4749c1d75a7057ee7\jetified-firebase-iid-20.1.1\AndroidManifest.xml:42:17-81
-131-->[com.google.firebase:firebase-iid:20.1.1] C:\Users\User\.gradle\caches\transforms-2\files-2.1\2af03360c2f1d9c4749c1d75a7057ee7\jetified-firebase-iid-20.1.1\AndroidManifest.xml:42:25-78
-132            </intent-filter>
-133        </receiver>
-134
-135        <provider
-135-->[com.google.firebase:firebase-common:19.3.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\d5ae2f905dca277d72c2333071856016\jetified-firebase-common-19.3.0\AndroidManifest.xml:26:9-30:39
-136            android:name="com.google.firebase.provider.FirebaseInitProvider"
-136-->[com.google.firebase:firebase-common:19.3.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\d5ae2f905dca277d72c2333071856016\jetified-firebase-common-19.3.0\AndroidManifest.xml:27:13-77
-137            android:authorities="com.kivey.myfirstionicvueapp.firebaseinitprovider"
-137-->[com.google.firebase:firebase-common:19.3.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\d5ae2f905dca277d72c2333071856016\jetified-firebase-common-19.3.0\AndroidManifest.xml:28:13-72
-138            android:exported="false"
-138-->[com.google.firebase:firebase-common:19.3.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\d5ae2f905dca277d72c2333071856016\jetified-firebase-common-19.3.0\AndroidManifest.xml:29:13-37
-139            android:initOrder="100" />
-139-->[com.google.firebase:firebase-common:19.3.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\d5ae2f905dca277d72c2333071856016\jetified-firebase-common-19.3.0\AndroidManifest.xml:30:13-36
-140
-141        <activity
-141-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\9d9f5eefb5bcc469207d44112eb03d4a\jetified-play-services-base-17.0.0\AndroidManifest.xml:23:9-26:75
-142            android:name="com.google.android.gms.common.api.GoogleApiActivity"
-142-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\9d9f5eefb5bcc469207d44112eb03d4a\jetified-play-services-base-17.0.0\AndroidManifest.xml:24:13-79
-143            android:exported="false"
-143-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\9d9f5eefb5bcc469207d44112eb03d4a\jetified-play-services-base-17.0.0\AndroidManifest.xml:25:13-37
-144            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-144-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\9d9f5eefb5bcc469207d44112eb03d4a\jetified-play-services-base-17.0.0\AndroidManifest.xml:26:13-72
-145
-146        <meta-data
-146-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\f258e3825c6af3b14c7ec1616fae4742\jetified-play-services-basement-17.0.0\AndroidManifest.xml:23:9-25:69
-147            android:name="com.google.android.gms.version"
-147-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\f258e3825c6af3b14c7ec1616fae4742\jetified-play-services-basement-17.0.0\AndroidManifest.xml:24:13-58
-148            android:value="@integer/google_play_services_version" />
-148-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\f258e3825c6af3b14c7ec1616fae4742\jetified-play-services-basement-17.0.0\AndroidManifest.xml:25:13-66
-149
-150        <service
-150-->[com.google.android.datatransport:transport-backend-cct:2.2.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\8e8493fc4060d1a9e60e0e8b89d28daa\jetified-transport-backend-cct-2.2.0\AndroidManifest.xml:29:9-35:19
-151            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
-151-->[com.google.android.datatransport:transport-backend-cct:2.2.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\8e8493fc4060d1a9e60e0e8b89d28daa\jetified-transport-backend-cct-2.2.0\AndroidManifest.xml:30:13-103
-152            android:exported="false" >
-152-->[com.google.android.datatransport:transport-backend-cct:2.2.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\8e8493fc4060d1a9e60e0e8b89d28daa\jetified-transport-backend-cct-2.2.0\AndroidManifest.xml:31:13-37
-153            <meta-data
-153-->[com.google.android.datatransport:transport-backend-cct:2.2.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\8e8493fc4060d1a9e60e0e8b89d28daa\jetified-transport-backend-cct-2.2.0\AndroidManifest.xml:32:13-34:39
-154                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
-154-->[com.google.android.datatransport:transport-backend-cct:2.2.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\8e8493fc4060d1a9e60e0e8b89d28daa\jetified-transport-backend-cct-2.2.0\AndroidManifest.xml:33:17-94
-155                android:value="cct" />
-155-->[com.google.android.datatransport:transport-backend-cct:2.2.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\8e8493fc4060d1a9e60e0e8b89d28daa\jetified-transport-backend-cct-2.2.0\AndroidManifest.xml:34:17-36
-156        </service>
-157        <service
-157-->[com.google.android.datatransport:transport-runtime:2.2.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\09a4bf673ec4891d08a21c203c688e10\jetified-transport-runtime-2.2.0\AndroidManifest.xml:26:9-30:19
-158            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
-158-->[com.google.android.datatransport:transport-runtime:2.2.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\09a4bf673ec4891d08a21c203c688e10\jetified-transport-runtime-2.2.0\AndroidManifest.xml:27:13-117
-159            android:exported="false"
-159-->[com.google.android.datatransport:transport-runtime:2.2.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\09a4bf673ec4891d08a21c203c688e10\jetified-transport-runtime-2.2.0\AndroidManifest.xml:28:13-37
-160            android:permission="android.permission.BIND_JOB_SERVICE" >
-160-->[com.google.android.datatransport:transport-runtime:2.2.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\09a4bf673ec4891d08a21c203c688e10\jetified-transport-runtime-2.2.0\AndroidManifest.xml:29:13-69
-161        </service>
-162
-163        <receiver
-163-->[com.google.android.datatransport:transport-runtime:2.2.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\09a4bf673ec4891d08a21c203c688e10\jetified-transport-runtime-2.2.0\AndroidManifest.xml:32:9-34:40
-164            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
-164-->[com.google.android.datatransport:transport-runtime:2.2.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\09a4bf673ec4891d08a21c203c688e10\jetified-transport-runtime-2.2.0\AndroidManifest.xml:33:13-132
-165            android:exported="false" />
-165-->[com.google.android.datatransport:transport-runtime:2.2.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\09a4bf673ec4891d08a21c203c688e10\jetified-transport-runtime-2.2.0\AndroidManifest.xml:34:13-37
-166    </application>
-167
-168</manifest>
+46        android:theme="@style/AppTheme" >
+46-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:11:9-40
+47        <activity
+47-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:13:9-32:20
+48            android:name="com.kivey.myfirstionicvueapp.MainActivity"
+48-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:15:13-69
+49            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
+49-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:14:13-129
+50            android:label="@string/title_activity_main"
+50-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:16:13-56
+51            android:launchMode="singleTask"
+51-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:18:13-44
+52            android:theme="@style/AppTheme.NoActionBarLaunch" >
+52-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:17:13-62
+53            <intent-filter>
+53-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:20:13-23:29
+54                <action android:name="android.intent.action.MAIN" />
+54-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:21:17-69
+54-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:21:25-66
+55
+56                <category android:name="android.intent.category.LAUNCHER" />
+56-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:22:17-77
+56-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:22:27-74
+57            </intent-filter>
+58            <intent-filter>
+58-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:25:13-30:29
+59                <action android:name="android.intent.action.VIEW" />
+59-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:26:17-69
+59-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:26:25-66
+60
+61                <category android:name="android.intent.category.DEFAULT" />
+61-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:27:17-76
+61-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:27:27-73
+62                <category android:name="android.intent.category.BROWSABLE" />
+62-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:28:17-78
+62-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:28:27-75
+63
+64                <data android:scheme="@string/custom_url_scheme" />
+64-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:29:17-68
+64-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:29:23-65
+65            </intent-filter>
+66        </activity>
+67
+68        <provider
+69            android:name="androidx.core.content.FileProvider"
+69-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:35:13-62
+70            android:authorities="com.kivey.myfirstionicvueapp.fileprovider"
+70-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:36:13-64
+71            android:exported="false"
+71-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:37:13-37
+72            android:grantUriPermissions="true" >
+72-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:38:13-47
+73            <meta-data
+73-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:39:13-41:64
+74                android:name="android.support.FILE_PROVIDER_PATHS"
+74-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:40:17-67
+75                android:resource="@xml/file_paths" />
+75-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:41:17-51
+76        </provider>
+77
+78        <service
+78-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:16:9-18:40
+79            android:name="com.getcapacitor.plugin.background.BackgroundTaskService"
+79-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:17:13-84
+80            android:exported="false" />
+80-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:18:13-37
+81
+82        <receiver android:name="com.getcapacitor.plugin.notification.TimedNotificationPublisher" />
+82-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:20:9-100
+82-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:20:19-97
+83        <receiver android:name="com.getcapacitor.plugin.notification.NotificationDismissReceiver" />
+83-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:21:9-101
+83-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:21:19-98
+84
+85        <meta-data
+85-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:23:9-25:37
+86            android:name="firebase_messaging_auto_init_enabled"
+86-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:24:13-64
+87            android:value="false" />
+87-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:25:13-34
+88
+89        <service
+89-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:27:9-33:19
+90            android:name="com.getcapacitor.CapacitorFirebaseMessagingService"
+90-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:28:13-78
+91            android:stopWithTask="false" >
+91-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:29:13-41
+92            <intent-filter>
+92-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:30:13-32:29
+93                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+93-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:31:17-78
+93-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:31:25-75
+94            </intent-filter>
+95        </service>
+96        <!--
+97             FirebaseMessagingService performs security checks at runtime,
+98             but set to not exported to explicitly avoid allowing another app to call it.
+99        -->
+100        <service
+100-->[com.google.firebase:firebase-messaging:20.1.2] C:\Users\User\.gradle\caches\transforms-2\files-2.1\ec0d34db7bfab328a67bc775742a1d9e\jetified-firebase-messaging-20.1.2\AndroidManifest.xml:28:9-34:19
+101            android:name="com.google.firebase.messaging.FirebaseMessagingService"
+101-->[com.google.firebase:firebase-messaging:20.1.2] C:\Users\User\.gradle\caches\transforms-2\files-2.1\ec0d34db7bfab328a67bc775742a1d9e\jetified-firebase-messaging-20.1.2\AndroidManifest.xml:29:13-82
+102            android:exported="false" >
+102-->[com.google.firebase:firebase-messaging:20.1.2] C:\Users\User\.gradle\caches\transforms-2\files-2.1\ec0d34db7bfab328a67bc775742a1d9e\jetified-firebase-messaging-20.1.2\AndroidManifest.xml:30:13-37
+103            <intent-filter android:priority="-500" >
+103-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:30:13-32:29
+104                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+104-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:31:17-78
+104-->[:capacitor-android] C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\node_modules\@capacitor\android\capacitor\build\intermediates\library_manifest\debug\AndroidManifest.xml:31:25-75
+105            </intent-filter>
+106        </service>
+107        <service
+107-->[com.google.firebase:firebase-messaging:20.1.2] C:\Users\User\.gradle\caches\transforms-2\files-2.1\ec0d34db7bfab328a67bc775742a1d9e\jetified-firebase-messaging-20.1.2\AndroidManifest.xml:35:9-41:19
+108            android:name="com.google.firebase.components.ComponentDiscoveryService"
+108-->[com.google.firebase:firebase-messaging:20.1.2] C:\Users\User\.gradle\caches\transforms-2\files-2.1\ec0d34db7bfab328a67bc775742a1d9e\jetified-firebase-messaging-20.1.2\AndroidManifest.xml:36:13-84
+109            android:directBootAware="true"
+109-->[com.google.firebase:firebase-common:19.3.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\d5ae2f905dca277d72c2333071856016\jetified-firebase-common-19.3.0\AndroidManifest.xml:34:13-43
+110            android:exported="false" >
+110-->[com.google.firebase:firebase-messaging:20.1.2] C:\Users\User\.gradle\caches\transforms-2\files-2.1\ec0d34db7bfab328a67bc775742a1d9e\jetified-firebase-messaging-20.1.2\AndroidManifest.xml:37:13-37
+111            <meta-data
+111-->[com.google.firebase:firebase-messaging:20.1.2] C:\Users\User\.gradle\caches\transforms-2\files-2.1\ec0d34db7bfab328a67bc775742a1d9e\jetified-firebase-messaging-20.1.2\AndroidManifest.xml:38:13-40:85
+112                android:name="com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingRegistrar"
+112-->[com.google.firebase:firebase-messaging:20.1.2] C:\Users\User\.gradle\caches\transforms-2\files-2.1\ec0d34db7bfab328a67bc775742a1d9e\jetified-firebase-messaging-20.1.2\AndroidManifest.xml:39:17-119
+113                android:value="com.google.firebase.components.ComponentRegistrar" />
+113-->[com.google.firebase:firebase-messaging:20.1.2] C:\Users\User\.gradle\caches\transforms-2\files-2.1\ec0d34db7bfab328a67bc775742a1d9e\jetified-firebase-messaging-20.1.2\AndroidManifest.xml:40:17-82
+114            <meta-data
+114-->[com.google.firebase:firebase-datatransport:17.0.3] C:\Users\User\.gradle\caches\transforms-2\files-2.1\ec6ed60bc769c1397d2bb4044e417511\jetified-firebase-datatransport-17.0.3\AndroidManifest.xml:28:13-30:85
+115                android:name="com.google.firebase.components:com.google.firebase.datatransport.TransportRegistrar"
+115-->[com.google.firebase:firebase-datatransport:17.0.3] C:\Users\User\.gradle\caches\transforms-2\files-2.1\ec6ed60bc769c1397d2bb4044e417511\jetified-firebase-datatransport-17.0.3\AndroidManifest.xml:29:17-115
+116                android:value="com.google.firebase.components.ComponentRegistrar" />
+116-->[com.google.firebase:firebase-datatransport:17.0.3] C:\Users\User\.gradle\caches\transforms-2\files-2.1\ec6ed60bc769c1397d2bb4044e417511\jetified-firebase-datatransport-17.0.3\AndroidManifest.xml:30:17-82
+117            <meta-data
+117-->[com.google.firebase:firebase-iid:20.1.1] C:\Users\User\.gradle\caches\transforms-2\files-2.1\2af03360c2f1d9c4749c1d75a7057ee7\jetified-firebase-iid-20.1.1\AndroidManifest.xml:32:13-34:85
+118                android:name="com.google.firebase.components:com.google.firebase.iid.Registrar"
+118-->[com.google.firebase:firebase-iid:20.1.1] C:\Users\User\.gradle\caches\transforms-2\files-2.1\2af03360c2f1d9c4749c1d75a7057ee7\jetified-firebase-iid-20.1.1\AndroidManifest.xml:33:17-96
+119                android:value="com.google.firebase.components.ComponentRegistrar" />
+119-->[com.google.firebase:firebase-iid:20.1.1] C:\Users\User\.gradle\caches\transforms-2\files-2.1\2af03360c2f1d9c4749c1d75a7057ee7\jetified-firebase-iid-20.1.1\AndroidManifest.xml:34:17-82
+120            <meta-data
+120-->[com.google.firebase:firebase-installations:16.0.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\a9f39591fd7e3606aa03e1dd4d0c2ad4\jetified-firebase-installations-16.0.0\AndroidManifest.xml:17:13-19:85
+121                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar"
+121-->[com.google.firebase:firebase-installations:16.0.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\a9f39591fd7e3606aa03e1dd4d0c2ad4\jetified-firebase-installations-16.0.0\AndroidManifest.xml:18:17-127
+122                android:value="com.google.firebase.components.ComponentRegistrar" />
+122-->[com.google.firebase:firebase-installations:16.0.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\a9f39591fd7e3606aa03e1dd4d0c2ad4\jetified-firebase-installations-16.0.0\AndroidManifest.xml:19:17-82
+123        </service>
+124
+125        <receiver
+125-->[com.google.firebase:firebase-iid:20.1.1] C:\Users\User\.gradle\caches\transforms-2\files-2.1\2af03360c2f1d9c4749c1d75a7057ee7\jetified-firebase-iid-20.1.1\AndroidManifest.xml:37:9-44:20
+126            android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
+126-->[com.google.firebase:firebase-iid:20.1.1] C:\Users\User\.gradle\caches\transforms-2\files-2.1\2af03360c2f1d9c4749c1d75a7057ee7\jetified-firebase-iid-20.1.1\AndroidManifest.xml:38:13-78
+127            android:exported="true"
+127-->[com.google.firebase:firebase-iid:20.1.1] C:\Users\User\.gradle\caches\transforms-2\files-2.1\2af03360c2f1d9c4749c1d75a7057ee7\jetified-firebase-iid-20.1.1\AndroidManifest.xml:39:13-36
+128            android:permission="com.google.android.c2dm.permission.SEND" >
+128-->[com.google.firebase:firebase-iid:20.1.1] C:\Users\User\.gradle\caches\transforms-2\files-2.1\2af03360c2f1d9c4749c1d75a7057ee7\jetified-firebase-iid-20.1.1\AndroidManifest.xml:40:13-73
+129            <intent-filter>
+129-->[com.google.firebase:firebase-iid:20.1.1] C:\Users\User\.gradle\caches\transforms-2\files-2.1\2af03360c2f1d9c4749c1d75a7057ee7\jetified-firebase-iid-20.1.1\AndroidManifest.xml:41:13-43:29
+130                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+130-->[com.google.firebase:firebase-iid:20.1.1] C:\Users\User\.gradle\caches\transforms-2\files-2.1\2af03360c2f1d9c4749c1d75a7057ee7\jetified-firebase-iid-20.1.1\AndroidManifest.xml:42:17-81
+130-->[com.google.firebase:firebase-iid:20.1.1] C:\Users\User\.gradle\caches\transforms-2\files-2.1\2af03360c2f1d9c4749c1d75a7057ee7\jetified-firebase-iid-20.1.1\AndroidManifest.xml:42:25-78
+131            </intent-filter>
+132        </receiver>
+133
+134        <provider
+134-->[com.google.firebase:firebase-common:19.3.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\d5ae2f905dca277d72c2333071856016\jetified-firebase-common-19.3.0\AndroidManifest.xml:26:9-30:39
+135            android:name="com.google.firebase.provider.FirebaseInitProvider"
+135-->[com.google.firebase:firebase-common:19.3.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\d5ae2f905dca277d72c2333071856016\jetified-firebase-common-19.3.0\AndroidManifest.xml:27:13-77
+136            android:authorities="com.kivey.myfirstionicvueapp.firebaseinitprovider"
+136-->[com.google.firebase:firebase-common:19.3.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\d5ae2f905dca277d72c2333071856016\jetified-firebase-common-19.3.0\AndroidManifest.xml:28:13-72
+137            android:exported="false"
+137-->[com.google.firebase:firebase-common:19.3.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\d5ae2f905dca277d72c2333071856016\jetified-firebase-common-19.3.0\AndroidManifest.xml:29:13-37
+138            android:initOrder="100" />
+138-->[com.google.firebase:firebase-common:19.3.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\d5ae2f905dca277d72c2333071856016\jetified-firebase-common-19.3.0\AndroidManifest.xml:30:13-36
+139
+140        <activity
+140-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\9d9f5eefb5bcc469207d44112eb03d4a\jetified-play-services-base-17.0.0\AndroidManifest.xml:23:9-26:75
+141            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+141-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\9d9f5eefb5bcc469207d44112eb03d4a\jetified-play-services-base-17.0.0\AndroidManifest.xml:24:13-79
+142            android:exported="false"
+142-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\9d9f5eefb5bcc469207d44112eb03d4a\jetified-play-services-base-17.0.0\AndroidManifest.xml:25:13-37
+143            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+143-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\9d9f5eefb5bcc469207d44112eb03d4a\jetified-play-services-base-17.0.0\AndroidManifest.xml:26:13-72
+144
+145        <meta-data
+145-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\f258e3825c6af3b14c7ec1616fae4742\jetified-play-services-basement-17.0.0\AndroidManifest.xml:23:9-25:69
+146            android:name="com.google.android.gms.version"
+146-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\f258e3825c6af3b14c7ec1616fae4742\jetified-play-services-basement-17.0.0\AndroidManifest.xml:24:13-58
+147            android:value="@integer/google_play_services_version" />
+147-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\f258e3825c6af3b14c7ec1616fae4742\jetified-play-services-basement-17.0.0\AndroidManifest.xml:25:13-66
+148
+149        <service
+149-->[com.google.android.datatransport:transport-backend-cct:2.2.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\8e8493fc4060d1a9e60e0e8b89d28daa\jetified-transport-backend-cct-2.2.0\AndroidManifest.xml:29:9-35:19
+150            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
+150-->[com.google.android.datatransport:transport-backend-cct:2.2.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\8e8493fc4060d1a9e60e0e8b89d28daa\jetified-transport-backend-cct-2.2.0\AndroidManifest.xml:30:13-103
+151            android:exported="false" >
+151-->[com.google.android.datatransport:transport-backend-cct:2.2.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\8e8493fc4060d1a9e60e0e8b89d28daa\jetified-transport-backend-cct-2.2.0\AndroidManifest.xml:31:13-37
+152            <meta-data
+152-->[com.google.android.datatransport:transport-backend-cct:2.2.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\8e8493fc4060d1a9e60e0e8b89d28daa\jetified-transport-backend-cct-2.2.0\AndroidManifest.xml:32:13-34:39
+153                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
+153-->[com.google.android.datatransport:transport-backend-cct:2.2.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\8e8493fc4060d1a9e60e0e8b89d28daa\jetified-transport-backend-cct-2.2.0\AndroidManifest.xml:33:17-94
+154                android:value="cct" />
+154-->[com.google.android.datatransport:transport-backend-cct:2.2.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\8e8493fc4060d1a9e60e0e8b89d28daa\jetified-transport-backend-cct-2.2.0\AndroidManifest.xml:34:17-36
+155        </service>
+156        <service
+156-->[com.google.android.datatransport:transport-runtime:2.2.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\09a4bf673ec4891d08a21c203c688e10\jetified-transport-runtime-2.2.0\AndroidManifest.xml:26:9-30:19
+157            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
+157-->[com.google.android.datatransport:transport-runtime:2.2.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\09a4bf673ec4891d08a21c203c688e10\jetified-transport-runtime-2.2.0\AndroidManifest.xml:27:13-117
+158            android:exported="false"
+158-->[com.google.android.datatransport:transport-runtime:2.2.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\09a4bf673ec4891d08a21c203c688e10\jetified-transport-runtime-2.2.0\AndroidManifest.xml:28:13-37
+159            android:permission="android.permission.BIND_JOB_SERVICE" >
+159-->[com.google.android.datatransport:transport-runtime:2.2.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\09a4bf673ec4891d08a21c203c688e10\jetified-transport-runtime-2.2.0\AndroidManifest.xml:29:13-69
+160        </service>
+161
+162        <receiver
+162-->[com.google.android.datatransport:transport-runtime:2.2.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\09a4bf673ec4891d08a21c203c688e10\jetified-transport-runtime-2.2.0\AndroidManifest.xml:32:9-34:40
+163            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
+163-->[com.google.android.datatransport:transport-runtime:2.2.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\09a4bf673ec4891d08a21c203c688e10\jetified-transport-runtime-2.2.0\AndroidManifest.xml:33:13-132
+164            android:exported="false" />
+164-->[com.google.android.datatransport:transport-runtime:2.2.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\09a4bf673ec4891d08a21c203c688e10\jetified-transport-runtime-2.2.0\AndroidManifest.xml:34:13-37
+165    </application>
+166
+167</manifest>
