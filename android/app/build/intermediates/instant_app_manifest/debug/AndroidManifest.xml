@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.kivey.myfirstionicvueapp"
+    package="ie.kiv.myshout"
     android:targetSandboxVersion="2"
     android:versionCode="1"
     android:versionName="1.0" >
@@ -46,7 +46,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.kivey.myfirstionicvueapp.MainActivity"
+            android:name="ie.kiv.myshout.MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
             android:label="@string/title_activity_main"
             android:launchMode="singleTask"
@@ -68,7 +68,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.kivey.myfirstionicvueapp.fileprovider"
+            android:authorities="ie.kiv.myshout.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true" >
             <meta-data
@@ -134,7 +134,7 @@
 
         <provider
             android:name="com.google.firebase.provider.FirebaseInitProvider"
-            android:authorities="com.kivey.myfirstionicvueapp.firebaseinitprovider"
+            android:authorities="ie.kiv.myshout.firebaseinitprovider"
             android:exported="false"
             android:initOrder="100" />
 

@@ -1,6 +1,6 @@
 1<?xml version="1.0" encoding="utf-8"?>
 2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-3    package="com.kivey.myfirstionicvueapp"
+3    package="ie.kiv.myshout"
 4    android:versionCode="1"
 5    android:versionName="1.0" >
 6
@@ -83,8 +83,8 @@
 46-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:11:9-40
 47        <activity
 47-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:13:9-32:20
-48            android:name="com.kivey.myfirstionicvueapp.MainActivity"
-48-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:15:13-69
+48            android:name="ie.kiv.myshout.MainActivity"
+48-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:15:13-55
 49            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
 49-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:14:13-129
 50            android:label="@string/title_activity_main"
@@ -125,7 +125,7 @@
 68        <provider
 69            android:name="androidx.core.content.FileProvider"
 69-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:35:13-62
-70            android:authorities="com.kivey.myfirstionicvueapp.fileprovider"
+70            android:authorities="ie.kiv.myshout.fileprovider"
 70-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:36:13-64
 71            android:exported="false"
 71-->C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:37:13-37
@@ -244,7 +244,7 @@
 134-->[com.google.firebase:firebase-common:19.3.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\d5ae2f905dca277d72c2333071856016\jetified-firebase-common-19.3.0\AndroidManifest.xml:26:9-30:39
 135            android:name="com.google.firebase.provider.FirebaseInitProvider"
 135-->[com.google.firebase:firebase-common:19.3.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\d5ae2f905dca277d72c2333071856016\jetified-firebase-common-19.3.0\AndroidManifest.xml:27:13-77
-136            android:authorities="com.kivey.myfirstionicvueapp.firebaseinitprovider"
+136            android:authorities="ie.kiv.myshout.firebaseinitprovider"
 136-->[com.google.firebase:firebase-common:19.3.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\d5ae2f905dca277d72c2333071856016\jetified-firebase-common-19.3.0\AndroidManifest.xml:28:13-72
 137            android:exported="false"
 137-->[com.google.firebase:firebase-common:19.3.0] C:\Users\User\.gradle\caches\transforms-2\files-2.1\d5ae2f905dca277d72c2333071856016\jetified-firebase-common-19.3.0\AndroidManifest.xml:29:13-37

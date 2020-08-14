@@ -1,4 +1,4 @@
-package com.kivey.myfirstionicvueapp;
+package ie.kiv.myshout;
 
 import android.os.Bundle;
 

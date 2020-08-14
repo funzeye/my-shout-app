@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">MYFirstIonicVueApp</string>
-    <string name="title_activity_main">MYFirstIonicVueApp</string>
-    <string name="package_name">com.kivey.myfirstionicvueapp</string>
-    <string name="custom_url_scheme">com.kivey.myfirstionicvueapp</string>
+    <string name="app_name">My Shout</string>
+    <string name="title_activity_main">My Shout</string>
+    <string name="package_name">ie.kiv.myshout</string>
+    <string name="custom_url_scheme">ie.kiv.myshout</string>
 </resources>
