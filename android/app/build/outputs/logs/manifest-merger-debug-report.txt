@@ -72,7 +72,7 @@ INJECTED from C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\
 INJECTED from C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:2:1-63:12
 INJECTED from C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:2:1-63:12
 	package
-		ADDED from C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:3:5-43
+		ADDED from C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:3:5-29
 		INJECTED from C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml
 		INJECTED from C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml
 	android:versionName
@@ -141,7 +141,7 @@ MERGED from [com.google.android.datatransport:transport-runtime:2.2.0] C:\Users\
 		ADDED from C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:6:9-35
 	android:theme
 		ADDED from C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:11:9-40
-activity#com.kivey.myfirstionicvueapp.MainActivity
+activity#ie.kiv.myshout.MainActivity
 ADDED from C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:13:9-32:20
 	android:label
 		ADDED from C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:16:13-56
@@ -152,7 +152,7 @@ ADDED from C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src
 	android:theme
 		ADDED from C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:17:13-62
 	android:name
-		ADDED from C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:15:13-69
+		ADDED from C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:15:13-55
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
 ADDED from C:\Users\User\Desktop\Ionic_Vue_Projects\my-shout-app\android\app\src\main\AndroidManifest.xml:20:13-23:29
 action#android.intent.action.MAIN

@@ -1,6 +1,6 @@
 {
   "appId": "ie.kiv.myshout",
-  "appName": "My Shout!",
+  "appName": "My Shout",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "dist",

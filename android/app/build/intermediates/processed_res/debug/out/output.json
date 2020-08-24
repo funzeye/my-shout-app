@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "applicationId": "com.kivey.myfirstionicvueapp",
+  "applicationId": "ie.kiv.myshout",
   "variantType": "BASE_APK",
   "elements": [
     {
@@ -19,7 +19,7 @@
       },
       "path": "resources-debug.ap_",
       "properties": {
-        "packageId": "com.kivey.myfirstionicvueapp",
+        "packageId": "ie.kiv.myshout",
         "split": "",
         "minSdkVersion": "21"
       }
