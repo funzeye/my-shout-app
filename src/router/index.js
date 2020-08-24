@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import CreateNewPub from '../views/CreateNewPub.vue'
+import Privacy from '../views/Privacy.vue'
 import CreateUserRoles from '../views/admin/CreateUserRoles.vue'
 import CreateNewPubFloorArea from '../views/admin/CreateNewPubFloorArea.vue'
 import TabRoot from '../components/TabRoot.vue'
@@ -246,6 +247,11 @@ const routes = [
         next('/signin')
       }
     }
+  },
+  {
+    path: '/privacy',
+    component: Privacy,
+    name: 'privacy'
   },
   {
     path: '/signup',
