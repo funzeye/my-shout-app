@@ -300,6 +300,10 @@ const router = new IonicVueRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => autoLogin.then(next))
+router.beforeEach((to, from, next) => {
+  if (to !== 'privacy') {
+    autoLogin.then(next)
+  }
+})
 
 export default router
