@@ -6,7 +6,7 @@
               Sign Up
             </ion-router-link>
             <ion-router-link href="#/signin" v-if="!auth" slot="end">
-              Login
+              Log In
             </ion-router-link>
       </ion-toolbar>
     </ion-header>
