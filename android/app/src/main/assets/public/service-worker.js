@@ -14,10 +14,10 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.1e4f9c412047c586158e2b4226e6ba8e.js"
+  "/precache-manifest.c46cab848292c2b53252203e7b689dae.js"
 );
 
-workbox.core.setCacheNameDetails({prefix: "first-ionic-vue-app"});
+workbox.core.setCacheNameDetails({prefix: "my-shout"});
 
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {

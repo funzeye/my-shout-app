@@ -228,9 +228,9 @@
                     "from": {
                         "startLines": "2,5,4,3",
                         "startColumns": "4,4,4,4",
-                        "startOffsets": "55,214,158,101",
+                        "startOffsets": "57,219,162,104",
                         "endColumns": "45,60,55,56",
-                        "endOffsets": "96,270,209,153"
+                        "endOffsets": "98,275,213,156"
                     },
                     "to": {
                         "startLines": "672,700,746,756",
