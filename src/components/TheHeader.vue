@@ -2,12 +2,12 @@
   <ion-header>
       <ion-toolbar>
         <ion-title>My Shout!</ion-title>
-        <ion-router-link href="/signup" v-if="!auth" slot="end">
-          Sign Up
-        </ion-router-link>
-        <ion-router-link href="/signin" v-if="!auth" slot="end">
-          Login
-        </ion-router-link>
+            <ion-router-link href="#/signup" v-if="!auth" slot="end">
+              Sign Up
+            </ion-router-link>
+            <ion-router-link href="#/signin" v-if="!auth" slot="end">
+              Login
+            </ion-router-link>
       </ion-toolbar>
     </ion-header>
 </template>
@@ -21,3 +21,11 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+
+ion-router-link {
+  margin-right: 16px;
+}
+
+</style>

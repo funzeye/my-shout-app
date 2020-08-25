@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import CreateNewPub from '../views/CreateNewPub.vue'
 import Privacy from '../views/Privacy.vue'
+import Home from '../views/Home.vue'
 import CreateUserRoles from '../views/admin/CreateUserRoles.vue'
 import CreateNewPubFloorArea from '../views/admin/CreateNewPubFloorArea.vue'
 import TabRoot from '../components/TabRoot.vue'
@@ -18,6 +19,11 @@ Vue.use(IonicVueRouter)
 const autoLogin = store.dispatch('tryAutoSignin')
 
 const routes = [
+  {
+    path: '/home',
+    component: Home,
+    name: 'home'
+  },
   {
     path: '/tabs',
     component: TabRoot,
@@ -37,7 +43,7 @@ const routes = [
           if (token) {
             next()
           } else {
-            next('/signin')
+            next('/home')
           }
         }// ,
         // children: [
@@ -55,7 +61,7 @@ const routes = [
           if (token) {
             next()
           } else {
-            next('/signin')
+            next('/home')
           }
         }
       },
@@ -70,7 +76,7 @@ const routes = [
           if (token) {
             next()
           } else {
-            next('/signin')
+            next('/home')
           }
         }
       },
@@ -86,7 +92,7 @@ const routes = [
           var pub = store.state.pub
           if (!token) {
             console.log('token not found - re-directing to sign in')
-            next('/signin')
+            next('/home')
           } else if (!pub.pubName) {
             console.log('pub name not found - re-directing to home page')
             next('/')
@@ -108,7 +114,7 @@ const routes = [
           var pub = store.state.pub
           if (!token) {
             console.log('token not found - re-directing to sign in')
-            next('/signin')
+            next('/home')
           } else if (!pub.pubName) {
             console.log('pub name not found - re-directing to home page')
             next('/')
@@ -130,7 +136,7 @@ const routes = [
           var pub = store.state.pub
           if (!token) {
             console.log('token not found - re-directing to sign in')
-            next('/signin')
+            next('/home')
           } else if (!pub.pubName) {
             console.log('pub name not found - re-directing to home page')
             next('/')
@@ -152,7 +158,7 @@ const routes = [
           var pub = store.state.pub
           if (!token) {
             console.log('token not found - re-directing to sign in')
-            next('/signin')
+            next('/home')
           } else if (!pub.pubName) {
             console.log('pub name not found - re-directing to home page')
             next('/')
@@ -173,7 +179,7 @@ const routes = [
           if (token) {
             next()
           } else {
-            next('/signin')
+            next('/home')
           }
         }
       },
@@ -188,7 +194,7 @@ const routes = [
           if (token) {
             next()
           } else {
-            next('/signin')
+            next('/home')
           }
         }
       },
@@ -203,7 +209,7 @@ const routes = [
           if (token) {
             next()
           } else {
-            next('/signin')
+            next('/home')
           }
         }
       }
@@ -218,7 +224,7 @@ const routes = [
       if (token) {
         next()
       } else {
-        next('/signin')
+        next('/home')
       }
     }
   },
@@ -231,7 +237,7 @@ const routes = [
       if (token) {
         next()
       } else {
-        next('/signin')
+        next('/home')
       }
     }
   },
@@ -244,7 +250,7 @@ const routes = [
       if (token) {
         next()
       } else {
-        next('/signin')
+        next('/home')
       }
     }
   },
@@ -259,7 +265,7 @@ const routes = [
     beforeEnter (to, from, next) {
       var token = store.state.idToken
       if (token) {
-        next('/')
+        next('tabs/search-for-pub')
       } else {
         next()
       }
@@ -283,14 +289,14 @@ const routes = [
     beforeEnter (to, from, next) {
       var token = store.state.idToken
       if (token) {
-        next('/')
+        next('tabs/search-for-pub')
       } else {
         next()
       }
     }
   },
-  { path: '/', redirect: 'tabs/search-for-pub' },
-  { path: '*', redirect: 'tabs/search-for-pub' }
+  { path: '/', redirect: 'home' },
+  { path: '*', redirect: 'home' }
 
   // { path: '' }
 ]
@@ -301,9 +307,7 @@ const router = new IonicVueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to !== 'privacy') {
-    autoLogin.then(next)
-  }
+  autoLogin.then(next)
 })
 
 export default router

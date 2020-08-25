@@ -13,7 +13,7 @@
     <ion-content class="ion-padding">
       <ion-text><h2>{{ user.email }}</h2></ion-text>
       <ion-item>
-        <ion-button @click="changeEmail">Change Email</ion-button>
+         <ion-button @click="changeEmail">Change Email</ion-button>
       </ion-item>
       <ion-item>
         <ion-button @click="changePassword">Send Password Reset Email</ion-button>
