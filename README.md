@@ -1,30 +1,19 @@
 # My Shout App
+An app built using Vue JS 2 and Ionic 5.
 
-## intro
-Ionic + Vue App
+Its primarily built for the purpose of deploying to android app store.
 
-Also uses:
-Vuex, Vuelidate, Axios, Firebase
+However a PWA version of the app is also deployed at www.myshout.ie.
 
-## Project setup
-```
-npm install
-```
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Technical Elements
+The app is a Vue app built using the Vue CLI and then the Ionic 5 packages added to it. The reason it is not built using the Ionic CLI is because at the time of creation (August 2020) the Vue version of Ionic was still in Beta. A fully fledged Ionic Vue release is due soon - once Vue 3 is released.
 
-### Compiles and minifies for production
-```
-npm run build
-```
+The app using tabs to navigate between pages.
 
-### Lints and fixes files
-```
-npm run lint
-```
+### Also uses:
+Vuex for state management,
+Vuelidate for for input validation,
+Firebase for the database persistance,
+Axios for communicating with Firebase via REST API.
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
