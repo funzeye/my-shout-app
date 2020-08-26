@@ -13,7 +13,7 @@ The app uses tabs to navigate between pages.
 
 How to create an Ionic Vue (Beta) app: https://hovercraft.ie/setting-up-a-basic-ionic-vue-app-beta/
 
-### Also uses:
+### Also uses
 - Vuex for state management,
 - Vuelidate for for input validation,
 - Firebase for the database persistance,
