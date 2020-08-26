@@ -88,7 +88,7 @@
         </div>
       </form>
       <ion-row class="ion-justify-content-center ion-padding-top">
-      <ion-router-link href="/signin">
+      <ion-router-link href="/#/signin">
         Already have an account? Sign In
       </ion-router-link>
       </ion-row>

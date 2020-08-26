@@ -25,12 +25,12 @@
       </form>
       <ion-grid>
       <ion-row class="ion-justify-content-center ion-padding-vertical">
-      <ion-router-link href="/signin">
+      <ion-router-link href="/#/signin">
         Sign In
       </ion-router-link>
       </ion-row>
       <ion-row class="ion-justify-content-center ion-padding-top">
-      <ion-router-link href="/signup">
+      <ion-router-link href="/#/signup">
         Sign Up
       </ion-router-link>
       </ion-row>
