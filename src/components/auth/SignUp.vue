@@ -40,7 +40,7 @@
 
         <ion-item>
         <ion-label>I'm a: <ion-text color="danger">*</ion-text></ion-label>
-        <ion-select-vue @ionBlur="$v.userRole.$touch(true)" interface="action-sheet" placeholder="Publican or Punter" name="userRole"
+        <ion-select-vue @ionBlur="$v.userRole.$touch(true)" interface="action-sheet" placeholder="Publican or Patron" name="userRole"
           v-model="userRole">
             <ion-select-option value="punter">Patron / Pub goer</ion-select-option>
             <ion-select-option value="publican">Publican</ion-select-option>
