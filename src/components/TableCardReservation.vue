@@ -116,7 +116,32 @@ export default {
       this.$router.push({ name: 'reserve-table', params: { id: this.pubTable.key }, query: { pubId: this.pubTable.pubId } })
     },
     cancelTableReservation () {
-      this.$store.dispatch('cancelReservationForCurrentlySelectedPubWithPubId', this.pubTable.key)
+      console.log('cancelling reservation...')
+      return this.$ionic.alertController
+        .create({
+          cssClass: 'alert-cancel-res',
+          header: 'Cancel Reservation',
+          // subHeader: 'Subtitle',
+          message: 'Are you sure you wish to cancel your reservation?',
+          buttons: [
+            {
+              text: 'Back',
+              role: 'cancel',
+              // cssClass: 'secondary',
+              handler: () => {
+                console.log('Cancellation abandoned.')
+              }
+            },
+            {
+              text: 'Confirm',
+              handler: () => {
+                console.log('Cancellation Confirmed')
+                this.$store.dispatch('cancelReservationForCurrentlySelectedPubWithPubId', this.pubTable.key)
+              }
+            }
+          ]
+        })
+        .then(a => a.present())
     }
   }
 }

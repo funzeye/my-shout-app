@@ -32,12 +32,12 @@
       <ion-grid>
       <ion-row class="ion-justify-content-center ion-padding-vertical">
       <ion-router-link href="/#/signup">
-        Sign Up
+        Not signed up? Sign up here
       </ion-router-link>
       </ion-row>
       <ion-row class="ion-justify-content-center ion-padding-top">
       <ion-router-link href="/#/forgotpassword">
-        Forgot Password?
+        Forgot password?
       </ion-router-link>
       </ion-row>
       </ion-grid>

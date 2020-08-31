@@ -12,9 +12,13 @@
     </ion-header>
     <ion-content class="ion-padding">
       <ion-list>
-        <div v-for="pt in pubTables" :key="pt['.key']">
-          <table-card :i="i" :pubTable="pt" :loggedInUserId="userId" :pubFloors="pub.floors" :userIsOwner="pub.ownerId === userId"/>
-        </div>
+        <ion-grid style="max-width:1200px;">
+          <ion-row>
+            <ion-col size="12" size-md="6" size-lg="4" v-for="pt in pubTables" :key="pt['.key']">
+                <table-card :i="i" :pubTable="pt" :loggedInUserId="userId" :pubFloors="pub.floors" :userIsOwner="pub.ownerId === userId"/>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
       </ion-list>
     </ion-content>
   </div>

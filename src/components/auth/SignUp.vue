@@ -42,7 +42,7 @@
         <ion-label>I'm a: <ion-text color="danger">*</ion-text></ion-label>
         <ion-select-vue @ionBlur="$v.userRole.$touch(true)" interface="action-sheet" placeholder="Publican or Punter" name="userRole"
           v-model="userRole">
-            <ion-select-option value="punter">Punter</ion-select-option>
+            <ion-select-option value="punter">Patron / Pub goer</ion-select-option>
             <ion-select-option value="publican">Publican</ion-select-option>
         </ion-select-vue>
         <ion-note v-if="$v.userRole.$invalid && $v.userRole.$dirty" class="error ion-padding" color="danger">required</ion-note>

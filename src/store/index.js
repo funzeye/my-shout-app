@@ -294,7 +294,7 @@ export default new Vuex.Store({
             userId: res.data.localId
           })
           dispatch('setLogoutTimer', res.data.expiresIn)
-          router.replace('/')
+          router.replace('/#/tabs/search-for-pub')
         })
         .catch(error => console.log(error))
     },

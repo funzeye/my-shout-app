@@ -6,16 +6,31 @@
         <div class="main-image">
         </div>
         <div class="main-message">
-            <h2>Book your table in any pub</h2>
-            <ion-button @click="onLogin" class="ion-margin-top" expand="block" size="large" v-if="!auth">
-                Log in
-            </ion-button>
-            <ion-button @click="onSignup" class="ion-margin-top" expand="block" size="large" v-if="!auth">
-                Sign up
-            </ion-button>
-            <ion-button @click="onSearch" class="ion-margin-top" expand="block" size="large" v-if="auth">
-                Begin Search
-            </ion-button>
+            <div class="main-message_flexbox">
+              <div class="main-message_flexbox_item">
+                <h1>Patron</h1>
+                <h2>Are you a patron looking to book a table in a pub</h2>
+              </div>
+              <div class="main-message_divider">
+              </div>
+              <div class="main-message_flexbox_item">
+                <h1>Publican</h1>
+                <h2>Are you a publican looking to manage reservations</h2>
+              </div>
+            </div>
+            <div class="message-button_container">
+              <div>
+                <ion-button @click="onLogin" class="ion-margin-top" expand="block" size="large" v-if="!auth">
+                    Log in
+                </ion-button>
+                <ion-button @click="onSignup" color="secondary" fill="outline" class="ion-margin-top" expand="block" size="large" v-if="!auth">
+                    Sign up
+                </ion-button>
+                <ion-button @click="onSearch" class="ion-margin-top" expand="block" size="large" v-if="auth">
+                    Begin Search
+                </ion-button>
+              </div>
+            </div>
         </div>
         </header>
     </ion-content>
@@ -78,15 +93,61 @@ header {
 
 .main-message{
     z-index: 1;
-    h2 {
+    h1 {
         font-weight: bold;
         color: #fff;
         text-align: center;
     }
+    h2 {
+        font-weight: 400;
+        color: #fff;
+        text-align: center;
+    }
+    max-width:800px;
 }
 
-ion-button{
+ion-button {
     --margin-top: 1em;
+}
+
+.message-button_container {
+  max-width: 400px;
+  margin: auto;
+  padding: 24px;
+}
+
+.main-message_flexbox {
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    @media (min-width: 600px) {
+      flex-direction: row;
+    }
+}
+
+.main-message_flexbox_item {
+  flex: 1;
+  h2{
+    @media (max-width: 600px) {
+      font-size: 20px;
+    }
+  }
+}
+
+.main-message_divider {
+  border-bottom: 2px solid white;
+  margin-top: 24px;
+  margin-bottom: 14px;
+
+  @media (min-width: 600px) {
+      flex-direction: row;
+      border-bottom: none;
+      border-left: 2px solid white;
+      margin-left: 24px;
+      margin-right: 24px;
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
 }
 
 </style>
