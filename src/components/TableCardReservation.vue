@@ -43,6 +43,8 @@
         </div>
       </template>
       <template slot="table-card-action-button-info">
+            {{ reservation }}
+
         <div class="info-text ion-text-center ion-text-sm-start" v-if="!reservation.isCancelled && !reservation.reservedBy  && !userIsOwner">
           Clicking 'Reserve' will reserve this table and cancel any other active reservations you currently have
         </div>
@@ -142,7 +144,7 @@ export default {
               text: 'Confirm',
               handler: () => {
                 console.log('Cancellation Confirmed')
-                this.$store.dispatch('reservationModule/cancelReservationForCurrentlySelectedPubWithPubId', this.pubTable.key)
+                this.$store.dispatch('reservationModule/cancelReservationForCurrentlySelectedTable', this.reservation.key)
               }
             }
           ]

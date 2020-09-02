@@ -225,14 +225,14 @@ const actions = {
         })
       })
   },
-  cancelReservationForCurrentlySelectedPubWithPubId ({ commit, rootState }, pubTableKey) {
+  cancelReservationForCurrentlySelectedTable ({ commit, rootState }, reservationKey) {
     if (!rootState.userModule.idToken) {
       console.log('No Id Token - Exiting')
       return
     }
-    console.log('cancelling reservation in DB for table: ', pubTableKey)
+    console.log('cancelling reservation in DB with res key id: ', reservationKey)
 
-    const resFromArray = state.allReservationsForPub.filter(res => res.table.tableId === pubTableKey)[0]
+    const resFromArray = state.allReservationsForPub.filter(res => res.key === reservationKey)[0]
     console.log('resFromArray:', resFromArray)
     const reservation = {
       table: {
@@ -254,16 +254,15 @@ const actions = {
       reservedByOwner: resFromArray.reservedByOwner,
       userDetails: null
     }
-    const resKey = resFromArray.key
 
     // update record but don't delete it
-    globalAxios.patch('reservations/' + resKey + '.json' + '?auth=' + rootState.userModule.idToken, reservation)
+    globalAxios.patch('reservations/' + reservationKey + '.json' + '?auth=' + rootState.userModule.idToken, reservation)
       .then(res => {
         console.log(res)
         console.log('reservation successfully cancelled in DB: ', res.data)
         console.log('about to reset reservation...')
         commit('resetCurrentReservation')
-        commit('removeReservationFromCollection', resKey)
+        commit('removeReservationFromCollection', reservationKey)
       })
       .catch(error => console.log(error))
   },
@@ -314,6 +313,7 @@ const actions = {
     }
     let arrivalLimitTime = null
     if (rootState.pubModule.pub.timeToArrivalLimitOn) {
+      console.log('setting time to arrival limit on')
       arrivalLimitTime = new Date()
       arrivalLimitTime.setMinutes(arrivalLimitTime.getMinutes() + rootState.pubModule.pub.timeToArrivalLimitInMinutes)
     }

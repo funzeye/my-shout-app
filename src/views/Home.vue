@@ -33,6 +33,9 @@
             </div>
         </div>
         </header>
+        <main>
+          This app is currently still being tested. All information will be wiped before the official release.
+        </main>
     </ion-content>
   </ion-page>
 
