@@ -71,39 +71,35 @@
 </template>
 
 <script>
-// import { loadingController } from '@ionic/core'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'booked-tables',
   computed: {
-    userId () {
-      return this.$store.getters.userId
-    },
-    user () {
-      return this.$store.getters.user
-    },
-    isPublican () {
-      return this.$store.getters.isPublican
-    },
-    isPunter () {
-      return this.$store.getters.isPunter
-    },
-    activeReservation () {
-      return this.$store.getters.activeReservationForPunter
-    },
+
+    ...mapGetters('userModule', [
+      'userId',
+      'user',
+      'isPublican',
+      'isPunter'
+    ]),
+
+    ...mapGetters('pubModule', [
+      'publicansPub'
+    ]),
+
+    ...mapGetters('reservationModule', {
+      activeReservation: 'activeReservationForPunter',
+      previousReservations: 'previousReservationsForPunter'
+    }),
+
     allReservationsForPub () {
-      var items = this.$store.getters.allReservationsForPub
+      var items = this.$store.getters.reservationModule.allReservationsForPub
       return items.sort(function (a, b) {
         // Turn your strings into dates, and then subtract them
         // to get a value that is either negative, positive, or zero.
         return new Date(b.reservedAtDate) - new Date(a.reservedAtDate)
       })
-    },
-    previousReservations () {
-      return this.$store.getters.previousReservationsForPunter
-    },
-    publicansPub () {
-      return this.$store.getters.publicansPub
     }
   },
   created () {
@@ -114,14 +110,14 @@ export default {
     // await loading.present()
     console.log('bookedTables created method called')
     if (this.user.email === '') {
-      this.$store.dispatch('fetchUserDetails', this.userId)
+      this.$store.dispatch('userModule/fetchUserDetails', this.userId)
     }
     if (!this.publicansPub || this.publicansPub === '') {
-      this.$store.dispatch('fetchPubs')
+      this.$store.dispatch('pubModule/fetchPubs')
     }
-    this.$store.dispatch('fetchReservationsForPunter', this.userId)
+    this.$store.dispatch('reservationModule/fetchReservationsForPunter', this.userId)
     if (this.publicansPub && this.publicansPub.key) {
-      this.$store.dispatch('fetchReservationsForPub', this.publicansPub.key)
+      this.$store.dispatch('reservationModule/fetchReservationsForPub', this.publicansPub.key)
     }
   }
 }

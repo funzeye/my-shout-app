@@ -126,14 +126,14 @@ export default {
   computed: {
     pub: {
       get () {
-        return this.$store.getters.pub
+        return this.$store.getters.pubModule.pub
       },
       set (pub) {
-        this.$store.dispatch('updatePub', pub)
+        this.$store.dispatch('pubModule/updatePub', pub)
       }
     },
     allTodaysReservationsForPub () {
-      return this.$store.getters.allTodaysReservationsForPub
+      return this.$store.getters.reservationModule.allTodaysReservationsForPub
     }
   },
   methods: {

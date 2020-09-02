@@ -72,7 +72,7 @@ export default {
         password: this.password
       }
       console.log(formData)
-      this.$store.dispatch('signin', formData)
+      this.$store.dispatch('userModule/signin', formData)
     },
     setEmailLostFocus () {
       this.$v.email.$touch(true)

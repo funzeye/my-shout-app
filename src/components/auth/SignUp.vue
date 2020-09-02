@@ -21,6 +21,7 @@
           <ion-label for="surname">Surname <ion-text color="danger">*</ion-text></ion-label>
           <ion-input-vue
                   type="text"
+                  inputmode="text"
                   id="surname"
                   @ionBlur="$v.surname.$touch(true)"
                   v-model="surname"></ion-input-vue>
@@ -29,9 +30,10 @@
 
         <ion-note v-if="$v.firstName.$invalid && $v.firstName.$dirty" class="error ion-padding" color="danger">Valid name required</ion-note>
         <ion-item class="input">
-          <ion-label for="surname">Phone <ion-text color="danger">*</ion-text></ion-label>
+          <ion-label for="phone">Phone <ion-text color="danger">*</ion-text></ion-label>
           <ion-input-vue
-                  type="number"
+                  type="tel"
+                  inputmode="tel"
                   id="phone"
                   @ionBlur="$v.phone.$touch(true)"
                   v-model="phone"></ion-input-vue>
@@ -51,6 +53,7 @@
           <ion-label for="email">Email <ion-text color="danger">*</ion-text></ion-label>
           <ion-input-vue
                   type="email"
+                  inputmode="email"
                   id="email"
                   debounce="300"
                   @ionBlur="setEmailLostFocus"

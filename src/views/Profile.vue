@@ -4,7 +4,7 @@
           <ion-toolbar>
               <ion-title>Your Profile</ion-title>
               <ion-buttons slot="end">
-                <ion-button v-if="auth" @click="onLogout">
+                <ion-button v-if="isAuthenticated" @click="onLogout">
                   Logout
                 </ion-button>
               </ion-buttons>
@@ -18,36 +18,33 @@
       <ion-item>
         <ion-button @click="changePassword">Send Password Reset Email</ion-button>
       </ion-item>
-      <ion-note class="ion-padding" style="display:block">Clicking 'Reset' will log you out and an email will be sent to the above address</ion-note>
+      <ion-note class="ion-padding" style="display:block">Clicking 'Send Password Reset Email' will log you out and an email will be sent to the above address</ion-note>
 
     </ion-content>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'profile',
   computed: {
-    user () {
-      return this.$store.getters.user
-    },
-    userId () {
-      return this.$store.getters.userId
-    },
-    auth () {
-      return this.$store.getters.isAuthenticated
-    }
+    ...mapGetters('userModule', [
+      'userId',
+      'user',
+      'isAuthenticated'
+    ])
   },
   methods: {
     changeEmail () {
       this.$router.push({ name: 'change-email', params: { userId: this.userId } })
     },
     changePassword () {
-      this.$store.dispatch('sendPasswordEmailReset', this.user.email)
+      this.$store.dispatch('userModule/sendPasswordEmailReset', this.user.email)
     },
     onLogout: function () {
-      this.$store.dispatch('logout')
+      this.$store.dispatch('userModule/logout')
     }
   }
 }

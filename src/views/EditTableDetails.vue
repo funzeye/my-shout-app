@@ -67,26 +67,26 @@ export default {
   },
   computed: {
     pubFloors () {
-      return this.$store.getters.pub.floors
+      return this.$store.getters.pubModule.pub.floors
     },
     pubFloorAreas () {
-      return this.$store.getters.pubFloorAreas
+      return this.$store.getters.pubModule.pubFloorAreas
     },
     pubTable: {
       get () {
         console.log('getting pubTable from getter')
-        return this.$store.getters.pubTable
+        return this.$store.getters.pubModule.pubTable
       },
       set (pubTable) {
         console.log('updating pubTable in setter:', pubTable)
-        this.$store.dispatch('setSelectedPubTable', pubTable)
+        this.$store.dispatch('pubModule/setSelectedPubTable', pubTable)
       }
     }
   },
   created () {
-    this.$store.dispatch('fetchPubFloorAreas')
+    this.$store.dispatch('pubModule/fetchPubFloorAreas')
     console.log('pubTable key:', this.pubTable.key)
-    this.$store.dispatch('fetchPubTable', this.pubTable.key)
+    this.$store.dispatch('pubModule/fetchPubTable', this.pubTable.key)
   },
   mounted () {
     this.$refs.seats.value = this.pubTable.seats

@@ -49,6 +49,7 @@
 import TheHeader from '../components/TheHeader.vue'
 import PubCard from '../components/PubCard.vue'
 import * as allIcons from 'ionicons/icons'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'search-for-pub',
@@ -62,26 +63,21 @@ export default {
     PubCard
   },
   computed: {
-    pubs: {
-      get () {
-        return this.$store.getters.pubs
-      }
-    },
-    publicansPub () {
-      return this.$store.getters.publicansPub
-    },
-    user () {
-      return this.$store.getters.user
-    }
+    ...mapGetters({
+      user: 'userModule/user',
+      pubs: 'pubModule/pubs',
+      publicansPubs: 'pubModule/publicansPub'
+    })
   },
   created () {
     console.log('search-for-pub created method called')
 
     if (!this.pubs || this.pubs.length === 0) {
-      this.$store.dispatch('fetchPubs')
+      console.log('calling fetchPubs from SearchForPubs')
+      this.$store.dispatch('pubModule/fetchPubs')
     }
     if (!this.user || this.user.email === '') {
-      this.$store.dispatch('fetchUserDetails')
+      this.$store.dispatch('userModule/fetchUserDetails')
     }
   },
   methods: {

@@ -34,9 +34,11 @@
             <ion-input-vue disabled>Today</ion-input-vue>
         </ion-item>
 
-        <ion-text color="secondary">
-            <p>There is NO time limit on this reservation. Once Reserved it will stay reserved unless freed by punter or publican. You can stay at table as long as you want.</p>
-        </ion-text>
+        <p class="info-text">
+          <ion-text color="secondary">
+          There is NO time limit on this reservation. Once Reserved it will stay reserved unless freed by the patron or publican. You can stay at table as long as you want.
+          </ion-text>
+        </p>
 
         <div class="ion-padding">
             <ion-button expand="block" class="ion-no-margin" :disabled="$v.$invalid && pub.ownerId === userId" type="submit">Confirm Reservation</ion-button>
@@ -52,6 +54,7 @@
 <script>
 import * as allIcons from 'ionicons/icons'
 import { required } from 'vuelidate/lib/validators'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'reserve-table',
@@ -71,18 +74,14 @@ export default {
     }
   },
   computed: {
-    pubTable () {
-      return this.$store.getters.pubTable
-    },
-    pub () {
-      return this.$store.getters.pub
-    },
-    user () {
-      return this.$store.getters.user
-    },
-    userId () {
-      return this.$store.getters.userId
-    }
+    ...mapGetters('pubModule', [
+      'pubTable',
+      'pub'
+    ]),
+    ...mapGetters('userModule', [
+      'user',
+      'userId'
+    ])
   },
   methods: {
     backToPubDetails () {
@@ -96,28 +95,36 @@ export default {
       console.log('reserveTable.vue: confirm reservation button clicked. submitting a new reservation')
       if (this.pub.ownerId !== this.userId) { // owner allowed make as many reservation as they wish in their own pub
         console.log('cancelling all existing reservations for punter')
-        this.$store.dispatch('cancelOtherReservationForPunter', { userId: this.userId, tableToIgnoreId: this.pubTable.key })
+        this.$store.dispatch('reservationModule/cancelOtherReservationForPunter', { userId: this.userId, tableToIgnoreId: this.pubTable.key })
       }
       console.log('reserveTable.vue: creating reservation')
-      this.$store.dispatch('createReservation', { ownerReservedOnBehalfOf: this.ownerReservedOnBehalfOf, ownerReservedOnBehalfOfPhone: this.ownerReservedOnBehalfOfPhone })
+      this.$store.dispatch('reservationModule/createReservation', { ownerReservedOnBehalfOf: this.ownerReservedOnBehalfOf, ownerReservedOnBehalfOfPhone: this.ownerReservedOnBehalfOfPhone })
       this.$router.replace({ name: 'pub-details', params: { id: this.pub.key } })
     }
   },
   created () {
     if (!this.user || this.user.email === '') {
-      this.$store.dispatch('fetchUserDetails')
+      this.$store.dispatch('userModule/fetchUserDetails')
     }
     if (!this.pub.key || this.pub.key !== this.$route.query.pubId) {
       console.log('this.$route.query:', this.$route.query)
       console.log('no pub state - fetching from DB')
-      this.$store.dispatch('fetchPubByPubId', this.$route.query.pubId)
+      this.$store.dispatch('pubModule/fetchPubByPubId', this.$route.query.pubId)
     }
     if (!this.pubTable || this.pubTable.key !== this.$route.params.id) {
       console.log('this.$route.params:', this.$route.params)
       console.log('no pubTable state - fetching from DB')
-      this.$store.dispatch('fetchPubTable', this.$route.params.id)
+      this.$store.dispatch('pubModule/fetchPubTable', this.$route.params.id)
     }
   }
 
 }
 </script>
+
+<style lang="scss" scoped>
+.info-text{
+  font-size:12px;
+  padding-left:16px
+}
+
+</style>

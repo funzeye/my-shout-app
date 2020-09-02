@@ -40,6 +40,7 @@
 
 <script>
 import TheHeader from '../components/TheHeader.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'home',
@@ -47,9 +48,12 @@ export default {
     TheHeader
   },
   computed: {
-    auth () {
-      return this.$store.getters.isAuthenticated
-    }
+    ...mapGetters('userModule', {
+      auth: 'isAuthenticated'
+    })
+    // auth () {
+    //   return this.$store.getters.userModule.isAuthenticated
+    // }
   },
   methods: {
     onLogin: function () {

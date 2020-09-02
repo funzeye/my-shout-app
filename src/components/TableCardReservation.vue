@@ -64,6 +64,7 @@
 
 <script>
 import TableCardBase from '../components/TableCardBase.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   props: ['i', 'pubTable', 'pubFloors', 'loggedInUserId', 'userIsOwner'],
@@ -90,8 +91,13 @@ export default {
     //  const reservations = this.$store.getters.reservations
     //  return reservations.some(item => item.tableId === this.pubTable.key)
     // },
+    ...mapGetters('reservationModule', [
+      'allTodaysReservationsForPub'
+    ]),
     reservation () {
-      const reservations = this.$store.getters.allTodaysReservationsForPub
+      console.log('checking if reservation exists for current table #', this.pubTable.tableNum)
+      const reservations = this.allTodaysReservationsForPub
+      console.log('all todays reservations for pub: ', reservations)
       if (reservations && reservations.length > 0) {
         const reservationsWithThisTableKey = reservations.filter(item => item.table.tableId === this.pubTable.key)
         if (reservationsWithThisTableKey.length === 1) {
@@ -111,8 +117,8 @@ export default {
   },
   methods: {
     reserveTable () {
-      this.$store.dispatch('fetchUserDetails')
-      this.$store.dispatch('setSelectedPubTable', this.pubTable)
+      this.$store.dispatch('userModule/fetchUserDetails')
+      this.$store.dispatch('pubModule/setSelectedPubTable', this.pubTable)
       this.$router.push({ name: 'reserve-table', params: { id: this.pubTable.key }, query: { pubId: this.pubTable.pubId } })
     },
     cancelTableReservation () {
@@ -136,7 +142,7 @@ export default {
               text: 'Confirm',
               handler: () => {
                 console.log('Cancellation Confirmed')
-                this.$store.dispatch('cancelReservationForCurrentlySelectedPubWithPubId', this.pubTable.key)
+                this.$store.dispatch('reservationModule/cancelReservationForCurrentlySelectedPubWithPubId', this.pubTable.key)
               }
             }
           ]

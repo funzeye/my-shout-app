@@ -40,6 +40,7 @@
 import { required, email } from 'vuelidate/lib/validators'
 import axios from '@/axios-auth'
 import * as allIcons from 'ionicons/icons'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'change-email',
@@ -81,18 +82,16 @@ export default {
     }
   },
   computed: {
-    user () {
-      return this.$store.getters.user
-    },
-    userId () {
-      return this.$store.getters.userId
-    }
+    ...mapGetters('userModule', [
+      'user',
+      'userId'
+    ])
   },
   methods: {
     onSubmit () {
       const newData = { newEmail: this.email }
       console.log('new email:', newData)
-      this.$store.dispatch('changeEmail', newData)
+      this.$store.dispatch('userModule/changeEmail', newData)
       this.email = ''
     },
     setEmailLostFocus () {
@@ -106,7 +105,7 @@ export default {
   },
   created () {
     if (this.user.email === '') {
-      this.$store.dispatch('fetchUserDetails', this.userId)
+      this.$store.dispatch('userModule/fetchUserDetails', this.userId)
     }
   }
 }

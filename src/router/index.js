@@ -16,7 +16,7 @@ import store from '../store'
 import { IonicVueRouter } from '@ionic/vue'
 Vue.use(IonicVueRouter)
 
-const autoLogin = store.dispatch('tryAutoSignin')
+const autoLogin = store.dispatch('userModule/tryAutoSignin')
 
 const routes = [
   {
@@ -39,10 +39,12 @@ const routes = [
         },
         name: 'search-for-pub',
         beforeEnter (to, from, next) {
-          var token = store.state.idToken
+          var token = store.state.userModule.idToken
           if (token) {
+            console.log('token found, going to next:', next)
             next()
           } else {
+            console.log('token not found, going to /home:')
             next('/home')
           }
         }// ,
@@ -57,7 +59,7 @@ const routes = [
         },
         name: 'pub-details',
         beforeEnter (to, from, next) {
-          var token = store.state.idToken
+          var token = store.state.userModule.idToken
           if (token) {
             next()
           } else {
@@ -72,7 +74,7 @@ const routes = [
         },
         name: 'reserve-table',
         beforeEnter (to, from, next) {
-          var token = store.state.idToken
+          var token = store.state.userModule.idToken
           if (token) {
             next()
           } else {
@@ -88,7 +90,7 @@ const routes = [
         name: 'edit-pub',
         beforeEnter (to, from, next) {
           console.log('navigating to edit-pub page.')
-          var token = store.state.idToken
+          var token = store.state.userModule.idToken
           var pub = store.state.pub
           if (!token) {
             console.log('token not found - re-directing to sign in')
@@ -110,7 +112,7 @@ const routes = [
         name: 'edit-pub-tables',
         beforeEnter (to, from, next) {
           console.log('navigating to edit-pub-tables page.')
-          var token = store.state.idToken
+          var token = store.state.userModule.idToken
           var pub = store.state.pub
           if (!token) {
             console.log('token not found - re-directing to sign in')
@@ -132,7 +134,7 @@ const routes = [
         name: 'edit-pub-details',
         beforeEnter (to, from, next) {
           console.log('navigating to edit-pub-details page.')
-          var token = store.state.idToken
+          var token = store.state.userModule.idToken
           var pub = store.state.pub
           if (!token) {
             console.log('token not found - re-directing to sign in')
@@ -154,7 +156,7 @@ const routes = [
         name: 'edit-table-details',
         beforeEnter (to, from, next) {
           console.log('navigating to edit-table-details page.')
-          var token = store.state.idToken
+          var token = store.state.userModule.idToken
           var pub = store.state.pub
           if (!token) {
             console.log('token not found - re-directing to sign in')
@@ -175,7 +177,7 @@ const routes = [
         },
         name: 'profile',
         beforeEnter (to, from, next) {
-          var token = store.state.idToken
+          var token = store.state.userModule.idToken
           if (token) {
             next()
           } else {
@@ -190,7 +192,7 @@ const routes = [
         },
         name: 'change-email',
         beforeEnter (to, from, next) {
-          var token = store.state.idToken
+          var token = store.state.userModule.idToken
           if (token) {
             next()
           } else {
@@ -205,7 +207,7 @@ const routes = [
         },
         name: 'booked-tables',
         beforeEnter (to, from, next) {
-          var token = store.state.idToken
+          var token = store.state.userModule.idToken
           if (token) {
             next()
           } else {
@@ -220,7 +222,7 @@ const routes = [
     component: CreateNewPubFloorArea,
     name: 'create-new-pub-floor-area',
     beforeEnter (to, from, next) {
-      var token = store.state.idToken
+      var token = store.state.userModule.idToken
       if (token) {
         next()
       } else {
@@ -233,7 +235,7 @@ const routes = [
     component: CreateNewPub,
     name: 'create-new-pub',
     beforeEnter (to, from, next) {
-      var token = store.state.idToken
+      var token = store.state.userModule.idToken
       if (token) {
         next()
       } else {
@@ -246,7 +248,7 @@ const routes = [
     component: CreateUserRoles,
     name: 'create-user-roles',
     beforeEnter (to, from, next) {
-      var token = store.state.idToken
+      var token = store.state.userModule.idToken
       if (token) {
         next()
       } else {
@@ -263,7 +265,7 @@ const routes = [
     path: '/signup',
     component: SignUpPage,
     beforeEnter (to, from, next) {
-      var token = store.state.idToken
+      var token = store.state.userModule.idToken
       if (token) {
         next('tabs/search-for-pub')
       } else {
@@ -275,7 +277,7 @@ const routes = [
     path: '/forgotpassword',
     component: ForgotPassword,
     beforeEnter (to, from, next) {
-      var token = store.state.idToken
+      var token = store.state.userModule.idToken
       if (token) {
         next('/')
       } else {
@@ -287,7 +289,7 @@ const routes = [
     path: '/signin',
     component: SignInPage,
     beforeEnter (to, from, next) {
-      var token = store.state.idToken
+      var token = store.state.userModule.idToken
       if (token) {
         next('tabs/search-for-pub')
       } else {

@@ -13,11 +13,13 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   computed: {
-    auth () {
-      return this.$store.getters.isAuthenticated
-    }
+    ...mapGetters('userModule', {
+      auth: 'isAuthenticated'
+    })
   }
 }
 </script>

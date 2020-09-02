@@ -15,7 +15,8 @@
         <ion-grid style="max-width:1200px;">
           <ion-row>
             <ion-col size="12" size-md="6" size-lg="4" v-for="pt in pubTables" :key="pt['.key']">
-                <table-card :i="i" :pubTable="pt" :loggedInUserId="userId" :pubFloors="pub.floors" :userIsOwner="pub.ownerId === userId"/>
+                <table-card :i="i" :pubTable="pt" :loggedInUserId="userId" :pubFloors="pub.floors"
+                :userIsOwner="pub.ownerId === userId"/>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -27,6 +28,7 @@
 <script>
 import TableCard from '../components/TableCardReservation.vue'
 import * as allIcons from 'ionicons/icons'
+import { mapGetters } from 'vuex'
 
 export default {
 
@@ -40,22 +42,20 @@ export default {
     TableCard
   },
   computed: {
-    pubTables () {
-      return this.$store.getters.pubTables
-    },
-    pub () {
-      return this.$store.getters.pub
-    },
-    userId () {
-      return this.$store.getters.userId
-    }
+    ...mapGetters('pubModule', [
+      'pubTables',
+      'pub'
+    ]),
+    ...mapGetters('userModule', [
+      'userId'
+    ])
   },
   created () {
     console.log(this.$route)
     console.log('current route param id ', this.$route.params.id)
     if (!this.pub || this.pub.key !== this.$route.params.id) {
       console.log('fecthing pub linked to pub id of: ', this.$route.params.id)
-      this.$store.dispatch('fetchPubByPubId', this.$route.params.id)
+      this.$store.dispatch('pubModule/fetchPubByPubId', this.$route.params.id)
     } else {
       console.log('current pub key: ', this.pub.key)
       console.log('current pub in state matches current pub on screen - not retreiving data from db')

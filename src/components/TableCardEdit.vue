@@ -14,7 +14,7 @@ export default {
   },
   methods: {
     editTableDetails () {
-      this.$store.dispatch('setSelectedPubTable', this.pubTable)
+      this.$store.dispatch('pubModule/setSelectedPubTable', this.pubTable)
       this.$router.push({ name: 'edit-table-details', params: { id: this.pubTable.pubId } })
     }
   }
