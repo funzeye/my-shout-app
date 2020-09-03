@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     submitted () {
-      this.$store.dispatch('updatePubTable', this.pubTable)
+      this.$store.dispatch('pubModule/updatePubTable', this.pubTable)
       this.$router.replace({ name: 'edit-pub-tables', params: { id: this.pubTable.pubId } })
     },
     updateTableFloors (e) {
@@ -66,16 +66,19 @@ export default {
     }
   },
   computed: {
+    pub () {
+      return this.$store.getters['pubModule/pub']
+    },
     pubFloors () {
-      return this.$store.getters.pubModule.pub.floors
+      return this.pub.floors
     },
     pubFloorAreas () {
-      return this.$store.getters.pubModule.pubFloorAreas
+      return this.$store.getters['pubModule/pubFloorAreas']
     },
     pubTable: {
       get () {
         console.log('getting pubTable from getter')
-        return this.$store.getters.pubModule.pubTable
+        return this.$store.getters['pubModule/pubTable']
       },
       set (pubTable) {
         console.log('updating pubTable in setter:', pubTable)

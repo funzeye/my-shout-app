@@ -181,7 +181,7 @@ export default {
         phone: this.phone
       }
       console.log(formData)
-      this.$store.dispatch('signup', formData)
+      this.$store.dispatch('userModule/signup', formData)
     },
     setEmailLostFocus () {
       console.log('email lost focus')

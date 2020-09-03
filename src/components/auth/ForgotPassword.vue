@@ -61,7 +61,7 @@ export default {
         email: this.email
       }
       console.log(formData)
-      this.$store.dispatch('sendPasswordEmailReset', this.email)
+      this.$store.dispatch('userMdoule/sendPasswordEmailReset', this.email)
     },
     setEmailLostFocus () {
       this.$v.email.$touch(true)

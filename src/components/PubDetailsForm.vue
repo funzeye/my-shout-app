@@ -43,7 +43,7 @@
       <ion-note v-if="$v.pub.county.$invalid && $v.pub.county.$dirty" class="error ion-padding" color="danger">county is required</ion-note>
 
       <ion-item :disabled="allTodaysReservationsForPub && allTodaysReservationsForPub.length > 0">
-        <ion-label position="stacked">Tables Reservable (Total Number)<ion-text color="danger">*</ion-text></ion-label>
+        <ion-label position="stacked">Number of Reservable Tables<ion-text color="danger">*</ion-text></ion-label>
         <ion-input-vue
           @ionBlur="$v.pub.numOfTables.$touch(true)"
           type="number"
@@ -54,7 +54,7 @@
       </ion-item>
       <ion-note v-if="allTodaysReservationsForPub && allTodaysReservationsForPub.length > 0" class="error ion-padding" color="danger">Cannot change number of tables while some tables are currently reserved</ion-note>
       <ion-item>
-          <ion-label position="stacked">Floors</ion-label>
+          <ion-label position="stacked">Floors (drag blue dot left or right to update)</ion-label>
           <ion-range ref="floors" id="dual-range"
             dual-knobs pin snaps debounce="200" min="-5" max="10" v-model="pub.floors"
             @ionChange="pub.floors = $event.target.value">
@@ -80,7 +80,7 @@
             </ion-toggle>
         </ion-item>
         <ion-item lines="none">
-            <ion-note>Allow Publican to cancel reservation if punter does not arrive within time limit</ion-note>
+            <ion-note>Allow you, the publican, to cancel a reservation if the patron has not arrived within the below time limit</ion-note>
         </ion-item>
         <ion-item :disabled="!pub.timeToArrivalLimitOn">
             <ion-label position="stacked">Set Time to Arrival Limit: {{ pub.timeToArrivalLimitInMinutes }} minutes</ion-label>
@@ -126,14 +126,14 @@ export default {
   computed: {
     pub: {
       get () {
-        return this.$store.getters.pubModule.pub
+        return this.$store.getters['pubModule/pub']
       },
       set (pub) {
         this.$store.dispatch('pubModule/updatePub', pub)
       }
     },
     allTodaysReservationsForPub () {
-      return this.$store.getters.reservationModule.allTodaysReservationsForPub
+      return this.$store.getters['reservationModule/allTodaysReservationsForPub']
     }
   },
   methods: {
@@ -142,11 +142,11 @@ export default {
       console.log('submitted pub details:')
       console.log(pubDetails)
       if (this.mode === 'create') {
-        this.$store.dispatch('storePub', pubDetails)
-        this.$router.replace({ name: 'edit-pub-tables', params: { id: pubDetails.key } })
+        this.$store.dispatch('pubModule/storePub', pubDetails)
+        this.$router.replace({ name: 'edit-pub-tables', params: { id: this.pub.key } })
       } else {
         console.log('updating pub in DB')
-        this.$store.dispatch('updatePubDetailsInDb', pubDetails)
+        this.$store.dispatch('pubModule/updatePubDetailsInDb', pubDetails)
         this.$router.replace({ name: 'edit-pub', params: { id: this.pub.key } })
       }
     },

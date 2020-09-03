@@ -22,13 +22,13 @@
             </ion-card-content>
         </ion-card>
 
-        <ion-card v-if="isPublican && allReservationsForPub && allReservationsForPub.length > 0">
+        <ion-card v-if="isPublican && allReservationsForPubSorted && allReservationsForPubSorted.length > 0">
             <ion-card-header>
                 <ion-card-title>Bookings</ion-card-title>
             </ion-card-header>
 
             <ion-card-content>
-            <ion-list v-for="ar in allReservationsForPub" :key="ar['.key']">
+            <ion-list v-for="ar in allReservationsForPubSorted" :key="ar['.key']">
                 <ion-item>
                     <ion-label>
                         <ion-label>
@@ -90,16 +90,20 @@ export default {
 
     ...mapGetters('reservationModule', {
       activeReservation: 'activeReservationForPunter',
-      previousReservations: 'previousReservationsForPunter'
+      previousReservations: 'previousReservationsForPunter',
+      allReservationsForPub: 'allReservationsForPub'
     }),
 
-    allReservationsForPub () {
-      var items = this.$store.getters.reservationModule.allReservationsForPub
-      return items.sort(function (a, b) {
-        // Turn your strings into dates, and then subtract them
-        // to get a value that is either negative, positive, or zero.
-        return new Date(b.reservedAtDate) - new Date(a.reservedAtDate)
-      })
+    allReservationsForPubSorted () {
+      var items = this.allReservationsForPub
+      if (items && items.length > 1) {
+        return items.sort(function (a, b) {
+          // Turn your strings into dates, and then subtract them
+          // to get a value that is either negative, positive, or zero.
+          return new Date(b.reservedAtDate) - new Date(a.reservedAtDate)
+        })
+      }
+      return items
     }
   },
   created () {

@@ -43,11 +43,11 @@ export default {
   },
   computed: {
     pubFloorAreas () {
-      return this.$store.getters.pubFloorAreas
+      return this.$store.getters['pubModule/pubFloorAreas']
     },
     pubFloorArea: {
       get () {
-        return this.$store.getters.pubFloorArea
+        return this.$store.getters['pubModule/pubFloorArea']
       },
       set (pubFloorArea) {
         this.$store.dispatch('updatePubFloorArea', pubFloorArea)
@@ -60,11 +60,11 @@ export default {
       console.log('submitted new pub floor area details:')
       console.log(newPubFloorArea)
 
-      this.$store.dispatch('storePubFloorArea', newPubFloorArea)
+      this.$store.dispatch('pubModule/storePubFloorArea', newPubFloorArea)
     }
   },
   created () {
-    this.$store.dispatch('fetchPubFloorAreas')
+    this.$store.dispatch('pubModule/fetchPubFloorAreas')
   }
 }
 </script>

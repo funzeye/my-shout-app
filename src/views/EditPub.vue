@@ -29,7 +29,7 @@ export default {
   computed: {
     pub: {
       get () {
-        return this.$store.getters.pub
+        return this.$store.getters['pubModule/pub']
       }
     }
   },

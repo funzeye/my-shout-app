@@ -48,17 +48,17 @@ export default {
   },
   computed: {
     userRoles () {
-      return this.$store.getters.userRoles
+      return this.$store.getters['userModule/userRoles']
     }
   },
   methods: {
     submitNewRole () {
-      this.$store.dispatch('storeUserRole', this.userRole)
+      this.$store.dispatch('userModule/storeUserRole', this.userRole)
       this.userRole = { roleId: '', roleName: '' }
     }
   },
   created () {
-    return this.$store.dispatch('fetchUserRoles')
+    return this.$store.dispatch('userModule/fetchUserRoles')
   }
 }
 </script>

@@ -11,12 +11,12 @@
           </ion-toolbar>
       </ion-header>
     <ion-content class="ion-padding">
-      <ion-text><h2>{{ user.email }}</h2></ion-text>
+      <ion-text><h2 style="padding-left:16px">{{ user.email }}</h2></ion-text>
       <ion-item>
-         <ion-button @click="changeEmail">Change Email</ion-button>
+         <ion-button style="margin-bottom:16px" @click="changeEmail">Change Email</ion-button>
       </ion-item>
       <ion-item>
-        <ion-button @click="changePassword">Send Password Reset Email</ion-button>
+        <ion-button style="margin-top:16px; margin-bottom: 16px" @click="changePassword">Send Password Reset Email</ion-button>
       </ion-item>
       <ion-note class="ion-padding" style="display:block">Clicking 'Send Password Reset Email' will log you out and an email will be sent to the above address</ion-note>
 

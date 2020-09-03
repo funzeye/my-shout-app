@@ -27,7 +27,7 @@
                     Sign up
                 </ion-button>
                 <ion-button @click="onSearch" class="ion-margin-top" expand="block" size="large" v-if="auth">
-                    Begin Search
+                    Enter
                 </ion-button>
               </div>
             </div>

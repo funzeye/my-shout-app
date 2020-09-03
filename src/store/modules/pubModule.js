@@ -219,7 +219,7 @@ const actions = {
       timeToArrivalLimitOn: pubData.timeToArrivalLimitOn,
       timeToArrivalLimitInMinutes: pubData.timeToArrivalLimitInMinutes
     }
-    globalAxios.post('pubs.json' + '?auth=' + state.idToken, pub)
+    globalAxios.post('pubs.json' + '?auth=' + rootState.userModule.idToken, pub)
       .then(res => {
         console.log('adding new pub response:', res)
         pub.key = res.data.name
@@ -372,8 +372,11 @@ const getters = {
     console.log(state)
     return state.pubTables
   },
-  publicansPub (state) {
-    return state.pubs.find(p => p.ownerId === state.userId)
+  publicansPub (state, getters, rootState, rootGetters) {
+    console.log('rootGetters[userModule/userId]:', rootGetters['userModule/userId'])
+    console.log('state.pubs:', state.pubs)
+
+    return state.pubs.find(p => p.ownerId === rootGetters['userModule/userId'])
   },
   pubTable (state) {
     console.log('calling pubTable getter in index.js')

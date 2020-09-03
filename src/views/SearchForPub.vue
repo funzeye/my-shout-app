@@ -7,17 +7,25 @@
           <h1 class="ion-padding">Your Pub</h1>
         </ion-text>
         <template v-if="publicansPub && publicansPub.key !== ''">
-          <pub-card :i="i" :pub="publicansPub" actionName="Manage" />
+          <ion-grid fixed>
+            <ion-row class="ion-justify-content-center">
+              <ion-col size="12" size-sm="8" size-md="6" size-xl="4">
+                <pub-card :i="i" :pub="publicansPub" actionName="Manage" />
+              </ion-col>
+            </ion-row>
+          </ion-grid>
         </template>
         <template v-else>
-          <ion-grid>
-            <ion-row>
-              <ion-col>
+          <ion-grid class="publican-pub-grid">
+            <ion-row class="ion-justify-content-center">
+              <ion-col size="8" size-md="4">
                 <ion-label>
                   You have no pub of your own added.
                 </ion-label>
               </ion-col>
-              <ion-col>
+            </ion-row>
+            <ion-row class="ion-justify-content-center">
+              <ion-col size="8" size-md="4">
                 <!--<ion-button expand="block" @click="createNewPub">
                 <ion-icon :src="i.addOutline" slot="start"></ion-icon>
                 Add New Pub
@@ -33,13 +41,23 @@
       <ion-item-divider v-if="user.userRoles && user.userRoles.punter === true && user.userRoles.publican === true">
       </ion-item-divider>
       <template v-if="user.userRoles && user.userRoles.punter === true">
-        <ion-searchbar show-cancel-button="focus"
+        <ion-grid fixed>
+          <ion-row class="ion-justify-content-center">
+            <ion-col size="12" size-md="6" size-lg="4">
+              <ion-searchbar show-cancel-button="focus"
         debounce="300" @ionChange="filterSearchItems($event.target)"></ion-searchbar>
-        <ion-list>
-            <div animated="true" v-show="!p.hidePub" v-for="p in pubs" :key="p['.key']">
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <ion-grid style="max-width:1200px;">
+          <ion-row class="ion-justify-content-center">
+            <ion-col size="12" size-md="6" size-lg="4" animated="true" v-show="!p.hidePub" v-for="p in pubs" :key="p['.key']">
+            <div>
                 <pub-card :pub="p" actionName="Select" />
             </div>
-        </ion-list>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
       </template>
     </ion-content>
   </div>
@@ -66,7 +84,7 @@ export default {
     ...mapGetters({
       user: 'userModule/user',
       pubs: 'pubModule/pubs',
-      publicansPubs: 'pubModule/publicansPub'
+      publicansPub: 'pubModule/publicansPub'
     })
   },
   created () {
@@ -106,3 +124,12 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+h1{
+  text-align:center;
+}
+.publican-pub-grid{
+  text-align: center;
+}
+</style>

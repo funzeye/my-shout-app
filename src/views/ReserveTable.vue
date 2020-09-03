@@ -11,42 +11,48 @@
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
-      <form @submit.prevent="reserve">
-        <ion-item>
-            <ion-label position="stacked">Table # To Reserve:</ion-label>
-            <ion-input-vue disabled>{{ pubTable.tableNum }}</ion-input-vue>
-        </ion-item>
-        <ion-item>
-            <ion-label position="stacked">Name on Reservation: <ion-text v-if="pub.ownerId === userId" color="danger">*</ion-text></ion-label>
-            <ion-input-vue v-if="pub.ownerId !== userId" type="text"  disabled>{{user.firstName}} {{user.surname}}</ion-input-vue>
-            <ion-input-vue v-else autofocus="true" v-model="ownerReservedOnBehalfOf" placeholder="Please add name of person here"></ion-input-vue>
-        </ion-item>
-        <ion-item v-if="pub.ownerId === userId">
-            <ion-label position="stacked">Their Phone Number: <ion-text color="danger">*</ion-text></ion-label>
-            <ion-input-vue type="number" v-model="ownerReservedOnBehalfOfPhone" placeholder="Please add number of person here"></ion-input-vue>
-        </ion-item>
-        <ion-item>
-            <ion-label position="stacked">In Pub:</ion-label>
-            <ion-input-vue disabled>{{ pub.pubName }}</ion-input-vue>
-        </ion-item>
-        <ion-item>
-            <ion-label position="stacked">On date:</ion-label>
-            <ion-input-vue disabled>Today</ion-input-vue>
-        </ion-item>
+      <ion-grid>
+        <ion-row class="ion-justify-content-center">
+          <ion-col size="12" size-sm="8" size-md="6" size-xl="4">
+            <form @submit.prevent="reserve">
+              <ion-item>
+                  <ion-label position="stacked">Table # To Reserve:</ion-label>
+                  <ion-input-vue disabled>{{ pubTable.tableNum }}</ion-input-vue>
+              </ion-item>
+              <ion-item>
+                  <ion-label position="stacked">Name on Reservation: <ion-text v-if="pub.ownerId === userId" color="danger">*</ion-text></ion-label>
+                  <ion-input-vue v-if="pub.ownerId !== userId" type="text"  disabled>{{user.firstName}} {{user.surname}}</ion-input-vue>
+                  <ion-input-vue v-else autofocus="true" v-model="ownerReservedOnBehalfOf" placeholder="Please add name of person here"></ion-input-vue>
+              </ion-item>
+              <ion-item v-if="pub.ownerId === userId">
+                  <ion-label position="stacked">Their Phone Number: <ion-text color="danger">*</ion-text></ion-label>
+                  <ion-input-vue type="number" v-model="ownerReservedOnBehalfOfPhone" placeholder="Please add number of person here"></ion-input-vue>
+              </ion-item>
+              <ion-item>
+                  <ion-label position="stacked">In Pub:</ion-label>
+                  <ion-input-vue disabled>{{ pub.pubName }}</ion-input-vue>
+              </ion-item>
+              <ion-item>
+                  <ion-label position="stacked">On date:</ion-label>
+                  <ion-input-vue disabled>Today</ion-input-vue>
+              </ion-item>
 
-        <p class="info-text">
-          <ion-text color="secondary">
-          There is NO time limit on this reservation. Once Reserved it will stay reserved unless freed by the patron or publican. You can stay at table as long as you want.
-          </ion-text>
-        </p>
+              <p class="info-text">
+                <ion-text color="secondary">
+                There is NO time limit on this reservation. Once Reserved it will stay reserved unless freed by the patron or publican. You can stay at table as long as you want.
+                </ion-text>
+              </p>
 
-        <div class="ion-padding">
-            <ion-button expand="block" class="ion-no-margin" :disabled="$v.$invalid && pub.ownerId === userId" type="submit">Confirm Reservation</ion-button>
-        </div>
-        <div class="ion-padding">
-            <ion-button expand="block" class="ion-no-margin" @click.prevent="cancel">Cancel</ion-button>
-        </div>
-      </form>
+              <div class="ion-padding">
+                  <ion-button expand="block" class="ion-no-margin" :disabled="$v.$invalid && pub.ownerId === userId" type="submit">Confirm Reservation</ion-button>
+              </div>
+              <div class="ion-padding">
+                  <ion-button expand="block" color="secondary" class="ion-no-margin" @click.prevent="cancel">Cancel</ion-button>
+              </div>
+            </form>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </ion-content>
   </div>
 </template>
@@ -126,6 +132,15 @@ export default {
 .info-text{
   font-size:12px;
   padding-left:16px
+}
+
+form{
+  background: white;
+  padding: 24px;
+}
+
+ion-item{
+  --background: white;
 }
 
 </style>

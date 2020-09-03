@@ -111,20 +111,25 @@ const actions = {
           firstName: authData.firstName,
           surname: authData.surname,
           phone: authData.phone
-        })
-        console.log('add user role to user details in DB')
-        dispatch('addRoleToUsersDetails', {
-          userRole: authData.userRole,
-          userId: res.data.localId
+        }).then(() => {
+          console.log('add user role to user details in DB')
+          dispatch('addRoleToUsersDetails', {
+            userRole: authData.userRole,
+            userId: res.data.localId
+          }).then(() => {
+            console.log('add user id to user roles in DB')
+            dispatch('addUserToUserRolesMembers', {
+              userRole: authData.userRole,
+              userId: res.data.localId
+            })
+          })
         })
 
-        console.log('add user id to user roles in DB')
-        dispatch('addUserToUserRolesMembers', {
-          userRole: authData.userRole,
-          userId: res.data.localId
-        })
+        console.log('calling setLogoutTimer action')
         dispatch('setLogoutTimer', res.data.expiresIn)
-        router.replace('#/tabs/search-for-pub')
+
+        console.log('calling router for #/tabs/search-for-pub')
+        router.replace({ name: 'search-for-pub' })
       })
       .catch(error => console.log(error))
   },

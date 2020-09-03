@@ -50,14 +50,14 @@ export default {
   },
   computed: {
     pubTables () {
-      return this.$store.getters.pubTables
+      return this.$store.getters['pubModule/pubTables']
     },
     pub: {
       get () {
-        return this.$store.getters.pub
+        return this.$store.getters['pubModule/pub']
       },
       set (pub) {
-        this.$store.dispatch('updatePub', pub)
+        this.$store.dispatch('pubModule/updatePub', pub)
       }
     }
   },
@@ -71,14 +71,14 @@ export default {
     console.log('current route param id ', this.$route.params.id)
     if (!this.pub || this.pub.key !== this.$route.params.id) {
       console.log('fecthing pub linked to pub id of: ', this.$route.params.id)
-      this.$store.dispatch('fetchPubByPubId', this.$route.params.id)
+      this.$store.dispatch('pubModule/fetchPubByPubId', this.$route.params.id)
     } else {
       console.log('current pub key: ', this.pub.key)
       console.log('current pub in state matches current pub on screen - not retreiving data from db')
     }
     if (!this.pubTables.length === 0) {
       console.log('fecthing pub tables for pub with key of: ', this.$route.params.id)
-      this.$store.dispatch('fetchPubTables', this.$route.params.id)
+      this.$store.dispatch('pubModule/fetchPubTables', this.$route.params.id)
     }
   }
 }

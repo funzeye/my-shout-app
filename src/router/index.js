@@ -91,7 +91,7 @@ const routes = [
         beforeEnter (to, from, next) {
           console.log('navigating to edit-pub page.')
           var token = store.state.userModule.idToken
-          var pub = store.state.pub
+          var pub = store.state.pubModule.pub
           if (!token) {
             console.log('token not found - re-directing to sign in')
             next('/home')
@@ -113,7 +113,7 @@ const routes = [
         beforeEnter (to, from, next) {
           console.log('navigating to edit-pub-tables page.')
           var token = store.state.userModule.idToken
-          var pub = store.state.pub
+          var pub = store.state.pubModule.pub
           if (!token) {
             console.log('token not found - re-directing to sign in')
             next('/home')
@@ -135,7 +135,7 @@ const routes = [
         beforeEnter (to, from, next) {
           console.log('navigating to edit-pub-details page.')
           var token = store.state.userModule.idToken
-          var pub = store.state.pub
+          var pub = store.state.pubModule.pub
           if (!token) {
             console.log('token not found - re-directing to sign in')
             next('/home')
@@ -157,7 +157,7 @@ const routes = [
         beforeEnter (to, from, next) {
           console.log('navigating to edit-table-details page.')
           var token = store.state.userModule.idToken
-          var pub = store.state.pub
+          var pub = store.state.pubModule.pub
           if (!token) {
             console.log('token not found - re-directing to sign in')
             next('/home')
