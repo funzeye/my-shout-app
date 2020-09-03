@@ -1,4 +1,5 @@
 import globalAxios from 'axios'
+import { loadingController } from '@ionic/core'
 
 const getDefaultState = () => {
   return {
@@ -188,41 +189,53 @@ const actions = {
     console.log('calling setActiveReservationForPub action in index.js')
     commit('setStateActiveReservationForPub', payload)
   },
-  cancelOtherReservationForPunter ({ commit, rootState, dispatch }, { userId, tableToIgnoreId }) {
+  cancelOtherReservationForPunterAndReserveNew ({ commit, rootState, dispatch }, { userId, tableToIgnoreId }) {
     if (!rootState.userModule.idToken) {
       console.log('No Id Token - Exiting')
       return
     }
-    console.log('cancelling reservations using cancelOtherReservationForPunter for user: ', userId)
-    globalAxios.get('reservations.json' + '?auth=' + rootState.userModule.idToken +
-     '&orderBy="reservedBy"&equalTo="' + userId + '"')
-      .then(response => {
-        console.log('fetchReservationForPunter response: ', response)
-        const data = response.data
-        const resultArray = []
-        const todaysDate = new Date()
-        for (const key in data) {
-          const reservedAtDateStringAsDate = new Date(data[key].reservedAtDate)
-          const reservationIsToday = todaysDate.getDate() === reservedAtDateStringAsDate.getDate() &&
-          todaysDate.getMonth() === reservedAtDateStringAsDate.getMonth() &&
-          todaysDate.getFullYear() === reservedAtDateStringAsDate.getFullYear()
-          if (!data[key].isCancelled === true && reservationIsToday && data[key].tableId !== tableToIgnoreId) {
-            console.log('fetchReservationForPunter key: ', key)
-            data[key].key = key
-            console.log('fetchReservationForPunter data[key]: ', data[key])
-            resultArray.push(data[key])
-          } else {
-            console.log('not cancelling reservation - data[key]:', data[key])
-            console.log('not cancelling reservation - tableToIgnoreId:', tableToIgnoreId)
-          }
-        }
+    console.log('cancelling reservations using cancelOtherReservationForPunterAndReserveNew for user: ', userId)
+    console.log(loadingController)
+    return loadingController
+      .create({
+        message: 'Reserving...'
+      })
+      .then(loading => {
+        loading.present()
+        globalAxios.get('reservations.json' + '?auth=' + rootState.userModule.idToken +
+          '&orderBy="reservedBy"&equalTo="' + userId + '"')
+          .then(response => {
+            console.log('fetchReservationForPunter response: ', response)
+            const data = response.data
+            const resultArray = []
+            const todaysDate = new Date()
+            for (const key in data) {
+              const reservedAtDateStringAsDate = new Date(data[key].reservedAtDate)
+              const reservationIsToday = todaysDate.getDate() === reservedAtDateStringAsDate.getDate() &&
+              todaysDate.getMonth() === reservedAtDateStringAsDate.getMonth() &&
+              todaysDate.getFullYear() === reservedAtDateStringAsDate.getFullYear()
+              if (!data[key].isCancelled === true && reservationIsToday && data[key].tableId !== tableToIgnoreId) {
+                console.log('fetchReservationForPunter key: ', key)
+                data[key].key = key
+                console.log('fetchReservationForPunter data[key]: ', data[key])
+                resultArray.push(data[key])
+              } else {
+                console.log('not cancelling reservation - data[key]:', data[key])
+                console.log('not cancelling reservation - tableToIgnoreId:', tableToIgnoreId)
+              }
+            }
 
-        console.log('resFromArray: ', resultArray)
-        resultArray.forEach((res) => {
-          console.log('res: ', res)
-          console.log('cancelling reservation in DB for table: ', res.tableId)
-          dispatch('cancelReservation', res)
-        })
+            console.log('resFromArray: ', resultArray)
+            resultArray.forEach((res) => {
+              console.log('res: ', res)
+              console.log('cancelling reservation in DB for table: ', res.tableId)
+              dispatch('cancelReservation', res)
+            })
+            dispatch('createReservation', { ownerReservedOnBehalfOf: null, ownerReservedOnBehalfOfPhone: null })
+          })
+        setTimeout(function () {
+          loading.dismiss()
+        }, 2500)
       })
   },
   cancelReservationForCurrentlySelectedTable ({ commit, rootState }, reservationKey) {
@@ -362,6 +375,7 @@ const actions = {
         .catch(error => console.log(error))
     } catch (ex) {
       console.log('error:', ex)
+      alert('Could not reserve Table - Refresh page and try again.')
     }
   }
 }

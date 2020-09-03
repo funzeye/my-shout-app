@@ -34,7 +34,11 @@
         </div>
         </header>
         <main>
+          <div style="text-align:center; padding:24px">
+          <ion-text>
           This app is currently still being tested. All information will be wiped before the official release.
+          </ion-text>
+          </div>
         </main>
     </ion-content>
   </ion-page>
@@ -120,7 +124,11 @@ ion-button {
 .message-button_container {
   max-width: 400px;
   margin: auto;
-  padding: 24px;
+  padding: 0px 24px 24px 24px;
+
+  @media (min-width: 600px) {
+    padding: 24px;
+  }
 }
 
 .main-message_flexbox {
@@ -136,15 +144,14 @@ ion-button {
   flex: 1;
   h2{
     @media (max-width: 600px) {
-      font-size: 20px;
+      font-size: 16px;
     }
   }
 }
 
 .main-message_divider {
   border-bottom: 2px solid white;
-  margin-top: 24px;
-  margin-bottom: 14px;
+  margin-top: 16px;
 
   @media (min-width: 600px) {
       flex-direction: row;

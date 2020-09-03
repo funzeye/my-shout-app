@@ -93,12 +93,13 @@ export default {
     },
     reserve () {
       console.log('reserveTable.vue: confirm reservation button clicked. submitting a new reservation')
-      if (this.pub.ownerId !== this.userId) { // owner allowed make as many reservation as they wish in their own pub
+      if (this.pub.ownerId !== this.userId) {
         console.log('cancelling all existing reservations for punter')
-        this.$store.dispatch('reservationModule/cancelOtherReservationForPunter', { userId: this.userId, tableToIgnoreId: this.pubTable.key })
+        this.$store.dispatch('reservationModule/cancelOtherReservationForPunterAndReserveNew', { userId: this.userId, tableToIgnoreId: this.pubTable.key })
+      } else { // owner allowed make as many reservation as they wish in their own pub
+        console.log('reserveTable.vue: creating reservation')
+        this.$store.dispatch('reservationModule/createReservation', { ownerReservedOnBehalfOf: this.ownerReservedOnBehalfOf, ownerReservedOnBehalfOfPhone: this.ownerReservedOnBehalfOfPhone })
       }
-      console.log('reserveTable.vue: creating reservation')
-      this.$store.dispatch('reservationModule/createReservation', { ownerReservedOnBehalfOf: this.ownerReservedOnBehalfOf, ownerReservedOnBehalfOfPhone: this.ownerReservedOnBehalfOfPhone })
       this.$router.replace({ name: 'pub-details', params: { id: this.pub.key } })
     }
   },
