@@ -18,7 +18,7 @@ export default {
 }
 </script>
 
-<style lang="css">
+<style lang="scss">
 
 ion-tab ion-content {
   --ion-background-color: #f1f2f8;
@@ -54,4 +54,40 @@ ion-card-header+.card-content-md {
 ion-card-content ion-label{
   color: #666 !important
 }
+
+:root {
+    form ion-item:not(:first-child){
+      padding-top: 16px;
+    }
+    ion-label{
+      text-transform: uppercase;
+      padding-bottom:6px
+    }
+    ion-input, ion-select, ion-range {
+        --background: #f4f2f7;
+        border-radius: 5px;
+        margin-top:6px;
+        --padding-start: 12px !important;
+    }
+
+    ion-range{
+      border: 2px solid #f4f2f7;
+      border-radius: 5px;
+      padding-top: 6px;
+    }
+
+    ion-note {
+      padding-left: 0;
+      padding-top: 6px !important;
+      padding-bottom:6px;
+    }
+
+    ion-select {
+        background: #f4f2f7;
+        --color: black !important;
+        --padding-start: 12px;
+        --placeholder-opacity: 0.5 !important;
+    }
+}
+
 </style>

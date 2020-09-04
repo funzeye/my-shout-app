@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.a70a1f613494092b2d1a32696ee2c93e.js"
+  "/precache-manifest.ca69e316fa79af573889a9655454553e.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "my-shout"});

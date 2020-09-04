@@ -1,11 +1,11 @@
 <template>
   <form @submit.prevent="submitted">
-      <ion-item>
-        <ion-label position="stacked">Pub Name <ion-text color="danger">*</ion-text></ion-label>
+      <ion-item lines="none">
+        <ion-label class="pub-details-label" position="stacked">Pub Name <ion-text color="danger">*</ion-text></ion-label>
         <ion-input-vue @ionBlur="$v.pub.pubName.$touch(true)" type="text" placeholder="e.g. Walsh's Public House" clear-input name="pubName" v-model="pub.pubName"></ion-input-vue>
       </ion-item>
 
-      <ion-item>
+      <ion-item lines="none">
         <ion-label position="stacked">Address <ion-text color="danger">*</ion-text></ion-label>
         <ion-input-vue @ionBlur="$v.pub.addressLine1.$touch(true)" placeholder="Address Line 1" v-model="pub.addressLine1"></ion-input-vue>
         <ion-input-vue placeholder="Address Line 2 (Optional)" v-model="pub.addressLine2"></ion-input-vue>
@@ -42,7 +42,7 @@
       </ion-item>
       <ion-note v-if="$v.pub.county.$invalid && $v.pub.county.$dirty" class="error ion-padding" color="danger">county is required</ion-note>
 
-      <ion-item :disabled="allTodaysReservationsForPub && allTodaysReservationsForPub.length > 0">
+      <ion-item lines="none" :disabled="allTodaysReservationsForPub && allTodaysReservationsForPub.length > 0">
         <ion-label position="stacked">Number of Reservable Tables<ion-text color="danger">*</ion-text></ion-label>
         <ion-input-vue
           @ionBlur="$v.pub.numOfTables.$touch(true)"
@@ -53,7 +53,7 @@
         <ion-note v-if="!$v.pub.numOfTables.minVal" class="error ion-padding" color="danger">Must add at least 1 table</ion-note>
       </ion-item>
       <ion-note v-if="allTodaysReservationsForPub && allTodaysReservationsForPub.length > 0" class="error ion-padding" color="danger">Cannot change number of tables while some tables are currently reserved</ion-note>
-      <ion-item>
+      <ion-item lines="none">
           <ion-label position="stacked">Floors (drag blue dot left or right to update)</ion-label>
           <ion-range ref="floors" id="dual-range"
             dual-knobs pin snaps debounce="200" min="-5" max="10" v-model="pub.floors"
@@ -61,13 +61,13 @@
             <ion-icon slot="start" :src="i.layers"></ion-icon>
             <ion-icon slot="end" :src="i.layers"></ion-icon>
           </ion-range>
-          <ion-note v-if="pub.floors.lower === pub.floors.upper" class="floor-details ion-padding" color="secondary">1 Floor Selected</ion-note>
-          <ion-note v-if="pub.floors.lower === pub.floors.upper && pub.floors.upper !== 0" class="floor-details ion-padding" color="secondary">Floor #: {{ pub.floors.lower }}</ion-note>
-          <ion-note v-if="pub.floors.lower === pub.floors.upper && pub.floors.upper === 0" class="floor-details ion-padding" color="secondary">Ground Floor Only</ion-note>
+          <ion-note v-if="pub.floors.lower === pub.floors.upper" class="floor-details ion-padding" color="secondary">&#10004; 1 Floor Selected</ion-note>
+          <ion-note v-if="pub.floors.lower === pub.floors.upper && pub.floors.upper !== 0" class="floor-details ion-padding" color="secondary">&#10004; Floor #: {{ pub.floors.lower }}</ion-note>
+          <ion-note v-if="pub.floors.lower === pub.floors.upper && pub.floors.upper === 0" class="floor-details ion-padding" color="secondary">&#10004; Ground Floor Only</ion-note>
 
-          <ion-note v-if="pub.floors.lower !== pub.floors.upper" class="floor-details ion-padding" color="secondary">{{ pub.floors.upper - pub.floors.lower + 1 }} Floors Selected</ion-note>
-          <ion-note v-if="pub.floors.lower !== pub.floors.upper" class="floor-details ion-padding" color="secondary">Lowest floor #: {{ pub.floors.lower }}</ion-note>
-          <ion-note v-if="pub.floors.lower !== pub.floors.upper" class="floor-details ion-padding" color="secondary">Highest floor #: {{ pub.floors.upper }}</ion-note>
+          <ion-note v-if="pub.floors.lower !== pub.floors.upper" class="floor-details ion-padding" color="secondary">&#10004; {{ pub.floors.upper - pub.floors.lower + 1 }} Floors Selected</ion-note>
+          <ion-note v-if="pub.floors.lower !== pub.floors.upper" class="floor-details ion-padding" color="secondary">&#10004; Lowest floor #: {{ pub.floors.lower }}</ion-note>
+          <ion-note v-if="pub.floors.lower !== pub.floors.upper" class="floor-details ion-padding" color="secondary">&#10004; Highest floor #: {{ pub.floors.upper }}</ion-note>
       </ion-item>
 
       <ion-item-group>
@@ -82,7 +82,7 @@
         <ion-item lines="none">
             <ion-note>Allow you, the publican, to cancel a reservation if the patron has not arrived within the below time limit</ion-note>
         </ion-item>
-        <ion-item :disabled="!pub.timeToArrivalLimitOn">
+        <ion-item lines="none" :disabled="!pub.timeToArrivalLimitOn">
             <ion-label position="stacked">Set Time to Arrival Limit: {{ pub.timeToArrivalLimitInMinutes }} minutes</ion-label>
             <ion-range name="limitToArrival" ref="limitToArrival" pin snaps debounce="200"
                 min="15" max="120" step="15" :value="pub.timeToArrivalLimitInMinutes" :v-model="pub.timeToArrivalLimitInMinutes" @ionChange="pub.timeToArrivalLimitInMinutes = $event.target.value">
