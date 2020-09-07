@@ -12,11 +12,11 @@
       </ion-header>
     <ion-content class="ion-padding">
       <form @submit.prevent="onSubmit">
-        <ion-item class="ion-padding-bottom">
+        <ion-item lines="none" class="ion-padding-bottom">
             <ion-label position="stacked">Current Email:</ion-label>
-            <ion-text>{{ user.email }}</ion-text>
+            <ion-text><b>{{ user.email }}</b></ion-text>
         </ion-item>
-        <ion-item class="input">
+        <ion-item lines="none" class="input">
           <ion-label position="stacked" for="email">New Email <ion-text color="danger">*</ion-text></ion-label>
           <ion-input-vue
                   type="email"
@@ -25,9 +25,9 @@
                   @ionBlur="setEmailLostFocus"
                   v-model="email"
                   @ionFocus="email_not_focused = false"></ion-input-vue>
+          <ion-note v-if="!$v.email.email && email_not_focused" class="error ion-padding" color="danger">Valid Email Required</ion-note>
+          <ion-note v-if="!$v.email.unique" class="error ion-padding" color="danger">Email Already Taken</ion-note>
         </ion-item>
-        <ion-note v-if="!$v.email.email && email_not_focused" class="error ion-padding" color="danger">Valid Email Required</ion-note>
-        <ion-note v-if="!$v.email.unique" class="error ion-padding" color="danger">Email Already Taken</ion-note>
         <div class="ion-padding">
           <ion-button type="submit" :disabled="$v.$invalid">Submit</ion-button>
         </div>
