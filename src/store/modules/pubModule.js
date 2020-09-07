@@ -65,9 +65,6 @@ const mutations = {
   storePubs (state, pubs) {
     state.pubs = pubs
   },
-  storePublicansPub (state, pub) {
-    state.publicansPub = pub
-  },
   storePubFloorAreas (state, pubFloorAreas) {
     state.pubFloorAreas = pubFloorAreas
   },

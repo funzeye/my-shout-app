@@ -152,7 +152,7 @@ const actions = {
         dispatch('fetchUserDetails')
         dispatch('setLogoutTimer', res.data.expiresIn)
 
-        router.replace('/')
+        router.replace({ name: 'search-for-pub' })
       })
       .catch(error => console.log(error))
   },

@@ -134,6 +134,10 @@ export default {
   padding-left:16px
 }
 
+ion-content{
+  --background: #f4f2f7;
+}
+
 form{
   background: white;
   padding: 24px;

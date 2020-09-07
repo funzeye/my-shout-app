@@ -2,6 +2,8 @@
   <div class="ion-page" id='search-for-pub'>
     <the-header />
     <ion-content class="ion-padding">
+      <template v-if="isLoading"></template>
+      <template v-else>
       <template v-if="user.userRoles && user.userRoles.publican === true">
         <ion-text>
           <h1 class="ion-padding">Your Pub</h1>
@@ -38,6 +40,7 @@
           </ion-grid>
         </template>
       </template>
+      </template>
       <ion-item-divider v-if="user.userRoles && user.userRoles.punter === true && user.userRoles.publican === true">
       </ion-item-divider>
       <template v-if="user.userRoles && user.userRoles.punter === true">
@@ -73,7 +76,8 @@ export default {
   name: 'search-for-pub',
   data () {
     return {
-      i: allIcons
+      i: allIcons,
+      isLoading: true
     }
   },
   components: {
@@ -85,15 +89,26 @@ export default {
       user: 'userModule/user',
       pubs: 'pubModule/pubs',
       publicansPub: 'pubModule/publicansPub'
-    })
+    }),
+    publicansPub: {
+      get () {
+        return this.$store.getters['pubModule/publicansPub']
+      }
+    }
+  },
+  watch: {
+    publicansPub () {
+      console.log('publicansPub property has changed')
+      this.isLoading = false
+    }
   },
   created () {
     console.log('search-for-pub created method called')
 
-    if (!this.pubs || this.pubs.length === 0) {
-      console.log('calling fetchPubs from SearchForPubs')
-      this.$store.dispatch('pubModule/fetchPubs')
-    }
+    // if (!this.pubs || this.pubs.length === 0) {
+    //  console.log('calling fetchPubs from SearchForPubs')
+    this.$store.dispatch('pubModule/fetchPubs')
+    // }
     if (!this.user || this.user.email === '') {
       this.$store.dispatch('userModule/fetchUserDetails')
     }

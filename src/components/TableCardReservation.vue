@@ -132,7 +132,7 @@ export default {
           cssClass: 'alert-cancel-res',
           header: 'Cancel Reservation',
           // subHeader: 'Subtitle',
-          message: 'Are you sure you wish to cancel your reservation?',
+          message: 'Are you sure you wish to cancel this reservation?',
           buttons: [
             {
               text: 'Back',

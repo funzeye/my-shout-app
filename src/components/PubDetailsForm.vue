@@ -51,9 +51,9 @@
           clear-input
           placeholder="e.g. 12" v-model.number="pub.numOfTables">
         </ion-input-vue>
+        <ion-note v-if="allTodaysReservationsForPub && allTodaysReservationsForPub.length > 0" class="error ion-padding" color="danger">Cannot change number of tables while some tables are currently reserved</ion-note>
         <ion-note v-if="!$v.pub.numOfTables.minVal" class="error ion-padding" color="danger">Must add at least 1 table</ion-note>
       </ion-item>
-      <ion-note v-if="allTodaysReservationsForPub && allTodaysReservationsForPub.length > 0" class="error ion-padding" color="danger">Cannot change number of tables while some tables are currently reserved</ion-note>
       <ion-item lines="none">
           <ion-label position="stacked">Floors (drag blue dot left or right to update)</ion-label>
           <ion-range ref="floors" id="dual-range"
@@ -80,6 +80,7 @@
                 :checked="pub.timeToArrivalLimitOn">
               </ion-toggle>
               <ion-note>Allows you, the publican, to cancel a reservation if the patron has not arrived within the below time limit</ion-note>
+              <ion-note v-if="mode === 'edit'">Any changes to arrival limit will only apply to future reservations, not past.</ion-note>
 
         </ion-item>
         <ion-item lines="none" :disabled="!pub.timeToArrivalLimitOn">
@@ -170,5 +171,9 @@ export default {
  }
  ion-item{
    --background: white;
+ }
+
+ form {
+   border-radius: 5px;
  }
 </style>
