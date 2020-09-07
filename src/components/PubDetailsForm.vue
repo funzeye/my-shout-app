@@ -39,8 +39,9 @@
           <ion-select-option value="wicklow">Wicklow</ion-select-option>
         </ion-select-vue>
         <ion-input-vue placeholder="Eircode (Optional)" v-model="pub.eircode"></ion-input-vue>
+        <ion-note v-if="$v.pub.county.$invalid && $v.pub.county.$dirty" class="error ion-padding" color="danger">county is required</ion-note>
+
       </ion-item>
-      <ion-note v-if="$v.pub.county.$invalid && $v.pub.county.$dirty" class="error ion-padding" color="danger">county is required</ion-note>
 
       <ion-item lines="none" :disabled="allTodaysReservationsForPub && allTodaysReservationsForPub.length > 0">
         <ion-label position="stacked">Number of Reservable Tables<ion-text color="danger">*</ion-text></ion-label>
@@ -72,25 +73,24 @@
 
       <ion-item-group>
         <ion-item lines="none">
-            <ion-label>Time to Arrival Limit</ion-label>
-            <ion-toggle
-            @ionChange="changeTimeArrivalLimitOn"
-            :value="pub.timeToArrivalLimitOn"
-            :checked="pub.timeToArrivalLimitOn">
-            </ion-toggle>
-        </ion-item>
-        <ion-item lines="none">
-            <ion-note>Allow you, the publican, to cancel a reservation if the patron has not arrived within the below time limit</ion-note>
+            <ion-label position="stacked">Time to Arrival Limit</ion-label>
+              <ion-toggle slot="end"
+                @ionChange="changeTimeArrivalLimitOn"
+                :value="pub.timeToArrivalLimitOn"
+                :checked="pub.timeToArrivalLimitOn">
+              </ion-toggle>
+              <ion-note>Allows you, the publican, to cancel a reservation if the patron has not arrived within the below time limit</ion-note>
+
         </ion-item>
         <ion-item lines="none" :disabled="!pub.timeToArrivalLimitOn">
-            <ion-label position="stacked">Set Time to Arrival Limit: {{ pub.timeToArrivalLimitInMinutes }} minutes</ion-label>
+            <ion-label position="stacked">Set Time to Arrival Limit: <b>{{ pub.timeToArrivalLimitInMinutes }} minutes</b></ion-label>
             <ion-range name="limitToArrival" ref="limitToArrival" pin snaps debounce="200"
                 min="15" max="120" step="15" :value="pub.timeToArrivalLimitInMinutes" :v-model="pub.timeToArrivalLimitInMinutes" @ionChange="pub.timeToArrivalLimitInMinutes = $event.target.value">
                 <ion-icon slot="start" :src="i.alarm"></ion-icon>
                 <ion-icon slot="end" :src="i.alarm"></ion-icon>
             </ion-range>
-            </ion-item>
-        </ion-item-group>
+          </ion-item>
+      </ion-item-group>
 
       <div class="ion-padding">
         <ion-button expand="block" class="ion-no-margin" :disabled="$v.$invalid" type="submit">Save Pub Details</ion-button>
@@ -167,5 +167,8 @@ export default {
 <style lang="css" scoped>
  .floor-details {
    padding-top: 0;
+ }
+ ion-item{
+   --background: white;
  }
 </style>

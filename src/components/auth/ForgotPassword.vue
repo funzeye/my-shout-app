@@ -6,10 +6,10 @@
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
-      <h1>Reset Password</h1>
+      <h1 class="ion-padding-start">Reset Password</h1>
       <form @submit.prevent="onSubmit">
-        <ion-item class="input">
-          <ion-label for="email">Email:</ion-label>
+        <ion-item lines="none" class="input">
+          <ion-label position="stacked" for="email">Email:</ion-label>
           <ion-input-vue
                   type="email"
                   id="email"

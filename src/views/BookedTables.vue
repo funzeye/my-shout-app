@@ -21,7 +21,6 @@
                 </ion-item>
             </ion-card-content>
         </ion-card>
-
         <ion-card v-if="isPublican && allReservationsForPubSorted && allReservationsForPubSorted.length > 0">
             <ion-card-header>
                 <ion-card-title>Bookings</ion-card-title>

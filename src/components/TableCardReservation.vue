@@ -3,7 +3,7 @@
       <template slot="table-card-other-details">
         <div>
           <ion-item lines="none" v-if="!reservation.isCancelled && reservation.reservedBy && !reservation.reservedByOwner && ((reservation.reservedBy === loggedInUserId) || userIsOwner)">
-            <ion-label position="stacked">Reserved By Punter:</ion-label>
+            <ion-label position="stacked">Reserved By Patron:</ion-label>
             <ion-text>{{ reservation.userDetails.firstName + ' ' + reservation.userDetails.surname }}</ion-text>
           </ion-item>
           <ion-item  lines="none" v-if="!reservation.isCancelled && reservation.reservedBy && !reservation.reservedByOwner && ((reservation.reservedBy === loggedInUserId) || userIsOwner)">
@@ -17,6 +17,10 @@
           <ion-item  lines="none" v-if="!reservation.isCancelled && reservation.reservedBy && reservation.reservedByOwner && userIsOwner">
             <ion-label position="stacked">Phone Number:</ion-label>
             <ion-text>{{ reservation.ownerReservedOnBehalfOfPhone }}</ion-text>
+          </ion-item>
+          <ion-item  lines="none" v-if="!reservation.isCancelled && reservation.reservedBy ">
+            <ion-label position="stacked">Reserved At:</ion-label>
+            <ion-text>{{ reservation.reservedAtDate | formatDate }}</ion-text>
           </ion-item>
           <ion-item  lines="none" v-if="!reservation.isCancelled && reservation.reservedBy ">
             <ion-label position="stacked">Reserved Until:</ion-label>

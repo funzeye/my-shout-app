@@ -2,17 +2,17 @@
   <div class="ion-page">
     <the-header />
     <ion-content class="ion-padding">
-      <h1>Edit Table Details</h1>
-      <h2>Table #{{ pubTable.tableNum }}</h2>
+      <h1 class="ion-padding-start">Edit Table Details</h1>
+      <h2 class="ion-padding-start">Table #{{ pubTable.tableNum }}</h2>
       <form @submit.prevent="submitted">
-        <ion-item>
+        <ion-item lines="none">
             <ion-label position="stacked">Pub Floor Area Name <ion-text color="danger">*</ion-text></ion-label>
             <ion-select-vue value="" interface="action-sheet" placeholder="e.g. Lounge" name="pubFloorArea" v-model="pubTable.pubFloorArea">
                 <ion-select-option v-for="pfa in pubFloorAreas" :key="pfa['.key']" :value="pfa.name">{{ pfa.name }}</ion-select-option>
             </ion-select-vue>
         </ion-item>
 
-        <ion-item>
+        <ion-item lines="none">
           <ion-label position="stacked">Seats {{ pubTable.seats }}</ion-label>
           <ion-range name="seats" ref="seats" pin snaps debounce="200" min="1" max="12" v-model="pubTable.seats"
             @ionChange="pubTable.seats = $event.target.value">
@@ -21,7 +21,7 @@
           </ion-range>
         </ion-item>
 
-        <ion-item v-if="pubFloors.lower !== pubFloors.upper">
+        <ion-item lines="none" v-if="pubFloors.lower !== pubFloors.upper">
           <ion-label position="stacked">Located on Floor # {{ pubTable.floor }}</ion-label>
           <ion-range name="floor" ref="floor" pin snaps debounce="200" :min="pubFloors.lower" :max="pubFloors.upper" v-model="pubTable.floor"
             @ionChange="updateTableFloors">
@@ -29,7 +29,7 @@
             <ion-icon slot="end" :src="i.layers"></ion-icon>
           </ion-range>
         </ion-item>
-        <ion-item v-else>
+        <ion-item lines="none" v-else>
           <ion-label ref="floor" position="stacked">Located on Floor # {{ pubFloors.lower }}</ion-label>
         </ion-item>
 

@@ -36,3 +36,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+ ion-content, ion-item{
+   --background: white;
+ }
+</style>

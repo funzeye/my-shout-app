@@ -20,9 +20,6 @@ export default {
 
 <style lang="scss">
 
-ion-tab ion-content {
-  --ion-background-color: #f1f2f8;
-}
 ion-searchbar {
   --background: #fff !important;
 }
@@ -70,7 +67,11 @@ ion-card-content ion-label{
         --padding-start: 12px !important;
     }
 
-    ion-range{
+    ion-input:disabled, ion-input.disabled {
+      --background: white;
+    }
+
+    ion-range, .arrival-limit-container{
       border: 2px solid #f4f2f7;
       border-radius: 5px;
       padding-top: 6px;

@@ -6,51 +6,51 @@
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
-      <h1>Sign Up</h1>
+      <h1 class="ion-padding-start">Sign Up</h1>
       <form @submit.prevent="onSubmit">
-        <ion-item class="input">
-          <ion-label for="firstName">First name <ion-text color="danger">*</ion-text></ion-label>
+        <ion-item lines="none" class="input">
+          <ion-label position="stacked" for="firstName">First name <ion-text color="danger">*</ion-text></ion-label>
           <ion-input-vue
                   type="text"
                   id="firstName"
                   @ionBlur="$v.firstName.$touch(true)"
                   v-model="firstName"></ion-input-vue>
+          <ion-note v-if="$v.firstName.$invalid && $v.firstName.$dirty" class="error ion-padding" color="danger">Valid name required</ion-note>
         </ion-item>
-        <ion-note v-if="$v.firstName.$invalid && $v.firstName.$dirty" class="error ion-padding" color="danger">Valid name required</ion-note>
-        <ion-item class="input">
-          <ion-label for="surname">Surname <ion-text color="danger">*</ion-text></ion-label>
+        <ion-item lines="none" class="input">
+          <ion-label position="stacked" for="surname">Surname <ion-text color="danger">*</ion-text></ion-label>
           <ion-input-vue
                   type="text"
                   inputmode="text"
                   id="surname"
                   @ionBlur="$v.surname.$touch(true)"
                   v-model="surname"></ion-input-vue>
+          <ion-note v-if="$v.surname.$invalid && $v.surname.$dirty" class="error ion-padding" color="danger">Valid name required</ion-note>
         </ion-item>
-        <ion-note v-if="$v.surname.$invalid && $v.surname.$dirty" class="error ion-padding" color="danger">Valid name required</ion-note>
 
         <ion-note v-if="$v.firstName.$invalid && $v.firstName.$dirty" class="error ion-padding" color="danger">Valid name required</ion-note>
-        <ion-item class="input">
-          <ion-label for="phone">Phone <ion-text color="danger">*</ion-text></ion-label>
+        <ion-item lines="none" class="input">
+          <ion-label position="stacked" for="phone">Phone <ion-text color="danger">*</ion-text></ion-label>
           <ion-input-vue
                   type="tel"
                   inputmode="tel"
                   id="phone"
                   @ionBlur="$v.phone.$touch(true)"
                   v-model="phone"></ion-input-vue>
+          <ion-note v-if="$v.phone.$invalid && $v.phone.$dirty" class="error ion-padding" color="danger">Valid number required</ion-note>
         </ion-item>
-        <ion-note v-if="$v.phone.$invalid && $v.phone.$dirty" class="error ion-padding" color="danger">Valid number required</ion-note>
 
-        <ion-item>
-        <ion-label>I'm a: <ion-text color="danger">*</ion-text></ion-label>
-        <ion-select-vue @ionBlur="$v.userRole.$touch(true)" interface="action-sheet" placeholder="Publican or Patron" name="userRole"
+        <ion-item lines="none">
+          <ion-label position="stacked">I'm a: <ion-text color="danger">*</ion-text></ion-label>
+          <ion-select-vue @ionBlur="$v.userRole.$touch(true)" interface="action-sheet" placeholder="Publican or Patron" name="userRole"
           v-model="userRole">
             <ion-select-option value="punter">Patron / Pub goer</ion-select-option>
             <ion-select-option value="publican">Publican</ion-select-option>
-        </ion-select-vue>
-        <ion-note v-if="$v.userRole.$invalid && $v.userRole.$dirty" class="error ion-padding" color="danger">required</ion-note>
-      </ion-item>
-      <ion-item class="input">
-          <ion-label for="email">Email <ion-text color="danger">*</ion-text></ion-label>
+          </ion-select-vue>
+          <ion-note v-if="$v.userRole.$invalid && $v.userRole.$dirty" class="error ion-padding" color="danger">required</ion-note>
+        </ion-item>
+        <ion-item lines="none" class="input">
+          <ion-label position="stacked" for="email">Email <ion-text color="danger">*</ion-text></ion-label>
           <ion-input-vue
                   type="email"
                   inputmode="email"
@@ -59,27 +59,27 @@
                   @ionBlur="setEmailLostFocus"
                   v-model="email"
                   @ionFocus="email_not_focused = false"></ion-input-vue>
-      </ion-item>
-      <ion-note v-if="!$v.email.email && email_not_focused" class="error ion-padding" color="danger">Valid Email Required</ion-note>
-      <ion-note v-if="!$v.email.unique" class="error ion-padding" color="danger">Email Already Taken</ion-note>
-      <ion-item class="input">
-          <ion-label for="password">Password <ion-text color="danger">*</ion-text></ion-label>
+          <ion-note v-if="!$v.email.email && email_not_focused" class="error ion-padding" color="danger">Valid Email Required</ion-note>
+          <ion-note v-if="!$v.email.unique" class="error ion-padding" color="danger">Email Already Taken</ion-note>
+        </ion-item>
+        <ion-item lines="none" class="input">
+          <ion-label position="stacked" for="password">Password <ion-text color="danger">*</ion-text></ion-label>
           <ion-input-vue
                   type="password"
                   id="password"
                   @ionBlur="$v.password.$touch(true)"
                   v-model="password"></ion-input-vue>
+          <ion-note v-if="!$v.password.minLen" class="error ion-padding" color="danger">Must be at least 6 characters long</ion-note>
         </ion-item>
-        <ion-note v-if="!$v.password.minLen" class="error ion-padding" color="danger">Must be at least 6 characters long</ion-note>
-        <ion-item class="input">
-          <ion-label for="confirm-password">Confirm Password <ion-text color="danger">*</ion-text></ion-label>
+        <ion-item lines="none" class="input">
+          <ion-label position="stacked" for="confirm-password">Confirm Password <ion-text color="danger">*</ion-text></ion-label>
           <ion-input-vue
                   type="password"
                   id="confirm-password"
                   @ionBlur="$v.confirmPassword.$touch(true)"
                   v-model="confirmPassword"></ion-input-vue>
+          <ion-note v-if="!$v.confirmPassword.sameAs && $v.password.$dirty" class="error ion-padding" color="danger">Passwords do not match</ion-note>
         </ion-item>
-        <ion-note v-if="!$v.confirmPassword.sameAs && $v.password.$dirty" class="error ion-padding" color="danger">Passwords do not match</ion-note>
 
         <!--<ion-item class="input">
           <ion-label>Accept Terms of Use</ion-label>

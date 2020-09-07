@@ -65,6 +65,9 @@ const mutations = {
   storePubs (state, pubs) {
     state.pubs = pubs
   },
+  storePublicansPub (state, pub) {
+    state.publicansPub = pub
+  },
   storePubFloorAreas (state, pubFloorAreas) {
     state.pubFloorAreas = pubFloorAreas
   },
@@ -113,7 +116,7 @@ const mutations = {
 
 const actions = {
   fetchPubs ({ commit, rootState }) {
-    console.log('rootState.userModule.idToken:', rootState.userModule.idToken)
+    // console.log('rootState.userModule.idToken:', rootState.userModule.idToken)
     if (!rootState.userModule.idToken) {
       console.log('No Id Token - Exiting')
       return
@@ -373,10 +376,13 @@ const getters = {
     return state.pubTables
   },
   publicansPub (state, getters, rootState, rootGetters) {
-    console.log('rootGetters[userModule/userId]:', rootGetters['userModule/userId'])
-    console.log('state.pubs:', state.pubs)
+    console.log('executing publicansPub getter')
 
-    return state.pubs.find(p => p.ownerId === rootGetters['userModule/userId'])
+    console.log('rootGetters[userModule/userId] found?:', rootGetters['userModule/userId'] !== '')
+    console.log('state.pubs:', state.pubs)
+    var publicansPub = state.pubs.find(p => p.ownerId === rootGetters['userModule/userId'])
+    console.log('publicansPub found in getter', publicansPub)
+    return publicansPub
   },
   pubTable (state) {
     console.log('calling pubTable getter in index.js')

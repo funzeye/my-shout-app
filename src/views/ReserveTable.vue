@@ -15,31 +15,31 @@
         <ion-row class="ion-justify-content-center">
           <ion-col size="12" size-sm="8" size-md="6" size-xl="4">
             <form @submit.prevent="reserve">
-              <ion-item>
+              <ion-item lines="none">
                   <ion-label position="stacked">Table # To Reserve:</ion-label>
-                  <ion-input-vue disabled>{{ pubTable.tableNum }}</ion-input-vue>
+                  <ion-input class="disabled" disabled>{{ pubTable.tableNum }}</ion-input>
               </ion-item>
-              <ion-item>
+              <ion-item lines="none">
                   <ion-label position="stacked">Name on Reservation: <ion-text v-if="pub.ownerId === userId" color="danger">*</ion-text></ion-label>
-                  <ion-input-vue v-if="pub.ownerId !== userId" type="text"  disabled>{{user.firstName}} {{user.surname}}</ion-input-vue>
-                  <ion-input-vue v-else autofocus="true" v-model="ownerReservedOnBehalfOf" placeholder="Please add name of person here"></ion-input-vue>
+                  <ion-input-vue v-if="pub.ownerId !== userId" type="text" class="disabled" disabled>{{user.firstName}} {{user.surname}}</ion-input-vue>
+                  <ion-input-vue v-else autofocus="true" type="text" inputmode="text" v-model="ownerReservedOnBehalfOf" placeholder="Please add name of person here"></ion-input-vue>
               </ion-item>
-              <ion-item v-if="pub.ownerId === userId">
+              <ion-item lines="none" v-if="pub.ownerId === userId">
                   <ion-label position="stacked">Their Phone Number: <ion-text color="danger">*</ion-text></ion-label>
-                  <ion-input-vue type="number" v-model="ownerReservedOnBehalfOfPhone" placeholder="Please add number of person here"></ion-input-vue>
+                  <ion-input-vue inputmode="tel" type="tel" v-model="ownerReservedOnBehalfOfPhone" placeholder="Please add number of person here"></ion-input-vue>
               </ion-item>
-              <ion-item>
+              <ion-item lines="none">
                   <ion-label position="stacked">In Pub:</ion-label>
-                  <ion-input-vue disabled>{{ pub.pubName }}</ion-input-vue>
+                  <ion-input-vue class="disabled" disabled>{{ pub.pubName }}</ion-input-vue>
               </ion-item>
-              <ion-item>
+              <ion-item lines="none">
                   <ion-label position="stacked">On date:</ion-label>
-                  <ion-input-vue disabled>Today</ion-input-vue>
+                  <ion-input-vue class="disabled" disabled>Today</ion-input-vue>
               </ion-item>
 
               <p class="info-text">
                 <ion-text color="secondary">
-                There is NO time limit on this reservation. Once Reserved it will stay reserved unless freed by the patron or publican. You can stay at table as long as you want.
+                There is NO time limit on this reservation. Once Reserved it will stay reserved unless freed by the patron or publican. You can stay at table until closing.
                 </ion-text>
               </p>
 
@@ -137,10 +137,6 @@ export default {
 form{
   background: white;
   padding: 24px;
-}
-
-ion-item{
-  --background: white;
 }
 
 </style>

@@ -17,6 +17,12 @@ Vue.config.productionTip = false
 
 Vue.use(Vuelidate)
 
+Vue.filter('formatDate', function (value) {
+  if (value) {
+    return new Date(value).toLocaleTimeString() + ' (' + new Date(value).toDateString() + ')'
+  }
+})
+
 Vue.use(Ionic)
 // Vue.use(VueResource)
 // Vue.http.options.root = 'https://myshout-app.firebaseio.com/pub.json'
