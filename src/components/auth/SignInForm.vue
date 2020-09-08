@@ -1,0 +1,89 @@
+<template>
+    <div>
+    <ion-grid>
+        <ion-row>
+          <ion-col size="12" offset-md="3" size-md="6" offset-xl="4" size-xl="4">
+            <h1 class="ion-padding-start">Sign In</h1>
+            <form @submit.prevent="onSubmit">
+              <ion-item lines="none" class="input">
+                <ion-label position="stacked" for="email">Email: <ion-text color="danger">*</ion-text></ion-label>
+                <ion-input-vue
+                        type="email"
+                        id="email"
+                        @ionBlur="setEmailLostFocus"
+                        v-model="email"
+                        @ionFocus="email_not_focused = false"></ion-input-vue>
+                <ion-note v-if="!$v.email.email && email_not_focused" class="error ion-padding" color="danger">Valid Email Required</ion-note>
+              </ion-item>
+              <ion-item lines="none" class="input">
+                <ion-label  position="stacked" for="password">Password: <ion-text color="danger">*</ion-text></ion-label>
+                <ion-input-vue
+                        type="password"
+                        id="password"
+                        v-model="password"></ion-input-vue>
+              </ion-item>
+              <div class="ion-padding">
+                <ion-button type="submit" :disabled="$v.$invalid">Submit</ion-button>
+              </div>
+            </form>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ion-grid>
+      <ion-row class="ion-justify-content-center ion-padding-vertical">
+      <ion-router-link href="/#/signup" @click="closeModal">
+        Not signed up? Sign up here
+      </ion-router-link>
+      </ion-row>
+      <ion-row class="ion-justify-content-center ion-padding-top">
+      <ion-router-link href="/#/forgotpassword" @click="closeModal">
+        Forgot password?
+      </ion-router-link>
+      </ion-row>
+      </ion-grid>
+    </div>
+</template>
+
+<script>
+import { required, email } from 'vuelidate/lib/validators'
+
+export default {
+  name: 'signInForm',
+  props: ['modalCloseParent', 'isModal'],
+  data () {
+    return {
+      email: '',
+      password: '',
+      email_not_focused: false
+    }
+  },
+  validations: {
+    email: {
+      required,
+      email
+    },
+    password: {
+      required
+    }
+  },
+  methods: {
+    onSubmit () {
+      const formData = {
+        email: this.email,
+        password: this.password
+      }
+      console.log(formData)
+      this.$store.dispatch('userModule/signin', { authData: formData, noRedirect: this.isModal })
+      console.log('isModal', this.isModal)
+      if (this.isModal) this.modalCloseParent()
+    },
+    setEmailLostFocus () {
+      this.$v.email.$touch(true)
+      this.email_not_focused = true
+    },
+    closeModal () {
+      if (this.isModal) this.modalCloseParent()
+    }
+  }
+}
+</script>

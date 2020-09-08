@@ -133,7 +133,7 @@ const actions = {
       })
       .catch(error => console.log(error))
   },
-  signin ({ commit, dispatch }, authData) {
+  signin ({ commit, dispatch }, { authData, noRedirect }) {
     axios.post(':signInWithPassword?key=AIzaSyB8-xAjyYMTR0Jt1-H-ayS9FDINW4JdAhQ',
       { email: authData.email, password: authData.password, returnSecureToken: true })
       .then(res => {
@@ -151,8 +151,8 @@ const actions = {
         })
         dispatch('fetchUserDetails')
         dispatch('setLogoutTimer', res.data.expiresIn)
-
-        router.replace({ name: 'search-for-pub' })
+        console.log('noRedirect', noRedirect)
+        if (!noRedirect) router.replace({ name: 'search-for-pub' })
       })
       .catch(error => console.log(error))
   },

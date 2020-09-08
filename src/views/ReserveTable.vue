@@ -43,7 +43,10 @@
                 </ion-text>
               </p>
 
-              <div class="ion-padding">
+              <div v-if="!isAuthenticated" class="ion-padding">
+                  <ion-button expand="block" class="ion-no-margin" @click.prevent="login">Sign In To Reserve</ion-button>
+              </div>
+              <div v-else class="ion-padding">
                   <ion-button expand="block" class="ion-no-margin" :disabled="$v.$invalid && pub.ownerId === userId" type="submit">Confirm Reservation</ion-button>
               </div>
               <div class="ion-padding">
@@ -61,6 +64,7 @@
 import * as allIcons from 'ionicons/icons'
 import { required } from 'vuelidate/lib/validators'
 import { mapGetters } from 'vuex'
+import Modal from '../components/auth/SignInModal.vue'
 
 export default {
   name: 'reserve-table',
@@ -85,6 +89,7 @@ export default {
       'pub'
     ]),
     ...mapGetters('userModule', [
+      'isAuthenticated',
       'user',
       'userId'
     ])
@@ -107,6 +112,25 @@ export default {
         this.$store.dispatch('reservationModule/createReservation', { ownerReservedOnBehalfOf: this.ownerReservedOnBehalfOf, ownerReservedOnBehalfOfPhone: this.ownerReservedOnBehalfOfPhone })
       }
       this.$router.replace({ name: 'pub-details', params: { id: this.pub.key } })
+    },
+    login () {
+      return this.$ionic.modalController
+        .create({
+          component: Modal,
+          // cssClass: 'my-custom-class',
+          componentProps: {
+            parent: this,
+            store: this.$store,
+            router: this.$router,
+            data: {
+              // content: 'New Content'
+            },
+            propsData: {
+              title: 'Sign In'
+            }
+          }
+        })
+        .then(m => m.present())
     }
   },
   created () {

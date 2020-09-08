@@ -1,12 +1,12 @@
 <template>
-  <div class="ion-page">
+  <div>
     <ion-header>
       <ion-toolbar>
         <ion-title>My Shout!</ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-content>
-      <sign-in-form :isModal="false"/>
+    <ion-content class="ion-padding">
+      <sign-in-form :modalCloseParent="modalClose" :isModal="true"></sign-in-form>
     </ion-content>
   </div>
 </template>
@@ -15,9 +15,14 @@
 import SignInForm from './SignInForm'
 
 export default {
-  name: 'login',
+  name: 'modal',
   components: {
     SignInForm
+  },
+  methods: {
+    modalClose: function () {
+      this.$ionic.modalController.dismiss()
+    }
   }
 }
 </script>

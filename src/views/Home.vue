@@ -18,9 +18,6 @@
                     <ion-button @click="onSignup" color="secondary" fill="outline" class="ion-margin-top" expand="block" size="large" v-if="!auth">
                         Sign up
                     </ion-button>
-                    <ion-button @click="onSearch" class="ion-margin-top" expand="block" size="large" v-if="auth">
-                        Enter
-                    </ion-button>
                   </div>
                 </div>
               </div>
@@ -37,11 +34,15 @@
                     <ion-button @click="onSignup" color="secondary" fill="outline" class="ion-margin-top" expand="block" size="large" v-if="!auth">
                         Sign up
                     </ion-button>
-                    <ion-button @click="onSearch" class="ion-margin-top" expand="block" size="large" v-if="auth">
-                        Enter
-                    </ion-button>
                   </div>
                 </div>
+              </div>
+            </div>
+            <div class="message-button_container">
+              <div>
+                <ion-button @click="onSearch" class="ion-margin-top" expand="block" size="large" v-if="auth">
+                    Let's Go!
+                </ion-button>
               </div>
             </div>
         </div>
