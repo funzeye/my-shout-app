@@ -174,6 +174,7 @@ const routes = [
         },
         name: 'profile',
         beforeEnter (to, from, next) {
+          console.log('calling beforeEnter for profile view')
           var token = store.state.userModule.idToken
           if (token) {
             next()

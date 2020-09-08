@@ -12,7 +12,7 @@
     </ion-header>
     <ion-content class="ion-padding">
       <ion-list>
-        <div v-for="pt in pubTables" :key="pt['.key']">
+        <div v-for="pt in sortedTables" :key="pt['.key']">
           <table-card :i="i" :pubTable="pt" :pubFloors="pub.floors" />
         </div>
       </ion-list>
@@ -59,6 +59,10 @@ export default {
       set (pub) {
         this.$store.dispatch('pubModule/updatePub', pub)
       }
+    },
+    sortedTables () {
+      var items = this.pubTables
+      return items.sort((a, b) => a.tableNum - b.tableNum)
     }
   },
   watch: {

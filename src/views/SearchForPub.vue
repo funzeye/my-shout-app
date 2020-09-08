@@ -2,9 +2,9 @@
   <div class="ion-page" id='search-for-pub'>
     <the-header />
     <ion-content class="ion-padding">
-      <!-- <template v-if="isLoading">
+      <template v-if="isLoading">
       </template>
-      <template v-else> -->
+      <template v-else>
       <template v-if="user.userRoles && user.userRoles.publican === true">
         <ion-text>
           <h1 class="ion-padding">Your Pub</h1>
@@ -40,7 +40,7 @@
             </ion-row>
           </ion-grid>
         </template>
-      <!-- </template> -->
+        </template>
       </template>
       <ion-item-divider v-if="user.userRoles && user.userRoles.punter === true && user.userRoles.publican === true">
       </ion-item-divider>
@@ -98,12 +98,12 @@ export default {
       }
     }
   },
-  // watch: {
-  //   publicansPub () {
-  //     console.log('publicansPub property has changed')
-  //     this.isLoading = false
-  //   }
-  // },
+  watch: {
+    pubs () {
+      console.log('pubs property has changed')
+      this.isLoading = false
+    }
+  },
   created () {
     console.log('search-for-pub created method called')
 

@@ -366,6 +366,7 @@ const getters = {
     console.log('state.pubs:', state.pubs)
     var publicansPub = state.pubs.find(p => p.ownerId === rootGetters['userModule/userId'])
     console.log('publicansPub found in getter:', publicansPub)
+
     return publicansPub
   },
   pubTable (state) {
