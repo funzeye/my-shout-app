@@ -6,23 +6,29 @@
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
-      <h1 class="ion-padding-start">Reset Password</h1>
-      <form @submit.prevent="onSubmit">
-        <ion-item lines="none" class="input">
-          <ion-label position="stacked" for="email">Email:</ion-label>
-          <ion-input-vue
-                  type="email"
-                  id="email"
-                  @ionBlur="setEmailLostFocus"
-                  v-model="email"
-                  @ionFocus="email_not_focused = false"></ion-input-vue>
-        </ion-item>
-        <ion-note v-if="!$v.email.email && email_not_focused" class="error ion-padding" color="danger">Valid Email Required</ion-note>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12" offset-md="3" size-md="6" offset-xl="4" size-xl="4">
+            <h1 class="ion-padding-start">Reset Password</h1>
+            <form @submit.prevent="onSubmit">
+              <ion-item lines="none" class="input">
+                <ion-label position="stacked" for="email">Email:</ion-label>
+                <ion-input-vue
+                        type="email"
+                        id="email"
+                        @ionBlur="setEmailLostFocus"
+                        v-model="email"
+                        @ionFocus="email_not_focused = false"></ion-input-vue>
+              </ion-item>
+              <ion-note v-if="!$v.email.email && email_not_focused" class="error ion-padding" color="danger">Valid Email Required</ion-note>
 
-        <div class="ion-padding">
-          <ion-button type="submit" :disabled="$v.$invalid">Send Password Reset Email</ion-button>
-        </div>
-      </form>
+              <div class="ion-padding">
+                <ion-button type="submit" :disabled="$v.$invalid">Send Password Reset Email</ion-button>
+              </div>
+            </form>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
       <ion-grid>
       <ion-row class="ion-justify-content-center ion-padding-vertical">
       <ion-router-link href="/#/signin">

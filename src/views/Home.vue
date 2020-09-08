@@ -9,26 +9,39 @@
             <div class="main-message_flexbox">
               <div class="main-message_flexbox_item">
                 <h1>Patron</h1>
-                <h2>Are you a patron looking to book a table in a pub</h2>
+                <h2>Discover and book your table in one of our pubs</h2>
+                <div class="message-button_container">
+                  <div>
+                    <ion-button @click="onSearch" class="ion-margin-top" expand="block" size="large" v-if="!auth">
+                        Find a table
+                    </ion-button>
+                    <ion-button @click="onSignup" color="secondary" fill="outline" class="ion-margin-top" expand="block" size="large" v-if="!auth">
+                        Sign up
+                    </ion-button>
+                    <ion-button @click="onSearch" class="ion-margin-top" expand="block" size="large" v-if="auth">
+                        Enter
+                    </ion-button>
+                  </div>
+                </div>
               </div>
               <div class="main-message_divider">
               </div>
               <div class="main-message_flexbox_item">
                 <h1>Publican</h1>
-                <h2>Are you a publican looking to manage reservations</h2>
-              </div>
-            </div>
-            <div class="message-button_container">
-              <div>
-                <ion-button @click="onLogin" class="ion-margin-top" expand="block" size="large" v-if="!auth">
-                    Log in
-                </ion-button>
-                <ion-button @click="onSignup" color="secondary" fill="outline" class="ion-margin-top" expand="block" size="large" v-if="!auth">
-                    Sign up
-                </ion-button>
-                <ion-button @click="onSearch" class="ion-margin-top" expand="block" size="large" v-if="auth">
-                    Enter
-                </ion-button>
+                <h2>Manage the reservations you get from your patrons</h2>
+                <div class="message-button_container">
+                  <div>
+                    <ion-button @click="onLogin" class="ion-margin-top" expand="block" size="large" v-if="!auth">
+                        Manage Pub
+                    </ion-button>
+                    <ion-button @click="onSignup" color="secondary" fill="outline" class="ion-margin-top" expand="block" size="large" v-if="!auth">
+                        Sign up
+                    </ion-button>
+                    <ion-button @click="onSearch" class="ion-margin-top" expand="block" size="large" v-if="auth">
+                        Enter
+                    </ion-button>
+                  </div>
+                </div>
               </div>
             </div>
         </div>
@@ -104,17 +117,26 @@ header {
 
 .main-message{
     z-index: 1;
+    max-width:800px;
+    @media (min-width: 1000px) {
+      max-width:900px;
+    }
+    @media (min-width: 1200px) {
+      max-width:1200px;
+    }
     h1 {
         font-weight: bold;
         color: #fff;
         text-align: center;
+        @media (min-width: 600px) {
+          font-size: 34px;
+        }
     }
     h2 {
         font-weight: 400;
         color: #fff;
         text-align: center;
     }
-    max-width:800px;
 }
 
 ion-button {
@@ -154,14 +176,18 @@ ion-button {
   margin-top: 16px;
 
   @media (min-width: 600px) {
-      flex-direction: row;
-      border-bottom: none;
-      border-left: 2px solid white;
-      margin-left: 24px;
-      margin-right: 24px;
-      margin-top: 0px;
-      margin-bottom: 0px;
-    }
+    flex-direction: row;
+    border-bottom: none;
+    border-left: 2px solid white;
+    margin-left: 24px;
+    margin-right: 24px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+  @media (min-width: 1200px) {
+    margin-left: 48px;
+    margin-right: 48px;
+  }
 }
 
 </style>

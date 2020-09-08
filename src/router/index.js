@@ -37,50 +37,47 @@ const routes = [
         components: {
           searchRoute: () => import('@/views/SearchForPub.vue')
         },
-        name: 'search-for-pub',
-        beforeEnter (to, from, next) {
-          var token = store.state.userModule.idToken
-          if (token) {
-            console.log('token found, going to next:', next)
-            next()
-          } else {
-            console.log('token not found, going to /home:')
-            next('/home')
-          }
-        }// ,
-        // children: [
-        //
-        // ]
+        name: 'search-for-pub'
+        // beforeEnter (to, from, next) {
+        //   var token = store.state.userModule.idToken
+        //   if (token) {
+        //     console.log('token found, going to next:', next)
+        //     next()
+        //   } else {
+        //     console.log('token not found, going to /home:')
+        //     next('/home')
+        //   }
+        // }
       },
       {
         path: ':id/pub-details',
         components: {
           searchRoute: () => import('@/views/PubDetails.vue')
         },
-        name: 'pub-details',
-        beforeEnter (to, from, next) {
-          var token = store.state.userModule.idToken
-          if (token) {
-            next()
-          } else {
-            next('/home')
-          }
-        }
+        name: 'pub-details'
+        // beforeEnter (to, from, next) {
+        //   var token = store.state.userModule.idToken
+        //   if (token) {
+        //     next()
+        //   } else {
+        //     next('/home')
+        //   }
+        // }
       },
       {
         path: ':id/reserve-table',
         components: {
           searchRoute: () => import('@/views/ReserveTable.vue')
         },
-        name: 'reserve-table',
-        beforeEnter (to, from, next) {
-          var token = store.state.userModule.idToken
-          if (token) {
-            next()
-          } else {
-            next('/home')
-          }
-        }
+        name: 'reserve-table'
+        // beforeEnter (to, from, next) {
+        //   var token = store.state.userModule.idToken
+        //   if (token) {
+        //     next()
+        //   } else {
+        //     next('/home')
+        //   }
+        // }
       },
       {
         path: ':id/edit-pub',

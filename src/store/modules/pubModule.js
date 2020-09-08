@@ -113,13 +113,8 @@ const mutations = {
 
 const actions = {
   fetchPubs ({ commit, rootState }) {
-    // console.log('rootState.userModule.idToken:', rootState.userModule.idToken)
-    if (!rootState.userModule.idToken) {
-      console.log('No Id Token - Exiting')
-      return
-    }
     console.log('fecthing pub data from the DB and updating List')
-    globalAxios.get('pubs.json' + '?auth=' + rootState.userModule.idToken)
+    globalAxios.get('pubs.json')
       .then(response => {
         console.log(response)
         const data = response.data
@@ -134,13 +129,9 @@ const actions = {
       })
   },
   fetchPubTables ({ commit, rootState }, pubKey) {
-    if (!rootState.userModule.idToken) {
-      console.log('No Id Token - Exiting')
-      return
-    }
     console.log('fecthing pub tables data from the DB and updating List')
     console.log('for pub with key:', pubKey)
-    globalAxios.get('pubTables.json' + '?auth=' + rootState.userModule.idToken + '&orderBy="pubId"&equalTo="' + pubKey + '"')
+    globalAxios.get('pubTables.json' + '?&orderBy="pubId"&equalTo="' + pubKey + '"')
       .then(response => {
         console.log(response)
         const data = response.data
@@ -155,13 +146,9 @@ const actions = {
       })
   },
   fetchPubByPubId ({ commit, rootState, dispatch }, pubId) {
-    if (!rootState.userModule.idToken) {
-      console.log('No Id Token - Exiting')
-      return
-    }
     console.log('fecthing pub data from the DB')
     console.log('for pub with pub id:', pubId)
-    globalAxios.get('pubs.json' + '?auth=' + rootState.userModule.idToken + '&orderBy="$key"&equalTo="' + pubId + '"')
+    globalAxios.get('pubs.json' + '?&orderBy="$key"&equalTo="' + pubId + '"')
       .then(response => {
         console.log('fetchPubByPubId response: ', response)
         const data = response.data
@@ -378,7 +365,7 @@ const getters = {
     console.log('rootGetters[userModule/userId] found?:', rootGetters['userModule/userId'] !== '')
     console.log('state.pubs:', state.pubs)
     var publicansPub = state.pubs.find(p => p.ownerId === rootGetters['userModule/userId'])
-    console.log('publicansPub found in getter', publicansPub)
+    console.log('publicansPub found in getter:', publicansPub)
     return publicansPub
   },
   pubTable (state) {
