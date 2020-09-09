@@ -56,7 +56,7 @@ ion-card-content ion-label{
     form ion-item:not(:first-child){
       padding-top: 16px;
     }
-    ion-label{
+    form ion-label{
       text-transform: uppercase;
       padding-bottom:6px
     }

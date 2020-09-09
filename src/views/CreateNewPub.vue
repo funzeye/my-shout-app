@@ -3,7 +3,7 @@
     <the-header />
     <ion-content class="ion-padding">
       <h1 class="ion-padding-start">Create Your Pub</h1>
-      <PubDetailsForm mode="create"/>
+      <pub-details-form mode="create"/>
 
     </ion-content>
   </div>

@@ -11,7 +11,7 @@
             </ion-toolbar>
         </ion-header>
         <ion-content class="ion-padding">
-          <PubDetailsForm mode="edit"/>
+          <pub-details-form mode="edit"/>
         </ion-content>
     </div>
 </template>

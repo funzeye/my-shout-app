@@ -265,7 +265,9 @@ const actions = {
       table: {
         seats: resFromArray.table.seats,
         tableId: resFromArray.table.tableId,
-        tableNum: resFromArray.table.tableNum
+        tableNum: resFromArray.table.tableNum,
+        floor: resFromArray.table.floor,
+        pubFloorArea: resFromArray.table.pubFloorArea
       },
       isCancelled: true,
       cancelledAtDate: new Date(),
@@ -305,7 +307,9 @@ const actions = {
       table: {
         seats: reservationData.table.seats,
         tableId: reservationData.table.tableId,
-        tableNum: reservationData.table.tableNum
+        tableNum: reservationData.table.tableNum,
+        floor: reservationData.table.floor,
+        pubFloorArea: reservationData.table.pubFloorArea
       },
       isCancelled: true,
       cancelledAtDate: new Date(),
@@ -349,7 +353,9 @@ const actions = {
       table: {
         tableId: rootState.pubModule.pubTable.key,
         tableNum: rootState.pubModule.pubTable.tableNum,
-        seats: rootState.pubModule.pubTable.seats
+        seats: rootState.pubModule.pubTable.seats,
+        floor: rootState.pubModule.pubTable.floor,
+        pubFloorArea: rootState.pubModule.pubTable.pubFloorArea
       },
       pub: {
         pubId: rootState.pubModule.pubTable.pubId,

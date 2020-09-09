@@ -5,14 +5,10 @@
           <ion-card-subtitle>{{ pubTable.pubFloorArea }}</ion-card-subtitle>
           <ion-card-title>Table # {{ pubTable.tableNum }}</ion-card-title>
           <ion-grid>
-            <ion-row v-if="pubTable.floor === 0" class="ion-justify-content-start ion-padding-top">
+            <ion-row class="ion-justify-content-start ion-padding-top">
                 <div>
-                  <ion-text>Ground Floor</ion-text>
-                </div>
-            </ion-row>
-            <ion-row class="ion-padding-top" v-else>
-                <div>
-                  <ion-text>Floor #: {{ pubTable.floor }}</ion-text>
+                  <ion-text v-if="pubTable.floor === 0">Ground Floor</ion-text>
+                  <ion-text v-else>Floor #: {{ pubTable.floor }}</ion-text>
                 </div>
             </ion-row>
             <ion-row>

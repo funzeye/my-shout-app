@@ -6,65 +6,81 @@
           </ion-toolbar>
       </ion-header>
       <ion-content>
-          <ion-card v-if="activeReservation && activeReservation.pub">
-            <ion-card-header>
-                <ion-card-title>Active Booking</ion-card-title>
-            </ion-card-header>
+        <ion-grid>
+          <ion-row v-if="activeReservation && activeReservation.pub">
+            <ion-col size="12" offset-md="3" size-md="6">
+              <ion-card>
+                <ion-card-header>
+                    <ion-card-title>Active Booking</ion-card-title>
+                </ion-card-header>
 
-            <ion-card-content>
-                <ion-item lines="none">
-                    <ion-label>
-                        <h2>{{ activeReservation.pub.pubName }}</h2>
-                        <h3>{{ activeReservation.table.seats }} seats &#64; table &#35; {{ activeReservation.table.tableNum }}</h3>
-                        <p>on {{ new Date(activeReservation.reservedAtDate).toDateString() }}</p>
-                    </ion-label>
-                </ion-item>
-            </ion-card-content>
-        </ion-card>
-        <ion-card v-if="isPublican && allReservationsForPubSorted && allReservationsForPubSorted.length > 0">
-            <ion-card-header>
-                <ion-card-title>Bookings</ion-card-title>
-            </ion-card-header>
-
-            <ion-card-content>
-            <ion-list v-for="ar in allReservationsForPubSorted" :key="ar['.key']">
-                <ion-item>
-                    <ion-label>
+                <ion-card-content>
+                    <ion-item class="booking-item" lines="none">
                         <ion-label>
-                        <h2 v-if="ar.ownerReservedOnBehalfOf">{{ ar.ownerReservedOnBehalfOf }}</h2>
-                        <h2 v-if="ar.ownerReservedOnBehalfOfPhone">{{ ar.ownerReservedOnBehalfOfPhone }}</h2>
-                        <div v-else>
-                          <h2>{{ ar.userDetails.firstName + ' ' + ar.userDetails.surname }}</h2>
-                          <h2>{{ ar.userDetails.phone }}</h2>
-                        </div>
-                        <h3>{{ ar.table.seats }} seats &#64; table &#35; {{ ar.table.tableNum }}</h3>
-                        <p>on {{ new Date(ar.reservedAtDate).toDateString() }}</p>
-                    </ion-label>
-                    </ion-label>
-                </ion-item>
-            </ion-list>
-            </ion-card-content>
-        </ion-card>
+                            <h2>{{ activeReservation.pub.pubName }}</h2>
+                            <h3>{{ activeReservation.table.seats }} seats &#64; table &#35; {{ activeReservation.table.tableNum }}</h3>
+                            <h3>on Floor # {{ activeReservation.table.floor }}<span v-show="activeReservation.table.pubFloorArea !== undefined"> ({{ activeReservation.table.pubFloorArea }})</span></h3>
+                            <p>on {{ new Date(activeReservation.reservedAtDate).toDateString() }}</p>
+                        </ion-label>
+                    </ion-item>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+          <ion-row v-if="isPublican && allReservationsForPubSorted && allReservationsForPubSorted.length > 0">
+            <ion-col size="12" offset-md="3" size-md="6">
+              <ion-card >
+                <ion-card-header>
+                    <ion-card-title>Bookings</ion-card-title>
+                </ion-card-header>
 
-        <ion-card v-if="previousReservations && previousReservations.length > 0">
-            <ion-card-header>
-                <ion-card-title>Previous Bookings</ion-card-title>
-            </ion-card-header>
-
-            <ion-card-content>
-            <ion-list v-for="pr in previousReservations" :key="pr['.key']">
-                <ion-item>
-                    <ion-label>
+                <ion-card-content>
+                <ion-list v-for="ar in allReservationsForPubSorted" :key="ar['.key']">
+                    <ion-item class="booking-item">
                         <ion-label>
-                        <h2>{{ pr.pub.pubName }}</h2>
-                        <h3>{{ pr.table.seats }} seats &#64; table &#35; {{ pr.table.tableNum }}</h3>
-                        <p>on {{ new Date(pr.reservedAtDate).toDateString() }}</p>
-                    </ion-label>
-                    </ion-label>
-                </ion-item>
-            </ion-list>
-            </ion-card-content>
-        </ion-card>
+                            <ion-label>
+                            <h2 v-if="ar.ownerReservedOnBehalfOf">{{ ar.ownerReservedOnBehalfOf }}</h2>
+                            <h2 v-if="ar.ownerReservedOnBehalfOfPhone">{{ ar.ownerReservedOnBehalfOfPhone }}</h2>
+                            <div v-else>
+                              <h2>{{ ar.userDetails.firstName + ' ' + ar.userDetails.surname }}</h2>
+                              <h2>{{ ar.userDetails.phone }}</h2>
+                            </div>
+                            <h3>{{ ar.table.seats }} seats &#64; table &#35; {{ ar.table.tableNum }}</h3>
+                            <h3>on Floor # {{ ar.table.floor }}<span v-if="ar.table.pubFloorArea !== undefined"> ({{ ar.table.pubFloorArea }})</span></h3>
+                            <p>on {{ new Date(ar.reservedAtDate).toDateString() }}</p>
+                        </ion-label>
+                        </ion-label>
+                    </ion-item>
+                </ion-list>
+                </ion-card-content>
+            </ion-card>
+            </ion-col>
+          </ion-row>
+          <ion-row v-if="previousReservations && previousReservations.length > 0">
+            <ion-col  size="12" offset-md="3" size-md="6">
+              <ion-card>
+                  <ion-card-header>
+                      <ion-card-title>Previous Bookings</ion-card-title>
+                  </ion-card-header>
+
+                  <ion-card-content>
+                  <ion-list v-for="pr in previousReservations" :key="pr['.key']">
+                      <ion-item class="booking-item">
+                          <ion-label>
+                              <ion-label>
+                              <h2>{{ pr.pub.pubName }}</h2>
+                              <h3>{{ pr.table.seats }} seats &#64; table &#35; {{ pr.table.tableNum }}</h3>
+                              <h3>on Floor # {{ pr.table.floor }}<span v-show="pr.table.pubFloorArea !== undefined"> ({{ pr.table.pubFloorArea }})</span></h3>
+                              <p>on {{ new Date(pr.reservedAtDate).toDateString() }}</p>
+                          </ion-label>
+                          </ion-label>
+                      </ion-item>
+                  </ion-list>
+                  </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
       </ion-content>
   </div>
 </template>
@@ -125,3 +141,17 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+ .booking-item{
+   margin-right: 16px;
+   h2{
+     font-weight:bold;
+     font-size:20px;
+     padding-bottom:10px;
+   }
+   h3{
+     padding-bottom:3px;
+   }
+ }
+</style>

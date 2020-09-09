@@ -12,13 +12,17 @@
     </ion-header>
     <ion-content class="ion-padding">
       <ion-list>
-        <div v-for="pt in sortedTables" :key="pt['.key']">
-          <table-card :i="i" :pubTable="pt" :pubFloors="pub.floors" />
-        </div>
+         <ion-grid style="max-width:1200px;">
+          <ion-row>
+            <ion-col size="12" size-md="6" size-lg="4" v-for="pt in sortedTables" :key="pt['.key']">
+              <table-card :i="i" :pubTable="pt" :pubFloors="pub.floors" />
+            </ion-col>
+          </ion-row>
+        </ion-grid>
       </ion-list>
-      <form @submit.prevent="submitted">
+      <form @submit.prevent="submitted" style="max-width:1200px; margin:0 auto;">
         <div class="ion-padding">
-          <ion-button expand="block" class="ion-no-margin" type="submit">Complete</ion-button>
+          <ion-button expand="block" class="ion-no-margin" type="submit">Done</ion-button>
         </div>
       </form>
     </ion-content>
