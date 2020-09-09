@@ -22,7 +22,7 @@
       </ion-list>
       <form @submit.prevent="submitted" style="max-width:1200px; margin:0 auto;">
         <div class="ion-padding">
-          <ion-button expand="block" class="ion-no-margin" type="submit">Done</ion-button>
+          <ion-button expand="block" class="ion-no-margin" type="submit">Done For Now</ion-button>
         </div>
       </form>
     </ion-content>

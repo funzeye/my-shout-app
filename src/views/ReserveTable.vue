@@ -22,7 +22,7 @@
               <ion-item lines="none">
                   <ion-label position="stacked">Name on Reservation: <ion-text v-if="pub.ownerId === userId" color="danger">*</ion-text></ion-label>
                   <ion-input v-if="pub.ownerId !== userId" type="text" class="disabled" disabled>{{user.firstName}} {{user.surname}}</ion-input>
-                  <ion-input v-else autofocus="true" type="text" inputmode="text" v-model="ownerReservedOnBehalfOf" placeholder="Please add name of person here"></ion-input>
+                  <ion-input-vue v-else autofocus="true" type="text" inputmode="text" v-model="ownerReservedOnBehalfOf" placeholder="Please add name of person here"></ion-input-vue>
               </ion-item>
               <ion-item lines="none" v-if="pub.ownerId === userId">
                   <ion-label position="stacked">Their Phone Number: <ion-text color="danger">*</ion-text></ion-label>
@@ -103,6 +103,62 @@ export default {
       this.$router.replace({ name: 'pub-details', params: { id: this.pub.key } })
     },
     reserve () {
+      if (this.pub.ownerId === this.userId) {
+        this.reserveTable()
+      } else if (!this.pub.timeToArrivalLimitOn) {
+        return this.$ionic.alertController
+          .create({
+            cssClass: 'confirm-res',
+            header: 'Confirm Reservation',
+            // subHeader: 'Subtitle',
+            message: 'Please note that the pub can cancel your reservation at any time without notice if they believe that you have not arrived (or will not arrive) within a reasonable time.',
+            buttons: [
+              {
+                text: 'Back',
+                role: 'cancel',
+                // cssClass: 'secondary',
+                handler: () => {
+                  console.log('Reservation abandoned.')
+                }
+              },
+              {
+                text: 'Confirm',
+                handler: () => {
+                  this.reserveTable()
+                }
+              }
+            ]
+          })
+          .then(a => a.present())
+      } else {
+        return this.$ionic.alertController
+          .create({
+            cssClass: 'alert-cancel-res',
+            header: 'Confirm Reservation',
+            // subHeader: 'Subtitle',
+            message: 'Please note that if you do not arrive to your table within ' + this.pub.timeToArrivalLimitInMinutes + ' minutes then the pub can cancel your reservation without notice.',
+            buttons: [
+              {
+                text: 'Back',
+                role: 'cancel',
+                // cssClass: 'secondary',
+                handler: () => {
+                  console.log('Reservation abandoned.')
+                }
+              },
+              {
+                text: 'Confirm',
+                handler: () => {
+                  this.reserveTable()
+                }
+              }
+            ]
+          })
+          .then(a => a.present())
+      }
+    },
+    reserveTable () {
+      console.log('Reservation Confirmed')
       console.log('reserveTable.vue: confirm reservation button clicked. submitting a new reservation')
       if (this.pub.ownerId !== this.userId) {
         console.log('cancelling all existing reservations for punter')

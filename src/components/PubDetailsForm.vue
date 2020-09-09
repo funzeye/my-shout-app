@@ -82,7 +82,8 @@
                     :value="pub.timeToArrivalLimitOn"
                     :checked="pub.timeToArrivalLimitOn">
                   </ion-toggle>
-                  <ion-note>Allows you, the publican, to cancel a reservation if the patron has not arrived within the below time limit</ion-note>
+                  <ion-note>Allows you, the publican, to cancel a reservation ONLY if the patron has not arrived within the below time limit</ion-note>
+                  <ion-note>If turned off then you may cancel a reservation at any time.</ion-note>
                   <ion-note v-if="mode === 'edit'">Any changes to arrival limit will only apply to future reservations, not past.</ion-note>
 
             </ion-item>
