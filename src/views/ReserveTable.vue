@@ -21,8 +21,8 @@
               </ion-item>
               <ion-item lines="none">
                   <ion-label position="stacked">Name on Reservation: <ion-text v-if="pub.ownerId === userId" color="danger">*</ion-text></ion-label>
-                  <ion-input-vue v-if="pub.ownerId !== userId" type="text" class="disabled" disabled>{{user.firstName}} {{user.surname}}</ion-input-vue>
-                  <ion-input-vue v-else autofocus="true" type="text" inputmode="text" v-model="ownerReservedOnBehalfOf" placeholder="Please add name of person here"></ion-input-vue>
+                  <ion-input v-if="pub.ownerId !== userId" type="text" class="disabled" disabled>{{user.firstName}} {{user.surname}}</ion-input>
+                  <ion-input v-else autofocus="true" type="text" inputmode="text" v-model="ownerReservedOnBehalfOf" placeholder="Please add name of person here"></ion-input>
               </ion-item>
               <ion-item lines="none" v-if="pub.ownerId === userId">
                   <ion-label position="stacked">Their Phone Number: <ion-text color="danger">*</ion-text></ion-label>

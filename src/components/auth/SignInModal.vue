@@ -6,7 +6,25 @@
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
-      <sign-in-form :modalCloseParent="modalClose" :isModal="true"></sign-in-form>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <sign-in-form :modalCloseParent="modalClose" :isModal="true"></sign-in-form>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ion-grid>
+        <ion-row class="ion-justify-content-center ion-padding-vertical">
+        <ion-router-link href="/#/signup" @click="modalClose">
+          Not signed up? Sign up here
+        </ion-router-link>
+        </ion-row>
+        <ion-row class="ion-justify-content-center ion-padding-top">
+        <ion-router-link href="/#/forgotpassword" @click="modalClose">
+          Forgot password?
+        </ion-router-link>
+      </ion-row>
+      </ion-grid>
     </ion-content>
   </div>
 </template>

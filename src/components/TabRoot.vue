@@ -23,7 +23,7 @@
               <ion-label>Pub</ion-label>
             </ion-tab-button>
 
-            <ion-tab-button v-if="auth" tab="booked-tables">
+            <ion-tab-button v-if="auth" tab="booked-tables" :to="{name:'booked-tables'}">
               <ion-icon :src="i.beer"></ion-icon>
               <ion-label>Bookings</ion-label>
               <!--<ion-badge>6</ion-badge>-->
