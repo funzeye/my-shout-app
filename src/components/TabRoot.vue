@@ -2,7 +2,8 @@
   <div class="ion-page">
   <ion-tabs>
 
-        <ion-tab tab="search-for-pub" :routes="['search-for-pub', 'pub-details', 'reserve-table', 'edit-pub', 'edit-pub-tables', 'edit-table-details', 'edit-pub-details']">
+        <ion-tab tab="search-for-pub" :routes="['search-for-pub', 'pub-details', 'reserve-table', 'edit-pub',
+        'edit-pub-tables', 'edit-table-details', 'edit-pub-details']">
           <ion-vue-router name="searchRoute"></ion-vue-router>
         </ion-tab>
 
@@ -22,7 +23,7 @@
               <ion-label>Pub</ion-label>
             </ion-tab-button>
 
-            <ion-tab-button v-if="auth" tab="booked-tables" :to="{name:'booked-tables'}">
+            <ion-tab-button v-if="auth" tab="booked-tables">
               <ion-icon :src="i.beer"></ion-icon>
               <ion-label>Bookings</ion-label>
               <!--<ion-badge>6</ion-badge>-->

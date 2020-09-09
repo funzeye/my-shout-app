@@ -303,7 +303,8 @@ const routes = [
 ]
 
 const router = new IonicVueRouter({
-  mode: 'history', // for not having the # in the URL
+  // mode: 'history', // for not having the # in the URL
+  base: process.env.BASE_URL,
   routes
 })
 
