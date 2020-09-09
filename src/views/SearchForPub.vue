@@ -94,6 +94,7 @@ export default {
     }),
     publicansPub: {
       get () {
+        console.log('search-for-pub publicansPub Getter')
         return this.$store.getters['pubModule/publicansPub']
       }
     }

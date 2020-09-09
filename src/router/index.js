@@ -177,6 +177,7 @@ const routes = [
           console.log('calling beforeEnter for profile view')
           var token = store.state.userModule.idToken
           if (token) {
+            console.log('next', next)
             next()
           } else {
             next('/home')
@@ -302,7 +303,7 @@ const routes = [
 ]
 
 const router = new IonicVueRouter({
-  // mode: 'history', // for not having the # in the URL
+  mode: 'history', // for not having the # in the URL
   routes
 })
 
