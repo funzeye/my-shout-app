@@ -31,7 +31,6 @@
                 <ion-note v-if="$v.surname.$invalid && $v.surname.$dirty" class="error ion-padding" color="danger">Valid name required</ion-note>
               </ion-item>
 
-              <ion-note v-if="$v.firstName.$invalid && $v.firstName.$dirty" class="error ion-padding" color="danger">Valid name required</ion-note>
               <ion-item lines="none" class="input">
                 <ion-label position="stacked" for="phone">Phone <ion-text color="danger">*</ion-text></ion-label>
                 <ion-input-vue
