@@ -71,6 +71,18 @@ const mutations = {
   resetReservationsForPubCollection (state) {
     state.allReservationsForPub = []
   },
+  resetCurrentReservationForPunter (state) {
+    state.activeReservationForPunter = {
+      key: '',
+      tableId: '',
+      reservedBy: '',
+      reservedByOwner: false,
+      ownerReservedOnBehalfOf: '',
+      ownerReservedOnBehalfOfPhone: '',
+      reservedAtDate: '',
+      userDetails: null
+    }
+  },
   resetCurrentReservation (state) {
     state.activeReservationForPub = {
       key: '',
@@ -177,6 +189,8 @@ const actions = {
         }
         if (resultArray.length > 0) {
           commit('setCurrentReservationForPunter', resultArray[0])
+        } else {
+          commit('resetCurrentReservationForPunter')
         }
         if (previousReservationsForPunterArray.length > 0) {
           commit('setPreviousReservationsForPunter', previousReservationsForPunterArray)
@@ -276,6 +290,7 @@ const actions = {
         console.log('about to reset reservation...')
         commit('resetCurrentReservation')
         commit('removeReservationFromCollection', reservationKey)
+        commit('resetCurrentReservationForPunter')
       })
       .catch(error => console.log(error))
   },
