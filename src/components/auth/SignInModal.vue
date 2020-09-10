@@ -3,6 +3,11 @@
     <ion-header>
       <ion-toolbar>
         <ion-title>My Shout!</ion-title>
+        <ion-buttons slot="end">
+          <ion-button @click="modalClose" color="danger" style="padding-right:12px;">
+            <ion-icon :src="i.closeCircle"></ion-icon>
+          </ion-button>
+        </ion-buttons>
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
@@ -31,9 +36,15 @@
 
 <script>
 import SignInForm from './SignInForm'
+import * as allIcons from 'ionicons/icons'
 
 export default {
   name: 'modal',
+  data () {
+    return {
+      i: allIcons
+    }
+  },
   components: {
     SignInForm
   },
