@@ -100,40 +100,42 @@ const mutations = {
 
 const actions = {
   fetchReservationsForPub ({ commit, rootState }, pubKey) {
-    if (!rootState.userModule.idToken) {
-      console.log('No Id Token - Exiting')
-      return
-    }
     console.log('fecthing pub table reservation data from the DB and updating List')
     console.log('for pub with key:', pubKey)
     commit('resetReservationsForPubCollection')
-    globalAxios.get('reservations.json' + '?auth=' + rootState.userModule.idToken +
-      '&orderBy="pub/pubId"&equalTo="' + pubKey + '"')
+    globalAxios.get('reservations.json' + '?orderBy="pub/pubId"&equalTo="' + pubKey + '"')
       .then(response => {
         console.log('fetchReservationsForPub response:', response)
         const data = response.data
         // const resultArray = []
         for (const key in data) {
           if (!data[key].isCancelled) {
-            // retrieve user details and append to reservation object as an inner object
-            console.log('getting userdetails for user with id of:', data[key].reservedBy)
-            globalAxios.get('usersDetails.json' + '?auth=' + rootState.userModule.idToken +
-              '&orderBy="$key"&equalTo="' + data[key].reservedBy + '"')
-              .then(response => {
-                console.log('.get(usersDetails.json:', response)
-                const userData = response.data
-                const usesDetailsResultArray = []
-                for (const dataKey in userData) {
-                  console.log('fetch user details key inside: ', dataKey)
-                  console.log('user details userData[key]: ', userData[dataKey])
-                  usesDetailsResultArray.push(userData[dataKey])
-                }
-                data[key].key = key
-                data[key].userDetails = usesDetailsResultArray[0]
-                console.log('pushing reservation to resultArray:', data[key])
-                // resultArray.push(data[key])
-                commit('addReservationToCollection', data[key])
-              })
+            if (!rootState.userModule.idToken) {
+              data[key].key = key
+              console.log('pushing reservation to resultArray:', data[key])
+              commit('addReservationToCollection', data[key])
+              console.log('No Id Token - Exiting')
+            } else {
+              // retrieve user details and append to reservation object as an inner object
+              console.log('getting userdetails for user with id of:', data[key].reservedBy)
+              globalAxios.get('usersDetails.json' + '?auth=' + rootState.userModule.idToken +
+                '&orderBy="$key"&equalTo="' + data[key].reservedBy + '"')
+                .then(response => {
+                  console.log('.get(usersDetails.json:', response)
+                  const userData = response.data
+                  const usesDetailsResultArray = []
+                  for (const dataKey in userData) {
+                    console.log('fetch user details key inside: ', dataKey)
+                    console.log('user details userData[key]: ', userData[dataKey])
+                    usesDetailsResultArray.push(userData[dataKey])
+                  }
+                  data[key].key = key
+                  data[key].userDetails = usesDetailsResultArray[0]
+                  console.log('pushing reservation to resultArray:', data[key])
+                  // resultArray.push(data[key])
+                  commit('addReservationToCollection', data[key])
+                })
+            }
           } else if (data[key].isCancelled) {
             console.log('reservation not added as it is a cancelled reservation')
           } else {

@@ -38,7 +38,7 @@
       </template>
       <template v-else-if="!reservation.isCancelled && reservation.reservedBy && reservation.reservedBy !== loggedInUserId" slot="table-card-action-button">
         <div class="ion-padding-vertical">
-          <ion-button expand="block"  size="default" fill="outline" color="success" disabled>Reserved</ion-button>
+          <ion-button expand="block" size="default" fill="outline" color="success" disabled>Reserved</ion-button>
         </div>
       </template>
       <template v-else slot="table-card-action-button">
