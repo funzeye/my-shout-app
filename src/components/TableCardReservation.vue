@@ -4,11 +4,11 @@
         <div>
           <ion-item lines="none" v-if="!reservation.isCancelled && reservation.reservedBy && !reservation.reservedByOwner && ((reservation.reservedBy === loggedInUserId) || userIsOwner)">
             <ion-label position="stacked">Reserved By Patron:</ion-label>
-            <ion-text>{{ reservation.userDetails.firstName + ' ' + reservation.userDetails.surname }}</ion-text>
+            <ion-text v-if="reservation.userDetails">{{ reservation.userDetails.firstName + ' ' + reservation.userDetails.surname }}</ion-text>
           </ion-item>
           <ion-item  lines="none" v-if="!reservation.isCancelled && reservation.reservedBy && !reservation.reservedByOwner && ((reservation.reservedBy === loggedInUserId) || userIsOwner)">
             <ion-label position="stacked">Phone Number:</ion-label>
-            <ion-text>{{ reservation.userDetails.phone }}</ion-text>
+            <ion-text v-if="reservation.userDetails">{{ reservation.userDetails.phone }}</ion-text>
           </ion-item>
           <ion-item  lines="none" v-if="!reservation.isCancelled && reservation.reservedBy && reservation.reservedByOwner && userIsOwner">
             <ion-label position="stacked">Reserved By Publican For:</ion-label>
@@ -114,7 +114,8 @@ export default {
         reservedBy: '',
         userDetails: {
           firstName: '',
-          surname: ''
+          surname: '',
+          phone: ''
         }
       }
     }

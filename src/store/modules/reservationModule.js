@@ -1,4 +1,5 @@
 import globalAxios from 'axios'
+import Vue from 'vue'
 import { loadingController } from '@ionic/core'
 
 const getDefaultState = () => {
@@ -53,6 +54,14 @@ const mutations = {
   addReservationToCollection (state, reservation) {
     console.log('reservation saved to state collection:', reservation)
     state.allReservationsForPub.push(reservation)
+  },
+  updateReservationInCollection (state, reservation) {
+    console.log('updating reservation in reservation array with key:', reservation.key)
+    var foundIndex = state.allReservationsForPub.findIndex(x => x.key === reservation.key)
+    console.log('foundIndex: ', foundIndex)
+    console.log('updated reservation details: ', reservation)
+    Vue.set(state.allReservationsForPub, foundIndex, reservation)
+    console.log('state.pubs: ', state.pubs)
   },
   setCurrentReservation (state, reservation) {
     state.reservation = reservation
@@ -115,6 +124,11 @@ const actions = {
               console.log('pushing reservation to resultArray:', data[key])
               commit('addReservationToCollection', data[key])
               console.log('No Id Token - Exiting')
+            } else if (data[key].reservedBy !== rootState.userModule.userId && !data[key].reservedByOwner && rootState.pubModule.pub.ownerId !== rootState.userModule.userId) {
+              data[key].key = key
+              console.log('pushing reservation to resultArray:', data[key])
+              commit('addReservationToCollection', data[key])
+              console.log('Cannot add user details as logged in user does not have permission to view this users details')
             } else {
               // retrieve user details and append to reservation object as an inner object
               console.log('getting userdetails for user with id of:', data[key].reservedBy)
@@ -280,8 +294,6 @@ const actions = {
       },
       reservedAtDate: resFromArray.reservedAtDate,
       reservedBy: resFromArray.reservedBy,
-      ownerReservedOnBehalfOf: resFromArray.ownerReservedOnBehalfOf,
-      ownerReservedOnBehalfOfPhone: resFromArray.ownerReservedOnBehalfOfPhone,
       reservedByOwner: resFromArray.reservedByOwner,
       userDetails: null
     }
@@ -322,11 +334,10 @@ const actions = {
       },
       reservedAtDate: reservationData.reservedAtDate,
       reservedBy: reservationData.reservedBy,
-      ownerReservedOnBehalfOf: reservationData.ownerReservedOnBehalfOf,
-      ownerReservedOnBehalfOfPhone: reservationData.ownerReservedOnBehalfOfPhone,
       reservedByOwner: reservationData.reservedByOwner,
       userDetails: null
     }
+
     const resKey = reservationData.key
 
     // update record but don't delete it
@@ -364,11 +375,14 @@ const actions = {
         pubName: rootState.pubModule.pub.pubName
       },
       reservedBy: rootState.userModule.userId,
-      ownerReservedOnBehalfOf: onBehalfOf.ownerReservedOnBehalfOf,
-      ownerReservedOnBehalfOfPhone: onBehalfOf.ownerReservedOnBehalfOfPhone,
       reservedByOwner: rootState.pubModule.pub.ownerId === rootState.userModule.userId,
       reservedAtDate: new Date(),
       timeToArrivalLimit: arrivalLimitTime
+    }
+
+    const reservationsGuestUserDetails = {
+      ownerReservedOnBehalfOf: onBehalfOf.ownerReservedOnBehalfOf,
+      ownerReservedOnBehalfOfPhone: onBehalfOf.ownerReservedOnBehalfOfPhone
     }
 
     try {
@@ -376,6 +390,7 @@ const actions = {
       globalAxios.post('reservations.json' + '?auth=' + rootState.userModule.idToken, reservation)
         .then(res => {
           console.log('new reservatioon data:', res)
+          reservation.key = res.data.name
           globalAxios.get('usersDetails.json' + '?auth=' + rootState.userModule.idToken +
           '&orderBy="$key"&equalTo="' + reservation.reservedBy + '"')
             .then(response => {
@@ -387,13 +402,23 @@ const actions = {
                 console.log('user details userData[key]: ', userData[dataKey])
                 usesDetailsResultArray.push(userData[dataKey])
               }
-              reservation.key = res.data.name
               reservation.userDetails = usesDetailsResultArray[0]
 
               // commit('setCurrentReservation', reservation)
               commit('addReservationToCollection', reservation)
               console.log('reservation successfully saved to DB: ', res.data)
             })
+        })
+        .then(() => {
+          if (reservation.reservedByOwner) {
+            globalAxios.put('reservationsGuestUserDetails/' + reservation.key + '.json' + '?auth=' + rootState.userModule.idToken, reservationsGuestUserDetails)
+              .then(res => {
+                // update reservation with guest user details for reservation
+                reservation.ownerReservedOnBehalfOf = res.data.ownerReservedOnBehalfOf
+                reservation.ownerReservedOnBehalfOfPhone = res.data.ownerReservedOnBehalfOfPhone
+                commit('updateReservationInCollection', reservation)
+              })
+          }
         })
         .catch(error => console.log(error))
     } catch (ex) {
