@@ -62,7 +62,7 @@
                         v-model="email"
                         @ionFocus="email_not_focused = false"></ion-input-vue>
                 <ion-note v-if="!$v.email.email && email_not_focused" class="error ion-padding" color="danger">Valid Email Required</ion-note>
-                <ion-note v-if="!$v.email.unique" class="error ion-padding" color="danger">Email Already Taken</ion-note>
+                <ion-note v-if="$v.email.notUnique" class="error ion-padding" color="danger">Email Already Taken</ion-note>
               </ion-item>
               <ion-item lines="none" class="input">
                 <ion-label position="stacked" for="password">Password <ion-text color="danger">*</ion-text></ion-label>
@@ -126,29 +126,26 @@ export default {
     email: {
       required,
       email,
-      unique: val => {
+      notUnique (val) {
         const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
         if (emailRegex.test(val)) {
-          if (val === '') {
-            return true
-          }
+          console.log('is a valid email, checking if unique')
+
           return axios.post(':createAuthUri?key=AIzaSyB8-xAjyYMTR0Jt1-H-ayS9FDINW4JdAhQ', {
             identifier: val,
             continueUri: window.location.href
           })
             .then(response => {
-              // console.log(response)
-              return !response.data.registered
-            }
-            )
+              console.log('response:', response)
+              return response.data.registered
+            })
             .catch((ex) => {
-              // console.log('error:', ex)
-              return true
-            }
-            )
+              console.log('error:', ex)
+              return false
+            })
         }
-        return true
+        return false
       }
     },
     password: {
