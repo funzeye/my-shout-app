@@ -12,14 +12,6 @@ const getDefaultState = () => {
       reservedAtDate: '',
       patronDetails: null
     },
-    activeReservationForPub: {
-      key: '',
-      tableId: '',
-      reservedBy: '',
-      reservedByOwner: false,
-      reservedAtDate: '',
-      patronDetails: null
-    },
     previousReservationsForPunter: [],
     allReservationsForPub: []
   }
@@ -37,9 +29,6 @@ const mutations = {
     // Object.keys(s).forEach(key => {
     //   state[key] = s[key]
     // })
-  },
-  setStateActiveReservationForPub (state, reservation) {
-    state.activeReservationForPub = reservation
   },
   removeReservationFromCollection (state, reservationKey) {
     console.log('removing reservation from collection:', reservationKey)
@@ -85,17 +74,6 @@ const mutations = {
       reservedAtDate: '',
       patronDetails: null
     }
-  },
-  resetCurrentReservation (state) {
-    state.activeReservationForPub = {
-      key: '',
-      tableId: '',
-      reservedBy: '',
-      reservedAtDate: '',
-      reservedByOwner: false,
-      patronDetails: null
-    }
-    console.log('current reservation state reset to nothing')
   }
 }
 
@@ -108,7 +86,6 @@ const actions = {
       .then(response => {
         console.log('fetchReservationsForPub response:', response)
         const data = response.data
-        // const resultArray = []
         for (const key in data) {
           if (!data[key].isCancelled) {
             if (!rootState.userModule.idToken) {
@@ -213,10 +190,6 @@ const actions = {
       }, error => {
         console.log(error)
       })
-  },
-  setActiveReservationForPub ({ commit }, payload) {
-    console.log('calling setActiveReservationForPub action in index.js')
-    commit('setStateActiveReservationForPub', payload)
   },
   cancelOtherReservationForPunterAndReserveNew ({ rootState, dispatch }, { userId, tableToIgnoreId, patronDetails }) {
     if (!rootState.userModule.idToken) {
@@ -391,34 +364,14 @@ const actions = {
           console.log('new reservatioon data:', res)
           reservation.key = res.data.name
           commit('addReservationToCollection', reservation)
-
-          // globalAxios.get('usersDetails.json' + '?auth=' + rootState.userModule.idToken +
-          // '&orderBy="$key"&equalTo="' + reservation.reservedBy + '"')
-          //   .then(response => {
-          //     console.log(response)
-          //     const userData = response.data
-          //     const usesDetailsResultArray = []
-          //     for (const dataKey in userData) {
-          //       console.log('fetch user details key inside: ', dataKey)
-          //       console.log('user details userData[key]: ', userData[dataKey])
-          //       usesDetailsResultArray.push(userData[dataKey])
-          //     }
-          //     reservation.userDetails = usesDetailsResultArray[0]
-
-          //     // commit('setCurrentReservation', reservation)
-          //     commit('addReservationToCollection', reservation)
-          //     console.log('reservation successfully saved to DB: ', res.data)
-          //   })
         })
         .then(() => {
-          // if (reservation.reservedByOwner) {
           globalAxios.put('reservationsPatronDetails/' + reservation.key + '.json' + '?auth=' + rootState.userModule.idToken, reservationsPatronDetails)
             .then(res => {
               // update reservation with guest user details for reservation
               reservation.patronDetails = { patronName: res.data.patronName, patronPhone: res.data.patronPhone }
               commit('updateReservationInCollection', reservation)
             })
-          // }
         })
         .catch(error => console.log(error))
     } catch (ex) {
@@ -429,10 +382,6 @@ const actions = {
 }
 
 const getters = {
-  activeReservationforPub (state) {
-    console.log('calling current reservation getter')
-    return state.reservation
-  },
   activeReservationForPunter (state) {
     console.log('calling activeReservationForPunter getter')
     return state.activeReservationForPunter
