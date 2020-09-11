@@ -4,19 +4,19 @@
         <div>
           <ion-item lines="none" v-if="!reservation.isCancelled && reservation.reservedBy && !reservation.reservedByOwner && ((reservation.reservedBy === loggedInUserId) || userIsOwner)">
             <ion-label position="stacked">Reserved By Patron:</ion-label>
-            <ion-text v-if="reservation.userDetails">{{ reservation.userDetails.firstName + ' ' + reservation.userDetails.surname }}</ion-text>
+            <ion-text v-if="reservation.patronDetails">{{ reservation.patronDetails.patronName }}</ion-text>
           </ion-item>
           <ion-item  lines="none" v-if="!reservation.isCancelled && reservation.reservedBy && !reservation.reservedByOwner && ((reservation.reservedBy === loggedInUserId) || userIsOwner)">
             <ion-label position="stacked">Phone Number:</ion-label>
-            <ion-text v-if="reservation.userDetails">{{ reservation.userDetails.phone }}</ion-text>
+            <ion-text v-if="reservation.patronDetails">{{ reservation.patronDetails.patronPhone }}</ion-text>
           </ion-item>
           <ion-item  lines="none" v-if="!reservation.isCancelled && reservation.reservedBy && reservation.reservedByOwner && userIsOwner">
             <ion-label position="stacked">Reserved By Publican For:</ion-label>
-            <ion-text>{{ reservation.ownerReservedOnBehalfOf }}</ion-text>
+            <ion-text>{{ reservation.patronDetails.patronName }}</ion-text>
           </ion-item>
           <ion-item  lines="none" v-if="!reservation.isCancelled && reservation.reservedBy && reservation.reservedByOwner && userIsOwner">
             <ion-label position="stacked">Phone Number:</ion-label>
-            <ion-text>{{ reservation.ownerReservedOnBehalfOfPhone }}</ion-text>
+            <ion-text>{{ reservation.patronDetails.patronPhone }}</ion-text>
           </ion-item>
           <ion-item  lines="none" v-if="!reservation.isCancelled && reservation.reservedBy ">
             <ion-label position="stacked">Reserved At:</ion-label>
@@ -112,10 +112,9 @@ export default {
       }
       return {
         reservedBy: '',
-        userDetails: {
-          firstName: '',
-          surname: '',
-          phone: ''
+        patronDetails: {
+          patronName: '',
+          patronPhone: ''
         }
       }
     }
