@@ -78,6 +78,7 @@ const mutations = {
 }
 
 const actions = {
+
   fetchReservationsForPub ({ commit, rootState }, pubKey) {
     console.log('fecthing pub table reservation data from the DB and updating List')
     console.log('for pub with key:', pubKey)

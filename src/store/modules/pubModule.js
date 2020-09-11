@@ -168,6 +168,29 @@ const actions = {
         console.log(error)
       })
   },
+  fetchPubByOwnerId ({ commit, rootState, dispatch }, ownerId) {
+    console.log('fecthing pub data from the DB')
+    console.log('for pub with owner id:', ownerId)
+    globalAxios.get('pubs.json' + '?&orderBy="ownerId"&equalTo="' + ownerId + '"')
+      .then(response => {
+        console.log('fetchPubByPubId response: ', response)
+        const data = response.data
+        const resultArray = []
+        for (const key in data) {
+          console.log('fetchPubByPubId key: ', key)
+          data[key].key = key
+          console.log('fetchPubByPubId data[key]: ', data[key])
+          resultArray.push(data[key])
+        }
+        if (resultArray.length > 0) {
+          commit('updatePub', resultArray[0])
+          dispatch('fetchPubTables', state.pub.key)
+          dispatch('reservationModule/fetchReservationsForPub', state.pub.key, { root: true })
+        }
+      }, error => {
+        console.log(error)
+      })
+  },
   fetchPubFloorAreas ({ commit, rootState }) {
     if (!rootState.userModule.idToken) {
       console.log('No Id Token - Exiting')

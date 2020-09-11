@@ -194,6 +194,7 @@ const actions = {
       })
   },
   tryAutoSignin ({ commit, dispatch }) {
+    console.log('trying auto sign in')
     const token = localStorage.getItem('token')
     if (!token) {
       return
@@ -206,12 +207,18 @@ const actions = {
 
     const userId = localStorage.getItem('userId')
     const refreshToken = localStorage.getItem('refreshToken')
+    const isPunter = localStorage.getItem('isPunter')
+    const isPublican = localStorage.getItem('isPublican')
 
     dispatch('setLogoutTimer', (expirationDate - now) / 1000)
     commit('authUser', {
       token: token,
       userId: userId,
       refreshToken: refreshToken
+    })
+    commit('setUserType', {
+      isPublican: isPublican,
+      isPunter: isPunter
     })
   },
   logout ({ commit }) {
