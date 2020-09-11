@@ -6,18 +6,24 @@
           <ion-label position="stacked" for="email">Email: <ion-text color="danger">*</ion-text></ion-label>
           <ion-input-vue
                   type="email" id="email" @ionBlur="setEmailLostFocus"
-                  v-model="email" @ionFocus="email_not_focused = false"></ion-input-vue>
+                  v-model="email" @ionFocus="setEmailHasFocus"></ion-input-vue>
           <ion-note v-if="!$v.email.email && email_not_focused" class="error ion-padding" color="danger">Valid Email Required</ion-note>
+          <ion-note v-if="!emailExists" class="error ion-padding" color="danger">Email Address does not exist</ion-note>
+
         </ion-item>
         <ion-item lines="none" class="input">
           <ion-label  position="stacked" for="password">Password: <ion-text color="danger">*</ion-text></ion-label>
           <ion-input-vue
                   type="password"
                   id="password"
-                  v-model="password"></ion-input-vue>
+                  v-model="password"
+                  @ionFocus="passwordCorrect = true"></ion-input-vue>
+            <ion-note v-if="!passwordCorrect" class="error ion-padding" color="danger">Incorrect Password Entered</ion-note>
+            <ion-note v-if="tooManyAttempts" class="error ion-padding" color="danger">Too Many Attempts - Login temporarily disabled for this user - Please try again later</ion-note>
         </ion-item>
         <div class="ion-padding">
-          <ion-button type="submit" :disabled="$v.$invalid">Submit</ion-button>
+          <ion-button type="submit" :disabled="$v.$invalid || tooManyAttempts">Submit</ion-button>
+
         </div>
       </form>
     </div>
@@ -33,7 +39,10 @@ export default {
     return {
       email: '',
       password: '',
-      email_not_focused: false
+      email_not_focused: false,
+      emailExists: true,
+      passwordCorrect: true,
+      tooManyAttempts: false
     }
   },
   validations: {
@@ -47,18 +56,35 @@ export default {
   },
   methods: {
     onSubmit () {
+      this.emailExists = true
+      this.passwordCorrect = true
       const formData = {
         email: this.email,
         password: this.password
       }
       console.log(formData)
       this.$store.dispatch('userModule/signin', { authData: formData, noRedirect: this.isModal })
+        .catch(error => {
+          console.log(error.response.data.error.message)
+          if (error.response.data.error.message === 'INVALID_PASSWORD') {
+            this.passwordCorrect = false
+          } else if (error.response.data.error.message === 'EMAIL_NOT_FOUND') {
+            this.emailExists = false
+          } else if (error.response.data.error.message.includes('TOO_MANY_ATTEMPTS_TRY_LATER')) {
+            this.tooManyAttempts = true
+          }
+        })
+
       console.log('isModal', this.isModal)
       if (this.isModal) this.modalCloseParent()
     },
     setEmailLostFocus () {
       this.$v.email.$touch(true)
       this.email_not_focused = true
+    },
+    setEmailHasFocus () {
+      this.email_not_focused = false
+      this.emailExists = true
     }
   }
 }
