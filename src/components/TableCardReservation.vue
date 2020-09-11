@@ -101,7 +101,6 @@ export default {
     reservation () {
       console.log('checking if reservation exists for current table #', this.pubTable.tableNum)
       const reservations = this.allTodaysReservationsForPub
-      console.log('all todays reservations for pub: ', reservations)
       if (reservations && reservations.length > 0) {
         const reservationsWithThisTableKey = reservations.filter(item => item.table.tableId === this.pubTable.key)
         if (reservationsWithThisTableKey.length === 1) {

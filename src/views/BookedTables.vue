@@ -39,11 +39,9 @@
                     <ion-item class="booking-item">
                         <ion-label>
                             <ion-label>
-                            <h2 v-if="ar.ownerReservedOnBehalfOf">{{ ar.ownerReservedOnBehalfOf }}</h2>
-                            <h2 v-if="ar.ownerReservedOnBehalfOfPhone">{{ ar.ownerReservedOnBehalfOfPhone }}</h2>
-                            <div v-else>
-                              <h2>{{ ar.userDetails.firstName + ' ' + ar.userDetails.surname }}</h2>
-                              <h2>{{ ar.userDetails.phone }}</h2>
+                            <div>
+                              <h2>{{ ar.patronDetails.patronName }}</h2>
+                              <h2>{{ ar.patronDetails.patronPhone }}</h2>
                             </div>
                             <h3>{{ ar.table.seats }} seats &#64; table &#35; {{ ar.table.tableNum }}</h3>
                             <h3>on Floor # {{ ar.table.floor }}<span v-if="ar.table.pubFloorArea !== undefined"> ({{ ar.table.pubFloorArea }})</span></h3>
@@ -136,6 +134,7 @@ export default {
     }
     this.$store.dispatch('reservationModule/fetchReservationsForPunter', this.userId)
     if (this.publicansPub && this.publicansPub.key) {
+      console.log('fetching all reservations for pub...')
       this.$store.dispatch('reservationModule/fetchReservationsForPub', this.publicansPub.key)
     }
   }

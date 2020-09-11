@@ -233,19 +233,13 @@ const actions = {
     }
     console.log('fecthing user details data from the DB')
     console.log('for user details with user id:', state.userId)
-    globalAxios.get('usersDetails.json' + '?auth=' + state.idToken + '&orderBy="$key"&equalTo="' + state.userId + '"')
+    globalAxios.get('usersDetails/' + state.userId + '.json' + '?auth=' + state.idToken)
       .then(response => {
         console.log('fetchUserDetails response: ', response)
         const data = response.data
-        const resultArray = []
-        for (const key in data) {
-          console.log('fetchUserDetailsa key: ', key)
-          data[key].key = key
-          console.log('fetchUserDetails data[key]: ', data[key])
-          resultArray.push(data[key])
-        }
-        if (resultArray.length > 0) {
-          const foundUser = resultArray[0]
+
+        if (data) {
+          const foundUser = data
           commit('storeUserDetails', foundUser)
           if (foundUser.userRoles.punter === true) {
             localStorage.setItem('isPunter', true)

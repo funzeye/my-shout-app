@@ -116,26 +116,33 @@ const actions = {
               console.log('pushing reservation to resultArray:', data[key])
               commit('addReservationToCollection', data[key])
               console.log('No Id Token - Exiting')
-            } else if (data[key].reservedBy !== rootState.userModule.userId && !data[key].reservedByOwner && rootState.pubModule.pub.ownerId !== rootState.userModule.userId) {
+            } else if (data[key].reservedByOwner && rootState.pubModule.pub.ownerId !== rootState.userModule.userId) {
+              console.log('reserved by owner but you are not the owner')
+              data[key].key = key
+              console.log('pushing reservation to resultArray:', data[key])
+              commit('addReservationToCollection', data[key])
+              console.log('Cannot add user details as logged in user does not have permission to view this users details')
+            } else if (data[key].reservedByOwner === false && data[key].reservedBy !== rootState.userModule.userId && rootState.pubModule.pub.ownerId !== rootState.userModule.userId) {
+              console.log('it was not reserved by the owner and you also didnt reserve it and you are also not the onwer')
               data[key].key = key
               console.log('pushing reservation to resultArray:', data[key])
               commit('addReservationToCollection', data[key])
               console.log('Cannot add user details as logged in user does not have permission to view this users details')
             } else {
+              console.log('data[key].reservedBy !== rootState.userModule.userId', data[key].reservedBy !== rootState.userModule.userId)
+              console.log('!data[key].reservedByOwner', !data[key].reservedByOwner)
+              console.log('rootState.pubModule.pub.ownerId !== rootState.userModule.userId', rootState.pubModule.pub.ownerId !== rootState.userModule.userId)
               // retrieve user details and append to reservation object as an inner object
               data[key].key = key
               console.log('getting userdetails for user with id of:', data[key].reservedBy)
-              globalAxios.get('reservationsPatronDetails.json' + '?auth=' + rootState.userModule.idToken +
-                '&orderBy="$key"&equalTo="' + data[key].key + '"')
+              globalAxios.get('reservationsPatronDetails/' + data[key].key + '.json' + '?auth=' + rootState.userModule.idToken)
                 .then(response => {
                   console.log('reservationsPatronDetails.json:', response)
                   const userData = response.data
                   const usesDetailsResultArray = []
-                  for (const dataKey in userData) {
-                    console.log('fetch user details key inside: ', dataKey)
-                    console.log('user details userData[key]: ', userData[dataKey])
-                    usesDetailsResultArray.push(userData[dataKey])
-                  }
+
+                  usesDetailsResultArray.push(userData)
+
                   data[key].patronDetails = usesDetailsResultArray[0]
                   console.log('pushing reservation to resultArray:', data[key])
                   // resultArray.push(data[key])
