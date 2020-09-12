@@ -26,7 +26,7 @@
                         debounce="300" @ionBlur="setEmailLostFocus"
                         v-model="email" @ionFocus="email_not_focused = false"></ion-input-vue>
                 <ion-note v-if="!$v.email.email && email_not_focused" class="error ion-padding" color="danger">Valid Email Required</ion-note>
-                <ion-note v-if="$v.email.notUnique" class="error ion-padding" color="danger">Email Already Taken</ion-note>
+                <ion-note v-if="!$v.email.unique && !$v.email.$pending" class="error ion-padding" color="danger">Email Already Taken</ion-note>
               </ion-item>
               <div class="ion-padding">
                 <ion-button type="submit" :disabled="$v.$invalid">Submit</ion-button>
@@ -58,26 +58,27 @@ export default {
     email: {
       required,
       email,
-      notUnique (val) {
+      async unique (val) {
+        if (val.trim().length === 0) return true
+        let isUnique = true
         const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
         if (emailRegex.test(val)) {
           console.log('is a valid email, checking if unique')
 
-          return axios.post(':createAuthUri?key=AIzaSyB8-xAjyYMTR0Jt1-H-ayS9FDINW4JdAhQ', {
+          const response = await axios.post(':createAuthUri?key=AIzaSyB8-xAjyYMTR0Jt1-H-ayS9FDINW4JdAhQ', {
             identifier: val,
             continueUri: window.location.href
           })
-            .then(response => {
-              console.log('response:', response)
-              return response.data.registered
-            })
             .catch((ex) => {
               console.log('error:', ex)
-              return false
+              return true
             })
+
+          console.log('response:', response)
+          isUnique = !response.data.registered
         }
-        return false
+        return await Boolean(isUnique)
       }
     }
   },
