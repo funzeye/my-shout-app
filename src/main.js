@@ -1,5 +1,7 @@
 import Vue from 'vue'
 
+import { defineCustomElements } from '@ionic/pwa-elements/loader'
+
 import App from './App.vue'
 import './registerServiceWorker'
 import axios from 'axios'
@@ -33,3 +35,5 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
+
+defineCustomElements(window)

@@ -146,6 +146,28 @@ const routes = [
         }
       },
       {
+        path: '/:id/add-pub-photo',
+        components: {
+          searchRoute: () => import('@/views/AddPubPhoto.vue')
+        },
+        name: 'add-pub-photo',
+        beforeEnter (to, from, next) {
+          console.log('navigating to add-pub-photo page.')
+          var token = store.state.userModule.idToken
+          var pub = store.state.pubModule.pub
+          if (!token) {
+            console.log('token not found - re-directing to sign in')
+            next('/home')
+          } else if (!pub.pubName) {
+            console.log('pub name not found - re-directing to home page')
+            next('/')
+          } else {
+            console.log('pub name found - continuing to pub tables page')
+            next()
+          }
+        }
+      },
+      {
         path: '/:id/edit-table-details',
         components: {
           searchRoute: () => import('@/views/EditTableDetails.vue')

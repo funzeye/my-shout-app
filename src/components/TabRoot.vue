@@ -3,7 +3,7 @@
   <ion-tabs>
 
         <ion-tab tab="search-for-pub" :routes="['search-for-pub', 'pub-details', 'reserve-table', 'edit-pub',
-        'edit-pub-tables', 'edit-table-details', 'edit-pub-details']">
+        'edit-pub-tables', 'edit-table-details', 'edit-pub-details', 'add-pub-photo']">
           <ion-vue-router name="searchRoute"></ion-vue-router>
         </ion-tab>
 

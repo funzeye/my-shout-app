@@ -13,6 +13,8 @@
     <ion-content class="ion-padding">
         <ion-button @click="editPubTables">Edit Pub Tables</ion-button>
         <ion-button @click="editPubDetails">Edit Pub Details</ion-button>
+        <ion-button @click="addPubPhoto">Add Photo of Pub</ion-button>
+
     </ion-content>
   </div>
 </template>
@@ -42,6 +44,9 @@ export default {
     },
     editPubDetails () {
       this.$router.push({ name: 'edit-pub-details', params: { id: this.pub.key } })
+    },
+    addPubPhoto () {
+      this.$router.push({ name: 'add-pub-photo', params: { id: this.pub.key } })
     }
   }
 }
