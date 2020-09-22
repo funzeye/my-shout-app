@@ -12,11 +12,11 @@
     </ion-header>
     <ion-content>
       <div class="image-wrapper">
-        <img v-if="imageElementSrc" :src="imageElementSrc"/>
+        <img v-if="imageElementSrc" :src="imageElementSrc.dataUrl"/>
       </div>
       <ion-toolbar>
         <ion-button slot="start" @click="takePicture">Take Picture</ion-button>
-        <ion-button v-if="imageElementSrc" slot="end" @click="uploadImage()">UPLOAD</ion-button>
+        <ion-button v-if="enableUpload" slot="end" @click="uploadImage()">UPLOAD</ion-button>
       </ion-toolbar>
     </ion-content>
   </ion-page>
@@ -25,6 +25,7 @@
 <script>
 import { Plugins, CameraSource, CameraResultType } from '@capacitor/core'
 import * as allIcons from 'ionicons/icons'
+import firebase from 'firebase/app'
 
 const { Camera } = Plugins
 
@@ -33,6 +34,7 @@ export default {
   data () {
     return {
       imageElementSrc: null,
+      enableUpload: false,
       i: allIcons
     }
   },
@@ -45,37 +47,67 @@ export default {
   },
   methods: {
     async takePicture () {
-      const image = await Camera.getPhoto({
-        quality: 90,
-        allowEditing: true,
-        resultType: CameraResultType.Uri,
-        source: CameraSource.Prompt
-      })
-      // image.webPath will contain a path that can be set as an image src.
-      // You can access the original file using image.path, which can be
-      // passed to the Filesystem API to read the raw data of the image,
-      // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
-      var imageUrl = image.webPath
-      // Can be set to the src of an image now
-      this.imageElementSrc = imageUrl
-      console.log('image:', image)
+      try {
+        const image = await Camera.getPhoto({
+          quality: 90,
+          allowEditing: true,
+          resultType: CameraResultType.DataUrl,
+          source: CameraSource.Prompt
+        })
+        // image.webPath will contain a path that can be set as an image src.
+        // You can access the original file using image.path, which can be
+        // passed to the Filesystem API to read the raw data of the image,
+        // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
+        // Can be set to the src of an image now
+        this.imageElementSrc = image
+        this.enableUpload = true
+        console.log('image:', image)
+      } catch (err) {
+        console.log('error taking photo:', err)
+      }
     },
-    // async uploadImage () {
-    //   if (!this.imageElementSrc?.value) return
-    //   try {
-    //     const name = new Date().getTime() + '.' + this.imageElementSrc.value.format
-    //     const { dataUrl = '', path = name } = this.imageElementSrc?.value
-    //     const r = await uploadData(dataUrl, path)
-    //     console.log(r)
-    //     console.log('File Uploaded!!')
-    //     this.imageElementSrc.value = null
+    async uploadImage () {
+      if (!this.imageElementSrc) return
+      try {
+        console.log('starting upload...', this.imageElementSrc)
+        const user = firebase.auth().currentUser
+        const name = 'profile.' + this.imageElementSrc.format
+        //  const { dataUrl = '', path = name } = this.imageElementSrc?.value
 
-    //     return r
-    //   } catch (error) {
-    //     console.log(error)
-    //     console.log(error.message)
-    //   }
-    // },
+        var storageRef = firebase.storage().ref(user.uid + '/profilePicture/' + name)
+        const task = storageRef.putString(this.imageElementSrc.dataUrl, 'data_url', {
+          contentType: 'image/png'
+        })
+
+        task.on('state_changed',
+          function progess (snapshot) {
+            console.log('image upload state changed snapshot:', snapshot)
+            var percentageComplete = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            console.log('percentage complete:', percentageComplete)
+          },
+          function error (err) {
+            console.log('error uploading', err)
+          },
+          function complete () {
+            console.log('upload complete')
+            task.snapshot.ref.getDownloadURL().then(function (downloadURL) {
+              console.log('File available at', downloadURL)
+              user.updateProfile({
+                photoURL: downloadURL
+              })
+            })
+          })
+
+        // const r = await uploadData(dataUrl, path)
+        // console.log(r)
+        this.enableUpload = false
+
+        // return r
+      } catch (error) {
+        console.log(error)
+        console.log(error.message)
+      }
+    },
     backToEditPub () {
       this.$router.replace({ name: 'edit-pub', params: { id: this.pub.key } })
     }

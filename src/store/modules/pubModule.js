@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import globalAxios from 'axios'
+import firebase from 'firebase/app'
 
 const getDefaultState = () => {
   return {
@@ -112,46 +112,47 @@ const mutations = {
 }
 
 const actions = {
-  fetchPubs ({ commit, rootState }) {
+  fetchPubs ({ commit }) {
     console.log('fecthing pub data from the DB and updating List')
-    globalAxios.get('pubs.json')
-      .then(response => {
-        console.log(response)
-        const data = response.data
+    firebase.database().ref('pubs')
+      .on('value', function (snapshot) {
+        const response = snapshot.val()
         const resultArray = []
-        for (const key in data) {
-          data[key].key = key
-          resultArray.push(data[key])
+        for (const key in response) {
+          response[key].key = key
+          resultArray.push(response[key])
         }
         commit('storePubs', resultArray)
-      }, error => {
-        console.log(error)
+      }, function (error) {
+        console.log('Error: ', error.code)
       })
   },
-  fetchPubTables ({ commit, rootState }, pubKey) {
+  fetchPubTables ({ commit }, pubKey) {
     console.log('fecthing pub tables data from the DB and updating List')
     console.log('for pub with key:', pubKey)
-    globalAxios.get('pubTables.json' + '?&orderBy="pubId"&equalTo="' + pubKey + '"')
-      .then(response => {
-        console.log(response)
-        const data = response.data
+    // globalAxios.get('pubTables.json' + '?&orderBy="pubId"&equalTo="' + pubKey + '"')
+    firebase.database().ref('pubTables').orderByChild('pubId').equalTo(pubKey)
+      .on('value', function (snapshot) {
+        const response = snapshot.val()
+        console.log('fetchPubTables snapshot:', response)
         const resultArray = []
-        for (const key in data) {
-          data[key].key = key
-          resultArray.push(data[key])
+        for (const key in response) {
+          response[key].key = key
+          resultArray.push(response[key])
         }
         commit('storePubTables', resultArray)
       }, error => {
         console.log(error)
       })
   },
-  fetchPubByPubId ({ commit, rootState, dispatch }, pubId) {
+  fetchPubByPubId ({ commit, dispatch }, pubId) {
     console.log('fecthing pub data from the DB')
     console.log('for pub with pub id:', pubId)
-    globalAxios.get('pubs.json' + '?&orderBy="$key"&equalTo="' + pubId + '"')
-      .then(response => {
-        console.log('fetchPubByPubId response: ', response)
-        const data = response.data
+    // globalAxios.get('pubs.json' + '?&orderBy="$key"&equalTo="' + pubId + '"')
+    firebase.database().ref('pubs').orderByKey().equalTo(pubId)
+      .on('value', function (snapshot) {
+        const data = snapshot.val()
+        console.log('fetchPubByPubId snapshot val: ', snapshot.val())
         const resultArray = []
         for (const key in data) {
           console.log('fetchPubByPubId key: ', key)
@@ -168,13 +169,14 @@ const actions = {
         console.log(error)
       })
   },
-  fetchPubByOwnerId ({ commit, rootState, dispatch }, ownerId) {
+  fetchPubByOwnerId ({ commit, dispatch }, ownerId) {
     console.log('fecthing pub data from the DB')
     console.log('for pub with owner id:', ownerId)
-    globalAxios.get('pubs.json' + '?&orderBy="ownerId"&equalTo="' + ownerId + '"')
-      .then(response => {
-        console.log('fetchPubByPubId response: ', response)
-        const data = response.data
+    // globalAxios.get('pubs.json' + '?&orderBy="ownerId"&equalTo="' + ownerId + '"')
+    firebase.database().ref('pubs').orderByChild('ownerId').equalTo(ownerId)
+      .on('value', function (snapshot) {
+        const data = snapshot.val()
+        console.log('fetchPubByPubId snapshot val: ', snapshot.val())
         const resultArray = []
         for (const key in data) {
           console.log('fetchPubByPubId key: ', key)
@@ -192,15 +194,11 @@ const actions = {
       })
   },
   fetchPubFloorAreas ({ commit, rootState }) {
-    if (!rootState.userModule.idToken) {
-      console.log('No Id Token - Exiting')
-      return
-    }
     console.log('fecthing pub data from the DB and updating List')
-    globalAxios.get('pubFloorAreas.json' + '?auth=' + rootState.userModule.idToken)
-      .then(response => {
-        console.log(response)
-        const data = response.data
+    // globalAxios.get('pubFloorAreas.json' + '?auth=' + rootState.userModule.idToken)
+    firebase.database().ref('pubFloorAreas')
+      .on('value', function (snapshot) {
+        const data = snapshot.val()
         const resultArray = []
         for (const key in data) {
           resultArray.push(data[key])
@@ -211,10 +209,6 @@ const actions = {
       })
   },
   storePub ({ commit, rootState, dispatch }, pubData) {
-    if (!rootState.userModule.idToken) {
-      console.log('No Id Token - Exiting')
-      return
-    }
     console.log('adding new pub to DB: ', pubData)
     const pub = {
       ownerId: localStorage.getItem('userId'),
@@ -229,55 +223,45 @@ const actions = {
       timeToArrivalLimitOn: pubData.timeToArrivalLimitOn,
       timeToArrivalLimitInMinutes: pubData.timeToArrivalLimitInMinutes
     }
-    globalAxios.post('pubs.json' + '?auth=' + rootState.userModule.idToken, pub)
-      .then(res => {
-        console.log('adding new pub response:', res)
-        pub.key = res.data.name
+    // globalAxios.post('pubs.json' + '?auth=' + rootState.userModule.idToken, pub)
+    firebase.database().ref('pubs').push(pub)
+      .then(snapshot => {
+        console.log('adding new pub response:', snapshot)
+        pub.key = snapshot.name
         commit('addNewPubToPubsCollection', pub)
         commit('updatePub', pub)
-        console.log('pub successfully saved to DB: ', res.data)
-        dispatch('storePubTables', res.data.name)
+        console.log('pub successfully saved to DB: ', snapshot)
+        dispatch('storePubTables', snapshot.name)
         // commit('resetPub') // no longer need to reset as we immediately go to a new page
       })
       .catch(error => console.log(error))
   },
   updatePubDetailsInDb ({ commit, rootState }, pubData) {
-    if (!rootState.userModule.idToken) {
-      console.log('No Id Token - Exiting')
-      return
-    }
     console.log('updating pub in DB: ', pubData)
 
-    globalAxios.patch('pubs/' + pubData.key + '/.json' + '?auth=' + rootState.userModule.idToken, pubData)
-      .then(res => {
-        console.log('updating pub response:', res)
+    // globalAxios.patch('pubs/' + pubData.key + '/.json' + '?auth=' + rootState.userModule.idToken, pubData)
+    firebase.database().ref('pubs/' + pubData.key).update(pubData)
+      .then(() => {
         commit('updatePubInPubsCollection', pubData)
-        console.log('pub successfully updated in DB: ', res.data)
+        console.log('pub successfully updated in DB')
         // dispatch('storePubTables', res.data.name)
         // commit('resetPub') // no longer need to reset as we immediately go to a new page
       })
       .catch(error => console.log(error))
   },
-  storePubFloorArea ({ commit, rootState }, pubFloorAreaData) {
-    if (!rootState.userModule.idToken) {
-      console.log('No Id Token - Exiting')
-      return
-    }
+  storePubFloorArea ({ commit }, pubFloorAreaData) {
     console.log('adding new pub floor area to DB: ', pubFloorAreaData)
-    globalAxios.post('pubFloorAreas.json' + '?auth=' + rootState.userModule.idToken, pubFloorAreaData)
-      .then(res => {
-        console.log(res)
+    // globalAxios.post('pubFloorAreas.json' + '?auth=' + rootState.userModule.idToken, pubFloorAreaData)
+    firebase.database().ref('pubFloorAreas').push(pubFloorAreaData)
+      .then(snapshot => {
+        console.log(snapshot)
         commit('addNewPubFloorArea', pubFloorAreaData)
-        console.log('pub successfully saved to DB: ', res.data)
+        console.log('pub successfully saved to DB: ', snapshot)
         commit('resetPubFloorArea') // no longer need to reset as we immediately go to a new page
       })
       .catch(error => console.log(error))
   },
-  updatePubTable ({ commit, rootState }, pubTable) {
-    if (!rootState.userModule.idToken) {
-      console.log('No Id Token - Exiting')
-      return
-    }
+  updatePubTable ({ commit }, pubTable) {
     const table = {
       pubId: pubTable.pubId,
       tableNum: pubTable.tableNum,
@@ -286,10 +270,10 @@ const actions = {
       floor: pubTable.floor
     }
     console.log('updating existing pub table in DB: ', table)
-    globalAxios.patch('pubTables/' + pubTable.key + '.json' + '?auth=' + rootState.userModule.idToken, table)
-      .then(res => {
-        console.log(res)
-        console.log('pub table successfully saved to DB: ', res.data)
+    // globalAxios.patch('pubTables/' + pubTable.key + '.json' + '?auth=' + rootState.userModule.idToken, table)
+    firebase.database().ref('pubTables/' + pubTable.key).update(table)
+      .then(() => {
+        console.log('pub table successfully saved to DB')
         console.log('about to update pub table in pub tables from action with key:', pubTable.key)
         commit('updatePubTableInPubTables', {
           pubTable: pubTable,
@@ -299,10 +283,6 @@ const actions = {
       .catch(error => console.log(error))
   },
   storePubTables ({ commit, rootState }, pubId) {
-    if (!rootState.userModule.idToken) {
-      console.log('No Id Token - Exiting')
-      return
-    }
     console.log('adding new tables to DB')
     console.log('number of tables to add:', state.pub.numOfTables)
 
@@ -321,10 +301,11 @@ const actions = {
         floor: defaultFloor
       }
       console.log('adding new table:', table)
-      globalAxios.post('pubTables.json' + '?auth=' + rootState.userModule.idToken, table)
-        .then(res => {
-          console.log(res)
-          table.key = res.data.name
+      // globalAxios.post('pubTables.json' + '?auth=' + rootState.userModule.idToken, table)
+      firebase.database().ref('pubTables').push(table)
+        .then(snapshot => {
+          console.log(snapshot)
+          table.key = snapshot.name
           commit('addNewPubTable', table)
           console.log('table successfully saved to DB.')
         })
@@ -332,16 +313,13 @@ const actions = {
     }
   },
   fetchPubTable ({ commit, rootState }, pubTableKey) {
-    if (!rootState.userModule.idToken) {
-      console.log('No Id Token - Exiting')
-      return
-    }
     console.log('fecthing pub table data from the DB')
-    globalAxios.get('pubTables.json' + '?auth=' + rootState.userModule.idToken + '&orderBy="$key"&equalTo="' + pubTableKey + '"')
-      .then(response => {
+    // globalAxios.get('pubTables.json' + '?auth=' + rootState.userModule.idToken + '&orderBy="$key"&equalTo="' + pubTableKey + '"')
+    firebase.database().ref('pubTables').orderByKey().equalTo(pubTableKey)
+      .on('value', function (snapshot) {
+        const data = snapshot.val()
+        // .then(response => {
         console.log('Successful response upon getting single pub table data from the DB')
-        console.log(response)
-        const data = response.data
         const pubTables = []
         for (const key in data) {
           console.log('looping through keys found in data for fecthPubTable call')

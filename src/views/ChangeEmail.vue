@@ -17,7 +17,7 @@
             <form @submit.prevent="onSubmit">
               <ion-item lines="none" class="ion-padding-bottom">
                   <ion-label position="stacked">Current Email:</ion-label>
-                  <ion-text><b>{{ user.email }}</b></ion-text>
+                  <ion-text><b>{{ userDetails.email }}</b></ion-text>
               </ion-item>
               <ion-item lines="none" class="input">
                 <ion-label position="stacked" for="email">New Email <ion-text color="danger">*</ion-text></ion-label>
@@ -84,7 +84,7 @@ export default {
   },
   computed: {
     ...mapGetters('userModule', [
-      'user',
+      'userDetails',
       'userId'
     ])
   },
@@ -105,7 +105,7 @@ export default {
     }
   },
   created () {
-    if (this.user.email === '') {
+    if (this.userDetails.email === '') {
       this.$store.dispatch('userModule/fetchUserDetails', this.userId)
     }
   }

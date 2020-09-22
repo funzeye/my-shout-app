@@ -1,6 +1,6 @@
-import globalAxios from 'axios'
 import Vue from 'vue'
 import { loadingController } from '@ionic/core'
+import firebase from 'firebase/app'
 
 const getDefaultState = () => {
   return {
@@ -42,11 +42,11 @@ const mutations = {
   },
   updateReservationInCollection (state, reservation) {
     console.log('updating reservation in reservation array with key:', reservation.key)
+    console.log('current list of reservations for pub:', state.allReservationsForPub)
     var foundIndex = state.allReservationsForPub.findIndex(x => x.key === reservation.key)
     console.log('foundIndex: ', foundIndex)
     console.log('updated reservation details: ', reservation)
     Vue.set(state.allReservationsForPub, foundIndex, reservation)
-    console.log('state.pubs: ', state.pubs)
   },
   setCurrentReservation (state, reservation) {
     state.reservation = reservation
@@ -83,40 +83,44 @@ const actions = {
     console.log('fecthing pub table reservation data from the DB and updating List')
     console.log('for pub with key:', pubKey)
     commit('resetReservationsForPubCollection')
-    globalAxios.get('reservations.json' + '?orderBy="pub/pubId"&equalTo="' + pubKey + '"')
-      .then(response => {
-        console.log('fetchReservationsForPub response:', response)
-        const data = response.data
+    // globalAxios.get('reservations.json' + '?orderBy="pub/pubId"&equalTo="' + pubKey + '"')
+    firebase.database().ref('reservations').orderByChild('pub/pubId').equalTo(pubKey)
+      .once('value', function (snapshot) {
+        const data = snapshot.val()
+        // .then(response => {
+        console.log('fetchReservationsForPub snapshot val:', data)
         for (const key in data) {
           if (!data[key].isCancelled) {
-            if (!rootState.userModule.idToken) {
+            if (!rootState.userModule.user) {
               data[key].key = key
               console.log('pushing reservation to resultArray:', data[key])
               commit('addReservationToCollection', data[key])
-              console.log('No Id Token - Exiting')
-            } else if (data[key].reservedByOwner && rootState.pubModule.pub.ownerId !== rootState.userModule.userId) {
+              console.log('No User State - Exiting')
+            } else if (data[key].reservedByOwner && rootState.pubModule.pub.ownerId !== rootState.userModule.user.uid) {
               console.log('reserved by owner but you are not the owner')
               data[key].key = key
               console.log('pushing reservation to resultArray:', data[key])
               commit('addReservationToCollection', data[key])
               console.log('Cannot add user details as logged in user does not have permission to view this users details')
-            } else if (data[key].reservedByOwner === false && data[key].reservedBy !== rootState.userModule.userId && rootState.pubModule.pub.ownerId !== rootState.userModule.userId) {
+            } else if (data[key].reservedByOwner === false && data[key].reservedBy !== rootState.userModule.user.uid && rootState.pubModule.pub.ownerId !== rootState.userModule.user.uid) {
               console.log('it was not reserved by the owner and you also didnt reserve it and you are also not the onwer')
               data[key].key = key
               console.log('pushing reservation to resultArray:', data[key])
               commit('addReservationToCollection', data[key])
               console.log('Cannot add user details as logged in user does not have permission to view this users details')
             } else {
-              console.log('data[key].reservedBy !== rootState.userModule.userId', data[key].reservedBy !== rootState.userModule.userId)
+              console.log('data[key].reservedBy !== rootState.userModule.user.uid', data[key].reservedBy !== rootState.userModule.user.uid)
               console.log('!data[key].reservedByOwner', !data[key].reservedByOwner)
-              console.log('rootState.pubModule.pub.ownerId !== rootState.userModule.userId', rootState.pubModule.pub.ownerId !== rootState.userModule.userId)
+              console.log('rootState.pubModule.pub.ownerId !== rootState.userModule.user.uid', rootState.pubModule.pub.ownerId !== rootState.userModule.user.uid)
               // retrieve user details and append to reservation object as an inner object
               data[key].key = key
               console.log('getting userdetails for user with id of:', data[key].reservedBy)
-              globalAxios.get('reservationsPatronDetails/' + data[key].key + '.json' + '?auth=' + rootState.userModule.idToken)
-                .then(response => {
-                  console.log('reservationsPatronDetails.json:', response)
-                  const userData = response.data
+              // globalAxios.get('reservationsPatronDetails/' + data[key].key + '.json' + '?auth=' + rootState.userModule.idToken)
+              //   .then(response => {
+              firebase.database().ref('reservationsPatronDetails/' + data[key].key)
+                .on('value', function (snapshot) {
+                  const userData = snapshot.val()
+                  console.log('reservationsPatronDetails.json:', userData)
                   const usesDetailsResultArray = []
 
                   usesDetailsResultArray.push(userData)
@@ -140,10 +144,6 @@ const actions = {
   fetchReservationsForPunter ({ commit, rootState }, userId) {
     console.log('executing fetchReservationsForPunter')
 
-    if (!rootState.userModule.idToken) {
-      console.log('No Id Token - Exiting')
-      return
-    }
     console.log('localStorage.getItem("isPunter")', localStorage.getItem('isPunter'))
     if (localStorage.getItem('isPunter') === null || localStorage.getItem('isPunter') === 'false') {
       console.log('current user is not a punter - Exiting')
@@ -153,11 +153,12 @@ const actions = {
     }
     console.log('fecthing reservations from the DB for punter')
     console.log('for user id:', userId)
-    globalAxios.get('reservations.json' + '?auth=' + rootState.userModule.idToken +
-     '&orderBy="reservedBy"&equalTo="' + userId + '"')
-      .then(response => {
-        console.log('fetchReservationsForPunter response: ', response)
-        const data = response.data
+    // globalAxios.get('reservations.json' + '?auth=' + rootState.userModule.idToken +
+    // '&orderBy="reservedBy"&equalTo="' + userId + '"')
+    firebase.database().ref('reservations').orderByChild('reservedBy').equalTo(userId)
+      .on('value', function (snapshot) {
+        const data = snapshot.val()
+        console.log('fetchReservationsForPunter response: ', data)
         const resultArray = []
         const previousReservationsForPunterArray = []
         const todaysDate = new Date()
@@ -193,10 +194,6 @@ const actions = {
       })
   },
   cancelOtherReservationForPunterAndReserveNew ({ rootState, dispatch }, { userId, tableToIgnoreId, patronDetails }) {
-    if (!rootState.userModule.idToken) {
-      console.log('No Id Token - Exiting')
-      return
-    }
     console.log('cancelling reservations using cancelOtherReservationForPunterAndReserveNew for user: ', userId)
     console.log(loadingController)
     return loadingController
@@ -205,11 +202,12 @@ const actions = {
       })
       .then(loading => {
         loading.present()
-        globalAxios.get('reservations.json' + '?auth=' + rootState.userModule.idToken +
-          '&orderBy="reservedBy"&equalTo="' + userId + '"')
-          .then(response => {
-            console.log('fetchReservationForPunter response: ', response)
-            const data = response.data
+        // globalAxios.get('reservations.json' + '?auth=' + rootState.userModule.idToken +
+        //   '&orderBy="reservedBy"&equalTo="' + userId + '"')
+        firebase.database().ref('reservations').orderByChild('reservedBy').equalTo(userId)
+          .once('value', function (snapshot) {
+            const data = snapshot.val()
+            console.log('fetchReservationForPunter response: ', data)
             const resultArray = []
             const todaysDate = new Date()
             for (const key in data) {
@@ -242,10 +240,6 @@ const actions = {
       })
   },
   cancelReservationForCurrentlySelectedTable ({ commit, rootState }, reservationKey) {
-    if (!rootState.userModule.idToken) {
-      console.log('No Id Token - Exiting')
-      return
-    }
     console.log('cancelling reservation in DB with res key id: ', reservationKey)
 
     const resFromArray = state.allReservationsForPub.filter(res => res.key === reservationKey)[0]
@@ -256,7 +250,7 @@ const actions = {
         tableId: resFromArray.table.tableId,
         tableNum: resFromArray.table.tableNum,
         floor: resFromArray.table.floor,
-        pubFloorArea: resFromArray.table.pubFloorArea
+        pubFloorArea: resFromArray.table.pubFloorArea === undefined ? null : resFromArray.table.pubFloorArea
       },
       isCancelled: true,
       cancelledAtDate: new Date(),
@@ -272,22 +266,18 @@ const actions = {
     }
 
     // update record but don't delete it
-    globalAxios.patch('reservations/' + reservationKey + '.json' + '?auth=' + rootState.userModule.idToken, reservation)
-      .then(res => {
-        console.log(res)
-        console.log('reservation successfully cancelled in DB: ', res.data)
+    // globalAxios.patch('reservations/' + reservationKey + '.json' + '?auth=' + rootState.userModule.idToken, reservation)
+    //  .then(res => {
+    firebase.database().ref('reservations/' + reservationKey).update(reservation)
+      .then(() => {
+        console.log('reservation successfully cancelled in DB.')
         console.log('about to reset reservation...')
-        commit('resetCurrentReservation')
         commit('removeReservationFromCollection', reservationKey)
         commit('resetCurrentReservationForPunter')
       })
       .catch(error => console.log(error))
   },
   cancelReservation ({ commit, rootState }, reservationData) {
-    if (!rootState.userModule.idToken) {
-      console.log('No Id Token - Exiting')
-      return
-    }
     console.log('cancelling reservation in DB for table: ', reservationData)
 
     const reservation = {
@@ -296,7 +286,7 @@ const actions = {
         tableId: reservationData.table.tableId,
         tableNum: reservationData.table.tableNum,
         floor: reservationData.table.floor,
-        pubFloorArea: reservationData.table.pubFloorArea
+        pubFloorArea: reservationData.table.pubFloorArea === undefined ? null : reservationData.table.pubFloorArea
       },
       isCancelled: true,
       cancelledAtDate: new Date(),
@@ -314,21 +304,17 @@ const actions = {
     const resKey = reservationData.key
 
     // update record but don't delete it
-    globalAxios.patch('reservations/' + resKey + '.json' + '?auth=' + rootState.userModule.idToken, reservation)
-      .then(res => {
-        console.log(res)
-        console.log('reservation successfully cancelled in DB: ', res.data)
+    // globalAxios.patch('reservations/' + resKey + '.json' + '?auth=' + rootState.userModule.idToken, reservation)
+    //  .then(res => {
+    firebase.database().ref('reservations/' + resKey).update(reservation)
+      .then(() => {
+        console.log('reservation successfully cancelled in DB.')
         console.log('about to reset reservation...')
-        commit('resetCurrentReservation')
         commit('removeReservationFromCollection', resKey)
       })
       .catch(error => console.log(error))
   },
   createReservation ({ commit, rootState }, patronDetails) {
-    if (!rootState.userModule.idToken) {
-      console.log('No Id Token - Exiting')
-      return
-    }
     let arrivalLimitTime = null
     if (rootState.pubModule.pub.timeToArrivalLimitOn) {
       console.log('setting time to arrival limit on')
@@ -341,16 +327,16 @@ const actions = {
         tableNum: rootState.pubModule.pubTable.tableNum,
         seats: rootState.pubModule.pubTable.seats,
         floor: rootState.pubModule.pubTable.floor,
-        pubFloorArea: rootState.pubModule.pubTable.pubFloorArea
+        pubFloorArea: rootState.pubModule.pubTable.pubFloorArea === undefined ? null : rootState.pubModule.pubTable.pubFloorArea
       },
       pub: {
         pubId: rootState.pubModule.pubTable.pubId,
         pubName: rootState.pubModule.pub.pubName
       },
-      reservedBy: rootState.userModule.userId,
-      reservedByOwner: rootState.pubModule.pub.ownerId === rootState.userModule.userId,
-      reservedAtDate: new Date(),
-      timeToArrivalLimit: arrivalLimitTime
+      reservedBy: rootState.userModule.user.uid,
+      reservedByOwner: rootState.pubModule.pub.ownerId === rootState.userModule.user.uid,
+      reservedAtDate: Date(),
+      timeToArrivalLimit: arrivalLimitTime !== null ? arrivalLimitTime.toString() : null
     }
 
     const reservationsPatronDetails = {
@@ -360,17 +346,23 @@ const actions = {
 
     try {
       console.log('adding new reservation to DB: ', reservation)
-      globalAxios.post('reservations.json' + '?auth=' + rootState.userModule.idToken, reservation)
-        .then(res => {
-          console.log('new reservatioon data:', res)
-          reservation.key = res.data.name
+      // globalAxios.post('reservations.json' + '?auth=' + rootState.userModule.idToken, reservation)
+      //  .then(res => {
+      firebase.database().ref('reservations').push(reservation)
+        .then(snapshot => {
+          console.log('new reservation snapshot data:', snapshot)
+          reservation.key = snapshot.key
+          console.log('res key:', reservation.key)
           commit('addReservationToCollection', reservation)
         })
         .then(() => {
-          globalAxios.put('reservationsPatronDetails/' + reservation.key + '.json' + '?auth=' + rootState.userModule.idToken, reservationsPatronDetails)
-            .then(res => {
+          // globalAxios.put('reservationsPatronDetails/' + reservation.key + '.json' + '?auth='
+          // + rootState.userModule.idToken, reservationsPatronDetails)
+          firebase.database().ref('reservationsPatronDetails/' + reservation.key).update(reservationsPatronDetails)
+            .then(() => {
+            // .then(res => {
               // update reservation with guest user details for reservation
-              reservation.patronDetails = { patronName: res.data.patronName, patronPhone: res.data.patronPhone }
+              reservation.patronDetails = { patronName: reservationsPatronDetails.patronName, patronPhone: reservationsPatronDetails.patronPhone }
               commit('updateReservationInCollection', reservation)
             })
         })

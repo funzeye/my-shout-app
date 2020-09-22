@@ -87,7 +87,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      user: 'userModule/user',
+      user: 'userModule/userDetails',
       auth: 'userModule/isAuthenticated',
       pubs: 'pubModule/pubs',
       publicansPub: 'pubModule/publicansPub'

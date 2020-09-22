@@ -21,7 +21,7 @@
               </ion-item>
               <ion-item lines="none">
                   <ion-label position="stacked">Name on Reservation: <ion-text v-if="pub.ownerId === userId" color="danger">*</ion-text></ion-label>
-                  <ion-input v-if="pub.ownerId !== userId" type="text" class="disabled" disabled>{{user.firstName}} {{user.surname}}</ion-input>
+                  <ion-input v-if="pub.ownerId !== userId" type="text" class="disabled" disabled>{{userDetails.firstName}} {{userDetails.surname}}</ion-input>
                   <ion-input-vue v-else autofocus="true" type="text" inputmode="text" v-model="ownerReservedOnBehalfOf" placeholder="Please add name of person here"></ion-input-vue>
               </ion-item>
               <ion-item lines="none" v-if="pub.ownerId === userId">
@@ -90,7 +90,7 @@ export default {
     ]),
     ...mapGetters('userModule', [
       'isAuthenticated',
-      'user',
+      'userDetails',
       'userId'
     ])
   },
@@ -162,7 +162,7 @@ export default {
       console.log('reserveTable.vue: confirm reservation button clicked. submitting a new reservation')
       if (this.pub.ownerId !== this.userId) {
         console.log('cancelling all existing reservations for punter')
-        this.$store.dispatch('reservationModule/cancelOtherReservationForPunterAndReserveNew', { userId: this.userId, tableToIgnoreId: this.pubTable.key, patronDetails: { patronName: this.user.firstName + ' ' + this.user.surname, patronPhone: this.user.phone } })
+        this.$store.dispatch('reservationModule/cancelOtherReservationForPunterAndReserveNew', { userId: this.userId, tableToIgnoreId: this.pubTable.key, patronDetails: { patronName: this.userDetails.firstName + ' ' + this.userDetails.surname, patronPhone: this.userDetails.phone } })
       } else { // owner allowed make as many reservation as they wish in their own pub
         console.log('reserveTable.vue: creating reservation')
         this.$store.dispatch('reservationModule/createReservation', { patronName: this.ownerReservedOnBehalfOf, patronPhone: this.ownerReservedOnBehalfOfPhone })
@@ -190,7 +190,7 @@ export default {
     }
   },
   created () {
-    if (!this.user || this.user.email === '') {
+    if (!this.userDetails || this.userDetails.email === '') {
       this.$store.dispatch('userModule/fetchUserDetails')
     }
     if (!this.pub.key || this.pub.key !== this.$route.query.pubId) {

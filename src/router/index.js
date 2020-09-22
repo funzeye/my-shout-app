@@ -16,13 +16,16 @@ import store from '../store'
 import { IonicVueRouter } from '@ionic/vue'
 Vue.use(IonicVueRouter)
 
-const autoLogin = store.dispatch('userModule/tryAutoSignin')
+// const ensureUserAuthenticated = store.dispatch('userModule/ensureUserAuthenticated')
 
 const routes = [
   {
     path: '/home',
     component: Home,
-    name: 'home'
+    name: 'home',
+    meta: {
+      requiresAuth: false
+    }
   },
   {
     path: '/tabs',
@@ -30,14 +33,20 @@ const routes = [
     children: [
       {
         path: '/',
-        redirect: '/tabs/search-for-pub'
+        redirect: '/tabs/search-for-pub',
+        meta: {
+          requiresAuth: false
+        }
       },
       {
         path: 'search-for-pub',
         components: {
           searchRoute: () => import('@/views/SearchForPub.vue')
         },
-        name: 'search-for-pub'
+        name: 'search-for-pub',
+        meta: {
+          requiresAuth: false
+        }
         // beforeEnter (to, from, next) {
         //   var token = store.state.userModule.idToken
         //   if (token) {
@@ -54,7 +63,10 @@ const routes = [
         components: {
           searchRoute: () => import('@/views/PubDetails.vue')
         },
-        name: 'pub-details'
+        name: 'pub-details',
+        meta: {
+          requiresAuth: false
+        }
         // beforeEnter (to, from, next) {
         //   var token = store.state.userModule.idToken
         //   if (token) {
@@ -69,7 +81,10 @@ const routes = [
         components: {
           searchRoute: () => import('@/views/ReserveTable.vue')
         },
-        name: 'reserve-table'
+        name: 'reserve-table',
+        meta: {
+          requiresAuth: false
+        }
         // beforeEnter (to, from, next) {
         //   var token = store.state.userModule.idToken
         //   if (token) {
@@ -87,12 +102,8 @@ const routes = [
         name: 'edit-pub',
         beforeEnter (to, from, next) {
           console.log('navigating to edit-pub page.')
-          var token = store.state.userModule.idToken
           var pub = store.state.pubModule.pub
-          if (!token) {
-            console.log('token not found - re-directing to sign in')
-            next('/home')
-          } else if (!pub.pubName) {
+          if (!pub.pubName) {
             console.log('pub name not found - re-directing to home page')
             next('/')
           } else {
@@ -109,12 +120,8 @@ const routes = [
         name: 'edit-pub-tables',
         beforeEnter (to, from, next) {
           console.log('navigating to edit-pub-tables page.')
-          var token = store.state.userModule.idToken
           var pub = store.state.pubModule.pub
-          if (!token) {
-            console.log('token not found - re-directing to sign in')
-            next('/home')
-          } else if (!pub.pubName) {
+          if (!pub.pubName) {
             console.log('pub name not found - re-directing to home page')
             next('/')
           } else {
@@ -131,12 +138,8 @@ const routes = [
         name: 'edit-pub-details',
         beforeEnter (to, from, next) {
           console.log('navigating to edit-pub-details page.')
-          var token = store.state.userModule.idToken
           var pub = store.state.pubModule.pub
-          if (!token) {
-            console.log('token not found - re-directing to sign in')
-            next('/home')
-          } else if (!pub.pubName) {
+          if (!pub.pubName) {
             console.log('pub name not found - re-directing to home page')
             next('/')
           } else {
@@ -153,12 +156,8 @@ const routes = [
         name: 'add-pub-photo',
         beforeEnter (to, from, next) {
           console.log('navigating to add-pub-photo page.')
-          var token = store.state.userModule.idToken
           var pub = store.state.pubModule.pub
-          if (!token) {
-            console.log('token not found - re-directing to sign in')
-            next('/home')
-          } else if (!pub.pubName) {
+          if (!pub.pubName) {
             console.log('pub name not found - re-directing to home page')
             next('/')
           } else {
@@ -175,12 +174,8 @@ const routes = [
         name: 'edit-table-details',
         beforeEnter (to, from, next) {
           console.log('navigating to edit-table-details page.')
-          var token = store.state.userModule.idToken
           var pub = store.state.pubModule.pub
-          if (!token) {
-            console.log('token not found - re-directing to sign in')
-            next('/home')
-          } else if (!pub.pubName) {
+          if (!pub.pubName) {
             console.log('pub name not found - re-directing to home page')
             next('/')
           } else {
@@ -194,124 +189,86 @@ const routes = [
         components: {
           profileRoute: () => import('@/views/Profile.vue')
         },
-        name: 'profile',
-        beforeEnter (to, from, next) {
-          console.log('calling beforeEnter for profile view')
-          var token = store.state.userModule.idToken
-          if (token) {
-            console.log('next', next)
-            next()
-          } else {
-            next('/home')
-          }
-        }
+        name: 'profile'
       },
       {
         path: ':userId/change-email',
         components: {
           profileRoute: () => import('@/views/ChangeEmail.vue')
         },
-        name: 'change-email',
-        beforeEnter (to, from, next) {
-          var token = store.state.userModule.idToken
-          if (token) {
-            next()
-          } else {
-            next('/home')
-          }
-        }
+        name: 'change-email'
       },
       {
         path: 'booked-tables',
         components: {
           bookedTablesRoute: () => import('@/views/BookedTables.vue')
         },
-        name: 'booked-tables',
-        beforeEnter (to, from, next) {
-          var token = store.state.userModule.idToken
-          if (token) {
-            next()
-          } else {
-            next('/home')
-          }
-        }
+        name: 'booked-tables'
       }
     ]
   },
   {
     path: '/create-new-pub-floor-area',
     component: CreateNewPubFloorArea,
-    name: 'create-new-pub-floor-area',
-    beforeEnter (to, from, next) {
-      var token = store.state.userModule.idToken
-      if (token) {
-        next()
-      } else {
-        next('/home')
-      }
-    }
+    name: 'create-new-pub-floor-area'
   },
   {
     path: '/create-new-pub',
     component: CreateNewPub,
-    name: 'create-new-pub',
-    beforeEnter (to, from, next) {
-      var token = store.state.userModule.idToken
-      if (token) {
-        next()
-      } else {
-        next('/home')
-      }
-    }
+    name: 'create-new-pub'
   },
   {
     path: '/create-user-roles',
     component: CreateUserRoles,
-    name: 'create-user-roles',
-    beforeEnter (to, from, next) {
-      var token = store.state.userModule.idToken
-      if (token) {
-        next()
-      } else {
-        next('/home')
-      }
-    }
+    name: 'create-user-roles'
   },
   {
     path: '/privacy',
     component: Privacy,
-    name: 'privacy'
+    name: 'privacy',
+    meta: {
+      requiresAuth: false
+    }
   },
   {
     path: '/signup',
     component: SignUpPage,
     beforeEnter (to, from, next) {
-      var token = store.state.userModule.idToken
-      if (token) {
+      var user = store.state.userModule.user
+      if (user) {
         next('tabs/search-for-pub')
       } else {
         next()
       }
+    },
+    meta: {
+      requiresAuth: false
     }
   },
   {
     path: '/forgotpassword',
     component: ForgotPassword,
     beforeEnter (to, from, next) {
-      var token = store.state.userModule.idToken
-      if (token) {
+      var user = store.state.userModule.user
+      if (user) {
         next('/')
       } else {
         next()
       }
+    },
+    meta: {
+      requiresAuth: false
     }
   },
   {
     path: '/signin',
     component: SignInPage,
+    meta: {
+      requiresAuth: false
+    },
     beforeEnter (to, from, next) {
-      var token = store.state.userModule.idToken
-      if (token) {
+      var user = store.state.userModule.user
+      if (user) {
         next('tabs/search-for-pub')
       } else {
         next()
@@ -331,7 +288,16 @@ const router = new IonicVueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  autoLogin.then(next)
+  const currentUser = store.state.userModule.user
+  console.log('currentUser in router beforeEach:', currentUser)
+  const doesntRequireAuth = to.matched.some(record => record.meta && record.meta.requiresAuth === false)
+
+  if (doesntRequireAuth === false && !currentUser) {
+    // try auto login
+    next('/home')
+  } else {
+    next()
+  }
 })
 
 export default router
