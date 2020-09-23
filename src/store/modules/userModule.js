@@ -215,13 +215,22 @@ const actions = {
   changeEmail ({ commit, state, dispatch }, newData) {
     const user = firebase.auth().currentUser
 
-    user.updateEmail(newData.newEmail).then(function () {
-      // Update successful.
-      console.log('email updated successfully')
-      dispatch('storeUserDetailsEmail', { email: newData.newEmail })
+    const credential = firebase.auth.EmailAuthProvider.credential(
+      state.user.email,
+      newData.userProvidedPassword
+    )
+
+    user.reauthenticateWithCredential(credential).then(function () {
+      user.updateEmail(newData.newEmail).then(function () {
+        // Update successful.
+        console.log('email updated successfully')
+        dispatch('storeUserDetailsEmail', { email: newData.newEmail })
+      }).catch(function (error) {
+        console.log('error updating email:', error)
+        // An error happened.
+      })
     }).catch(function (error) {
-      console.log('error updating email:', error)
-      // An error happened.
+      console.log('error re-authenticating user: ', error)
     })
 
     // console.log('id token:', state.idToken)

@@ -28,6 +28,10 @@
                 <ion-note v-if="!$v.email.email && email_not_focused" class="error ion-padding" color="danger">Valid Email Required</ion-note>
                 <ion-note v-if="!$v.email.unique && !$v.email.$pending" class="error ion-padding" color="danger">Email Already Taken</ion-note>
               </ion-item>
+              <ion-item lines="none" class="ion-padding-bottom">
+                  <ion-label position="stacked">Current Password:</ion-label>
+                  <ion-input-vue id="userProvidedPassword" v-model="userProvidedPassword"></ion-input-vue>
+              </ion-item>
               <div class="ion-padding">
                 <ion-button type="submit" :disabled="$v.$invalid">Submit</ion-button>
               </div>
@@ -50,6 +54,7 @@ export default {
   data () {
     return {
       email: '',
+      userProvidedPassword: '',
       email_not_focused: false,
       i: allIcons
     }
@@ -90,9 +95,10 @@ export default {
   },
   methods: {
     onSubmit () {
-      const newData = { newEmail: this.email }
-      console.log('new email:', newData)
+      const newData = { newEmail: this.email, userProvidedPassword: this.userProvidedPassword }
+      console.log('new email:', newData.email)
       this.$store.dispatch('userModule/changeEmail', newData)
+      this.userProvidedPassword = ''
       this.email = ''
     },
     setEmailLostFocus () {
