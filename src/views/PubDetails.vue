@@ -10,7 +10,10 @@
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
-    <ion-content class="ion-padding">
+    <ion-content>
+      <div class="image-container">
+        <div class="image" :style="'background-image:url(' + pub.photoUrl + ')'"></div>
+      </div>
       <ion-list>
         <ion-grid style="max-width:1200px;">
           <ion-row>
@@ -35,7 +38,8 @@ export default {
   name: 'pub-details',
   data () {
     return {
-      i: allIcons
+      i: allIcons,
+      pubImg: null
     }
   },
   components: {
@@ -73,3 +77,26 @@ export default {
 }
 
 </script>
+
+<style lang="scss" scoped>
+.image-container{
+  height: 40vh;
+  max-height: none;
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+}
+.image{
+  background-position: 50%;
+  background-size: cover;
+  background-attachment: scroll;
+  background-repeat: no-repeat;
+  z-index: 0;
+  display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+</style>

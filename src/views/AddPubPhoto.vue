@@ -38,13 +38,6 @@ export default {
       i: allIcons
     }
   },
-  computed: {
-    pub: {
-      get () {
-        return this.$store.getters['pubModule/pub']
-      }
-    }
-  },
   methods: {
     async takePicture () {
       try {
@@ -70,14 +63,16 @@ export default {
       if (!this.imageElementSrc) return
       try {
         console.log('starting upload...', this.imageElementSrc)
-        const user = firebase.auth().currentUser
+        // const user = firebase.auth().currentUser
         const name = 'profile.' + this.imageElementSrc.format
         //  const { dataUrl = '', path = name } = this.imageElementSrc?.value
 
-        var storageRef = firebase.storage().ref(user.uid + '/profilePicture/' + name)
+        var storageRef = firebase.storage().ref(this.$route.params.id + '/pubPicture/' + name)
         const task = storageRef.putString(this.imageElementSrc.dataUrl, 'data_url', {
           contentType: 'image/png'
         })
+
+        const vueInstance = this
 
         task.on('state_changed',
           function progess (snapshot) {
@@ -92,9 +87,10 @@ export default {
             console.log('upload complete')
             task.snapshot.ref.getDownloadURL().then(function (downloadURL) {
               console.log('File available at', downloadURL)
-              user.updateProfile({
-                photoURL: downloadURL
-              })
+              vueInstance.$store.dispatch('pubModule/updatePubProfilePictureUrl', { pubKey: vueInstance.$route.params.id, downloadUrl: downloadURL })
+              // user.updateProfile({
+              //  photoURL: downloadURL
+              // })
             })
           })
 
@@ -109,7 +105,7 @@ export default {
       }
     },
     backToEditPub () {
-      this.$router.replace({ name: 'edit-pub', params: { id: this.pub.key } })
+      this.$router.replace({ name: 'edit-pub', params: { id: this.$route.params.id } })
     }
   }
 }

@@ -380,7 +380,7 @@ const actions = {
       return
     }
     // globalAxios.patch('usersDetails/' + state.userId + '.json' + '?auth=' + state.idToken, userData)
-    firebase.database().ref('usersDetails/' + state.user.uid).child('email').update(userData.email)
+    firebase.database().ref('usersDetails/' + state.user.uid).update({ email: userData.email })
       .then(() => {
         commit('storeUserDetailsEmail', userData.email)
       })

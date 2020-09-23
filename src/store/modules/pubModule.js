@@ -23,6 +23,7 @@ const getDefaultState = () => {
       county: '',
       eircode: '',
       numOfTables: '',
+      photoUrl: '',
       floors: { lower: 0, upper: 0 },
       timeToArrivalLimitOn: true,
       timeToArrivalLimitInMinutes: 30
@@ -45,6 +46,9 @@ const mutations = {
   },
   storePubTables (state, pubTables) {
     state.pubTables = pubTables
+  },
+  updatePubPhotoUrl (state, downloadUrl) {
+    state.pub.photoUrl = downloadUrl
   },
   updatePubTableInPubTables (state, { pubTable, key }) {
     console.log('updating pub table in pubTables array with key:', key)
@@ -332,6 +336,15 @@ const actions = {
       }, error => {
         console.log('Error response while getting single pub table data from the DB')
         console.log(error)
+      })
+  },
+  updatePubProfilePictureUrl ({ commit }, payload) {
+    firebase.database().ref('pubs/' + payload.pubKey).update({ photoUrl: payload.downloadUrl })
+      .then(() => {
+        commit('updatePubPhotoUrl', payload.downloadUrl)
+      })
+      .catch(error => {
+        console.log(error.message)
       })
   },
   updatePub ({ commit }, payload) {
