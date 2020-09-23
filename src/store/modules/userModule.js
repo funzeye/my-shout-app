@@ -189,30 +189,15 @@ const actions = {
   //       if (!noRedirect) router.replace({ name: 'search-for-pub' })
   //     })
   // },
-  signin ({ commit, dispatch }, { authData, noRedirect }) {
-    firebase.auth().signInWithEmailAndPassword(authData.email, authData.password)
+  async signin ({ commit, dispatch }, { authData, noRedirect }) {
+    await firebase.auth().signInWithEmailAndPassword(authData.email, authData.password)
       .then(function (response) {
         console.log('response:', response)
         console.log('noRedirect:', noRedirect)
         if (!noRedirect) router.replace({ name: 'search-for-pub' })
       })
-      .catch(function (error) {
-        // Handle Errors here.
-        var errorCode = error.code
-        // var errorMessage = error.message
-        // [START_EXCLUDE]
-        if (errorCode === 'auth/wrong-password') {
-          alert('Wrong password.')
-        } else if (errorCode === 'auth/user-not-found') {
-          alert('No such email exists.')
-        } else {
-          // alert(errorMessage)
-        }
-        console.log(error)
-        // [END_EXCLUDE]
-      })
   },
-  changeEmail ({ commit, state, dispatch }, newData) {
+  async changeEmail ({ commit, state, dispatch }, newData) {
     const user = firebase.auth().currentUser
 
     const credential = firebase.auth.EmailAuthProvider.credential(
@@ -220,17 +205,12 @@ const actions = {
       newData.userProvidedPassword
     )
 
-    user.reauthenticateWithCredential(credential).then(function () {
+    await user.reauthenticateWithCredential(credential).then(function () {
       user.updateEmail(newData.newEmail).then(function () {
         // Update successful.
         console.log('email updated successfully')
         dispatch('storeUserDetailsEmail', { email: newData.newEmail })
-      }).catch(function (error) {
-        console.log('error updating email:', error)
-        // An error happened.
       })
-    }).catch(function (error) {
-      console.log('error re-authenticating user: ', error)
     })
 
     // console.log('id token:', state.idToken)

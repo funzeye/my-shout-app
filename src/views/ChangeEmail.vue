@@ -30,10 +30,12 @@
               </ion-item>
               <ion-item lines="none" class="ion-padding-bottom">
                   <ion-label position="stacked">Current Password:</ion-label>
-                  <ion-input-vue id="userProvidedPassword" v-model="userProvidedPassword"></ion-input-vue>
+                  <ion-input-vue @ionFocus="passwordCorrect = true" type="password" id="userProvidedPassword" v-model="userProvidedPassword"></ion-input-vue>
+                  <ion-note v-if="!passwordCorrect" class="error ion-padding" color="danger">Incorrect Password Entered</ion-note>
+                 <ion-note v-if="tooManyAttempts" class="error ion-padding" color="danger">Too Many Attempts - 'Change Email' is temporarily disabled for this user - Please try again later</ion-note>
               </ion-item>
               <div class="ion-padding">
-                <ion-button type="submit" :disabled="$v.$invalid">Submit</ion-button>
+                <ion-button type="submit" :disabled="$v.$invalid || tooManyAttempts">Submit</ion-button>
               </div>
             </form>
           </ion-col>
@@ -56,6 +58,8 @@ export default {
       email: '',
       userProvidedPassword: '',
       email_not_focused: false,
+      passwordCorrect: true,
+      tooManyAttempts: false,
       i: allIcons
     }
   },
@@ -95,11 +99,21 @@ export default {
   },
   methods: {
     onSubmit () {
+      this.passwordCorrect = true
+
       const newData = { newEmail: this.email, userProvidedPassword: this.userProvidedPassword }
-      console.log('new email:', newData.email)
+      console.log('new email:', newData.newEmail)
       this.$store.dispatch('userModule/changeEmail', newData)
-      this.userProvidedPassword = ''
-      this.email = ''
+        .then(() => {
+          this.userProvidedPassword = ''
+        })
+        .catch(error => {
+          if (error.code.toUpperCase().includes('WRONG-PASSWORD') || error.code.toUpperCase().includes('INVALID_PASSWORD')) {
+            this.passwordCorrect = false
+          } else if (error.code.toUpperCase().includes('TOO-MANY-REQUESTS')) {
+            this.tooManyAttempts = true
+          }
+        })
     },
     setEmailLostFocus () {
       console.log('email lost focus')

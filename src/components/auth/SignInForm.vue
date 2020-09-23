@@ -65,12 +65,13 @@ export default {
       console.log(formData)
       this.$store.dispatch('userModule/signin', { authData: formData, noRedirect: this.isModal })
         .catch(error => {
-          console.log(error.response.data.error.message)
-          if (error.response.data.error.message === 'INVALID_PASSWORD') {
+          console.log(error.code)
+          // console.log(error.response.data.error.message)
+          if (error.code.toUpperCase().includes('WRONG-PASSWORD') || error.code.toUpperCase().includes('INVALID_PASSWORD')) {
             this.passwordCorrect = false
-          } else if (error.response.data.error.message === 'EMAIL_NOT_FOUND') {
+          } else if (error.code.toUpperCase().includes('EMAIL_NOT_FOUND') || error.code.toUpperCase().includes('USER-NOT-FOUND')) {
             this.emailExists = false
-          } else if (error.response.data.error.message.includes('TOO_MANY_ATTEMPTS_TRY_LATER')) {
+          } else if (error.code.toUpperCase().includes('TOO-MANY-REQUESTS')) {
             this.tooManyAttempts = true
           }
         })
