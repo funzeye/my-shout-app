@@ -18,8 +18,6 @@
       <ion-item lines="none">
         <ion-button style="margin-top:16px; margin-bottom: 16px" @click="changePassword">Send Password Reset Email</ion-button>
       </ion-item>
-      <ion-text class="ion-padding" style="display:block; font-size:12px">Clicking 'Send Password Reset Email' will log you out and an email will be sent to the above address</ion-text>
-
     </ion-content>
   </div>
 </template>
@@ -41,7 +39,31 @@ export default {
       this.$router.push({ name: 'change-email', params: { userId: this.userId } })
     },
     changePassword () {
-      this.$store.dispatch('userModule/sendPasswordEmailReset', this.userDetails.email)
+      return this.$ionic.alertController
+        .create({
+          cssClass: 'alert-cancel-res',
+          header: 'Password Reset Request',
+          subHeader: this.userDetails.email,
+          message: 'Clicking "Confirm" will log you out and an email will be sent to the above address',
+          buttons: [
+            {
+              text: 'Back',
+              role: 'cancel',
+              // cssClass: 'secondary',
+              handler: () => {
+                console.log('password reset abandoned.')
+              }
+            },
+            {
+              text: 'Confirm',
+              handler: () => {
+                console.log('password reset Confirmed')
+                this.$store.dispatch('userModule/sendPasswordEmailReset', this.userDetails.email)
+              }
+            }
+          ]
+        })
+        .then(a => a.present())
     },
     onLogout: function () {
       this.$store.dispatch('userModule/logout')

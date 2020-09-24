@@ -70,7 +70,11 @@
                         id="password"
                         @ionBlur="$v.password.$touch(true)"
                         v-model="password"></ion-input-vue>
-                <ion-note v-if="!$v.password.minLen" class="error ion-padding" color="danger">Must be at least 6 characters long</ion-note>
+                <ion-note v-if="!$v.password.minLen" class="error ion-padding" color="danger">Must be at least 8 characters long</ion-note>
+                <ion-note v-if="!$v.password.containsUppercase && $v.password.$dirty" class="error ion-padding" color="danger">Must contain an upper case character</ion-note>
+                <ion-note v-if="!$v.password.containsLowercase && $v.password.$dirty" class="error ion-padding" color="danger">Must contain a lower case character</ion-note>
+                <ion-note v-if="!$v.password.containsNumber && $v.password.$dirty" class="error ion-padding" color="danger">Must contain a number</ion-note>
+                <ion-note v-if="!$v.password.containsSpecial && $v.password.$dirty" class="error ion-padding" color="danger">Must contain a special character</ion-note>
               </ion-item>
               <ion-item lines="none" class="input">
                 <ion-label position="stacked" for="confirm-password">Confirm Password <ion-text color="danger">*</ion-text></ion-label>
@@ -150,7 +154,20 @@ export default {
     },
     password: {
       required,
-      minLen: minLength(6)
+      minLen: minLength(8),
+      containsUppercase: function (value) {
+        return /[A-Z]/.test(value)
+      },
+      containsLowercase: function (value) {
+        return /[a-z]/.test(value)
+      },
+      containsNumber: function (value) {
+        return /[0-9]/.test(value)
+      },
+      containsSpecial: function (value) {
+        // return !/[#?!@$%^&*-]/.test(value)
+        return /\W|_/.test(value)
+      }
     },
     confirmPassword: {
       sameAs: sameAs('password')
