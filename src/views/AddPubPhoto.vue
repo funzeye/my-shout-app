@@ -26,8 +26,20 @@
 import { Plugins, CameraSource, CameraResultType } from '@capacitor/core'
 import * as allIcons from 'ionicons/icons'
 import firebase from 'firebase/app'
+import { toastController } from '@ionic/core'
 
 const { Camera } = Plugins
+
+const handleToast = (message, isError = false) => {
+  toastController
+    .create({
+      message: message,
+      position: 'top',
+      color: isError ? 'danger' : 'success',
+      duration: 2000
+    })
+    .then((t) => t.present())
+}
 
 export default {
   name: 'add-pub-photo',
@@ -82,6 +94,7 @@ export default {
           },
           function error (err) {
             console.log('error uploading', err)
+            handleToast('Error Uploading!', true)
           },
           function complete () {
             console.log('upload complete')
@@ -92,6 +105,7 @@ export default {
               //  photoURL: downloadURL
               // })
             })
+            handleToast('File Uploaded!!', false)
           })
 
         // const r = await uploadData(dataUrl, path)

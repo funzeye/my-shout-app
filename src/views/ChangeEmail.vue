@@ -50,6 +50,18 @@ import { required, email } from 'vuelidate/lib/validators'
 import axios from '@/axios-auth'
 import * as allIcons from 'ionicons/icons'
 import { mapGetters } from 'vuex'
+import { toastController } from '@ionic/core'
+
+const handleToast = (message, isError = false) => {
+  toastController
+    .create({
+      message: message,
+      position: 'top',
+      color: isError ? 'danger' : 'success',
+      duration: 2000
+    })
+    .then((t) => t.present())
+}
 
 export default {
   name: 'change-email',
@@ -105,6 +117,7 @@ export default {
       console.log('new email:', newData.newEmail)
       this.$store.dispatch('userModule/changeEmail', newData)
         .then(() => {
+          handleToast('Email Changed Successfully!', false)
           this.userProvidedPassword = ''
         })
         .catch(error => {
@@ -113,6 +126,7 @@ export default {
           } else if (error.code.toUpperCase().includes('TOO-MANY-REQUESTS')) {
             this.tooManyAttempts = true
           }
+          handleToast('Email not changed', true)
         })
     },
     setEmailLostFocus () {
