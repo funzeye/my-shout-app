@@ -48,6 +48,16 @@ const mutations = {
     console.log('updated reservation details: ', reservation)
     Vue.set(state.allReservationsForPub, foundIndex, reservation)
   },
+  updatePatronDetailsForReservationInCollection (state, reservationPatronDetails) {
+    console.log('updating reservation in reservation array with key:', reservationPatronDetails.key)
+    console.log('current list of reservations for pub:', state.allReservationsForPub)
+    var foundIndex = state.allReservationsForPub.findIndex(x => x.key === reservationPatronDetails.key)
+    if (foundIndex >= 0) {
+      console.log('foundIndex: ', foundIndex)
+      Vue.set(state.allReservationsForPub[foundIndex], 'patronDetails', reservationPatronDetails.patronDetails)
+      // state.allReservationsForPub[foundIndex].patronDetails = reservationPatronDetails.patronDetails // not reactive
+    }
+  },
   setCurrentReservation (state, reservation) {
     state.reservation = reservation
   },
@@ -84,62 +94,59 @@ const actions = {
     console.log('for pub with key:', pubKey)
     commit('resetReservationsForPubCollection')
     // globalAxios.get('reservations.json' + '?orderBy="pub/pubId"&equalTo="' + pubKey + '"')
-    firebase.database().ref('reservations').orderByChild('pub/pubId').equalTo(pubKey)
-      .once('value', function (snapshot) {
-        const data = snapshot.val()
-        // .then(response => {
-        console.log('fetchReservationsForPub snapshot val:', data)
-        for (const key in data) {
-          if (!data[key].isCancelled) {
-            if (!rootState.userModule.user) {
-              data[key].key = key
-              console.log('pushing reservation to resultArray:', data[key])
-              commit('addReservationToCollection', data[key])
-              console.log('No User State - Exiting')
-            } else if (data[key].reservedByOwner && rootState.pubModule.pub.ownerId !== rootState.userModule.user.uid) {
-              console.log('reserved by owner but you are not the owner')
-              data[key].key = key
-              console.log('pushing reservation to resultArray:', data[key])
-              commit('addReservationToCollection', data[key])
-              console.log('Cannot add user details as logged in user does not have permission to view this users details')
-            } else if (data[key].reservedByOwner === false && data[key].reservedBy !== rootState.userModule.user.uid && rootState.pubModule.pub.ownerId !== rootState.userModule.user.uid) {
-              console.log('it was not reserved by the owner and you also didnt reserve it and you are also not the onwer')
-              data[key].key = key
-              console.log('pushing reservation to resultArray:', data[key])
-              commit('addReservationToCollection', data[key])
-              console.log('Cannot add user details as logged in user does not have permission to view this users details')
+    const reservationsRef = firebase.database().ref('reservations').orderByChild('pub/pubId').equalTo(pubKey)
+
+    reservationsRef.on('child_changed', function (snapshot) {
+      console.log('reservation changed with key:', snapshot.key)
+      const reservation = snapshot.val()
+      reservation.key = snapshot.key
+
+      commit('updateReservationInCollection', reservation)
+      commit('removeReservationFromCollection', reservation.key)
+    })
+
+    reservationsRef.on('child_added', function (snapshot) {
+      const data = snapshot.val()
+      data.key = snapshot.key
+      // .then(response => {
+      console.log('fetchReservationsForPub snapshot val:', data)
+      // for (const key in data) {
+      if (!data.isCancelled) {
+        commit('addReservationToCollection', data)
+
+        if (!rootState.userModule.user) {
+          console.log('No User State - Exiting')
+        } else if (data.reservedByOwner && rootState.pubModule.pub.ownerId !== rootState.userModule.user.uid) {
+          console.log('reserved by owner but you are not the owner')
+          console.log('Cannot add user details as logged in user does not have permission to view this users details')
+        } else if (data.reservedByOwner === false && data.reservedBy !== rootState.userModule.user.uid && rootState.pubModule.pub.ownerId !== rootState.userModule.user.uid) {
+          console.log('it was not reserved by the owner and you also didnt reserve it and you are also not the onwer')
+          console.log('Cannot add user details as logged in user does not have permission to view this users details')
+        } else {
+          const resDetails = firebase.database().ref('reservationsPatronDetails/' + data.key)
+
+          resDetails.on('value', function (snapshot2) {
+            if (snapshot2.val()) {
+              const userDetailsObject = { key: snapshot2.key, patronDetails: { patronName: snapshot2.val().patronName, patronPhone: snapshot2.val().patronPhone } }
+              commit('updatePatronDetailsForReservationInCollection', userDetailsObject)
             } else {
-              console.log('data[key].reservedBy !== rootState.userModule.user.uid', data[key].reservedBy !== rootState.userModule.user.uid)
-              console.log('!data[key].reservedByOwner', !data[key].reservedByOwner)
-              console.log('rootState.pubModule.pub.ownerId !== rootState.userModule.user.uid', rootState.pubModule.pub.ownerId !== rootState.userModule.user.uid)
-              // retrieve user details and append to reservation object as an inner object
-              data[key].key = key
-              console.log('getting userdetails for user with id of:', data[key].reservedBy)
-              // globalAxios.get('reservationsPatronDetails/' + data[key].key + '.json' + '?auth=' + rootState.userModule.idToken)
-              //   .then(response => {
-              firebase.database().ref('reservationsPatronDetails/' + data[key].key)
-                .on('value', function (snapshot) {
-                  const userData = snapshot.val()
-                  console.log('reservationsPatronDetails.json:', userData)
-                  const usesDetailsResultArray = []
-
-                  usesDetailsResultArray.push(userData)
-
-                  data[key].patronDetails = usesDetailsResultArray[0]
-                  console.log('pushing reservation to resultArray:', data[key])
-                  // resultArray.push(data[key])
-                  commit('addReservationToCollection', data[key])
-                })
+              console.log('snapshot2 is null')
             }
-          } else if (data[key].isCancelled) {
-            console.log('reservation not added as it is a cancelled reservation')
-          } else {
-            console.log('reservation not added for unknown reason')
-          }
+          })
         }
-      }, error => {
-        console.log(error)
-      })
+      } else if (data.isCancelled) {
+        console.log('reservation not added as it is a cancelled reservation')
+      } else {
+        console.log('reservation not added for unknown reason')
+      }
+      // }
+    })
+
+    // no need to track changes - only change is cancellation and that removal from collection mutation is already
+    // triggered by the cancalReservation action below
+    // reservationsRef.on('child_changed', function(snapshot) {
+    //  setCommentValues(postElement, data.key, data.val().text, data.val().author);
+    // });
   },
   fetchReservationsForPunter ({ commit, rootState }, userId) {
     console.log('executing fetchReservationsForPunter')
@@ -272,7 +279,6 @@ const actions = {
       .then(() => {
         console.log('reservation successfully cancelled in DB.')
         console.log('about to reset reservation...')
-        commit('removeReservationFromCollection', reservationKey)
         commit('resetCurrentReservationForPunter')
       })
       .catch(error => console.log(error))
@@ -310,7 +316,7 @@ const actions = {
       .then(() => {
         console.log('reservation successfully cancelled in DB.')
         console.log('about to reset reservation...')
-        commit('removeReservationFromCollection', resKey)
+        // commit('removeReservationFromCollection', resKey)
       })
       .catch(error => console.log(error))
   },
@@ -353,7 +359,7 @@ const actions = {
           console.log('new reservation snapshot data:', snapshot)
           reservation.key = snapshot.key
           console.log('res key:', reservation.key)
-          commit('addReservationToCollection', reservation)
+          // commit('addReservationToCollection', reservation)
         })
         .then(() => {
           // globalAxios.put('reservationsPatronDetails/' + reservation.key + '.json' + '?auth='
