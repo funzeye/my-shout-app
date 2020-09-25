@@ -113,7 +113,7 @@ const routes = [
         }
       },
       {
-        path: '/:id/edit-pub-tables',
+        path: '/:id?/edit-pub-tables',
         components: {
           searchRoute: () => import('@/views/EditPubTables.vue')
         },

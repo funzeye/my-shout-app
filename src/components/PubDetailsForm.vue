@@ -143,16 +143,19 @@ export default {
     },
     allTodaysReservationsForPub () {
       return this.$store.getters['reservationModule/allTodaysReservationsForPub']
+    },
+    userId () {
+      return this.$store.getters['userModule/userId']
     }
   },
   methods: {
-    submitted () {
+    async submitted () {
       var pubDetails = this.pub
-      console.log('submitted pub details:')
-      console.log(pubDetails)
+      console.log('submitted pub details for creation of new pub.')
       if (this.mode === 'create') {
+        pubDetails.ownerId = this.userId
         this.$store.dispatch('pubModule/storePub', pubDetails)
-        this.$router.replace({ name: 'edit-pub-tables', params: { id: this.pub.key } })
+        this.$router.replace({ name: 'edit-pub-tables' })
       } else {
         console.log('updating pub in DB')
         this.$store.dispatch('pubModule/updatePubDetailsInDb', pubDetails)

@@ -77,7 +77,7 @@ export default {
   created () {
     console.log(this.$route)
     console.log('current route param id ', this.$route.params.id)
-    if (!this.pub || this.pub.key !== this.$route.params.id) {
+    if (!this.pub || (this.$route.params.id !== undefined && this.pub.key !== this.$route.params.id)) {
       console.log('fecthing pub linked to pub id of: ', this.$route.params.id)
       this.$store.dispatch('pubModule/fetchPubByPubId', this.$route.params.id)
     } else {

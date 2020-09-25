@@ -212,10 +212,10 @@ const actions = {
         console.log(error)
       })
   },
-  storePub ({ commit, rootState, dispatch }, pubData) {
+  storePub ({ commit, dispatch }, pubData) {
     console.log('adding new pub to DB: ', pubData)
     const pub = {
-      ownerId: localStorage.getItem('userId'),
+      ownerId: pubData.ownerId,
       pubName: pubData.pubName,
       addressLine1: pubData.addressLine1,
       addressLine2: pubData.addressLine2,
@@ -230,21 +230,25 @@ const actions = {
     // globalAxios.post('pubs.json' + '?auth=' + rootState.userModule.idToken, pub)
     firebase.database().ref('pubs').push(pub)
       .then(snapshot => {
-        console.log('adding new pub response:', snapshot)
-        pub.key = snapshot.name
-        commit('addNewPubToPubsCollection', pub)
+        console.log('adding new pub snapshot:', snapshot)
+        console.log('adding new pub snapshot key:', snapshot.key)
+
+        pub.key = snapshot.key
         commit('updatePub', pub)
+        commit('addNewPubToPubsCollection', pub)
         console.log('pub successfully saved to DB: ', snapshot)
-        dispatch('storePubTables', snapshot.name)
+        dispatch('storePubTables', pub.key)
         // commit('resetPub') // no longer need to reset as we immediately go to a new page
       })
       .catch(error => console.log(error))
   },
   updatePubDetailsInDb ({ commit, rootState }, pubData) {
     console.log('updating pub in DB: ', pubData)
+    const key = pubData.key
+    pubData.key = null
 
     // globalAxios.patch('pubs/' + pubData.key + '/.json' + '?auth=' + rootState.userModule.idToken, pubData)
-    firebase.database().ref('pubs/' + pubData.key).update(pubData)
+    firebase.database().ref('pubs/' + key).update(pubData)
       .then(() => {
         commit('updatePubInPubsCollection', pubData)
         console.log('pub successfully updated in DB')
@@ -309,7 +313,7 @@ const actions = {
       firebase.database().ref('pubTables').push(table)
         .then(snapshot => {
           console.log(snapshot)
-          table.key = snapshot.name
+          table.key = snapshot.key
           commit('addNewPubTable', table)
           console.log('table successfully saved to DB.')
         })

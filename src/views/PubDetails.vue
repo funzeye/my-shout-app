@@ -11,7 +11,7 @@
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <div class="image-container">
+      <div v-if="pub.photoUrl" class="image-container">
         <div class="image" :style="'background-image:url(' + pub.photoUrl + ')'"></div>
       </div>
       <ion-list>
