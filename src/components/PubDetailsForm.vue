@@ -153,12 +153,13 @@ export default {
   methods: {
     async submitted () {
       var pubDetails = this.pub
-      console.log('submitted pub details for creation of new pub.')
       if (this.mode === 'create') {
+        console.log('submitted pub details for creation of new pub.')
         pubDetails.ownerId = this.userId
         this.$store.dispatch('pubModule/storePub', pubDetails)
         this.$router.replace({ name: 'edit-pub-tables' })
       } else {
+        console.log('submitted pub details for update of existing pub.')
         console.log('updating pub in DB')
         this.$store.dispatch('pubModule/updatePubDetailsInDb', pubDetails)
         this.$router.replace({ name: 'edit-pub', params: { id: this.pub.key } })

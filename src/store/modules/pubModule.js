@@ -28,9 +28,6 @@ const getDefaultState = () => {
       timeToArrivalLimitOn: true,
       timeToArrivalLimitInMinutes: 30
     },
-    pubFloorArea: {
-      name: ''
-    },
     pubFloorAreas: []
   }
 }
@@ -87,14 +84,6 @@ const mutations = {
   setSelectedPubTable (state, pubTable) {
     console.log('calling setSelectedPubTable mutation in index.js')
     state.pubTable = pubTable
-  },
-  updatePubFloorArea (state, pubFloorArea) {
-    state.pubFloorArea = pubFloorArea
-  },
-  resetPubFloorArea (state) {
-    state.pubFloorArea = {
-      name: ''
-    }
   },
   resetPub (state) {
     state.pub = {
@@ -197,15 +186,19 @@ const actions = {
         console.log(error)
       })
   },
-  fetchPubFloorAreas ({ commit, rootState }) {
+  fetchPubFloorAreas ({ commit }) {
     console.log('fecthing pub data from the DB and updating List')
     // globalAxios.get('pubFloorAreas.json' + '?auth=' + rootState.userModule.idToken)
     firebase.database().ref('pubFloorAreas')
       .on('value', function (snapshot) {
-        const data = snapshot.val()
+        console.log('snapshot', snapshot)
+        console.log('snapshot.val()', snapshot.val())
+        console.log('snapshot.key', snapshot.key)
         const resultArray = []
-        for (const key in data) {
-          resultArray.push(data[key])
+        for (const key in snapshot.val()) {
+          const itemForArray = snapshot.val()[key]
+          itemForArray.key = key
+          resultArray.push(itemForArray)
         }
         commit('storePubFloorAreas', resultArray)
       }, error => {
@@ -263,9 +256,20 @@ const actions = {
     firebase.database().ref('pubFloorAreas').push(pubFloorAreaData)
       .then(snapshot => {
         console.log(snapshot)
-        commit('addNewPubFloorArea', pubFloorAreaData)
-        console.log('pub successfully saved to DB: ', snapshot)
-        commit('resetPubFloorArea') // no longer need to reset as we immediately go to a new page
+        // commit('addNewPubFloorArea', pubFloorAreaData)
+      })
+      .catch(error => console.log(error))
+  },
+  updatePubFloorArea ({ commit }, pubFloorAreaData) {
+    const pubFloorArea = {
+      name: pubFloorAreaData.name
+    }
+    firebase.database().ref('pubFloorAreas/' + pubFloorAreaData.key).update(pubFloorArea)
+      .then(() => {
+        console.log('pub floor area successfully updated in DB')
+        // commit('updatePubFloorAreaInPubFloorAreas', {
+        //  pubFloorArea: pubFloorAreaData
+        // })
       })
       .catch(error => console.log(error))
   },
@@ -360,9 +364,6 @@ const actions = {
   setSelectedPubTable ({ commit }, payload) {
     console.log('calling setSelectedPubTable action in index.js')
     commit('setSelectedPubTable', payload)
-  },
-  updatePubFloorArea ({ commit }, payload) {
-    commit('updatePubFloorArea', payload)
   }
 }
 
@@ -401,11 +402,6 @@ const getters = {
     console.log('calling pub floor areas getter')
     console.log(state)
     return state.pubFloorAreas
-  },
-  pubFloorArea (state) {
-    console.log('calling pub floor area getter')
-    console.log(state)
-    return state.pubFloorArea
   }
 }
 

@@ -4,6 +4,7 @@ import Privacy from '../views/Privacy.vue'
 import Home from '../views/Home.vue'
 import CreateUserRoles from '../views/admin/CreateUserRoles.vue'
 import CreateNewPubFloorArea from '../views/admin/CreateNewPubFloorArea.vue'
+import EditPubFloorArea from '../views/admin/EditPubFloorArea.vue'
 import TabRoot from '../components/TabRoot.vue'
 import SignUpPage from '../components/auth/SignUp.vue'
 import ForgotPassword from '../components/auth/ForgotPassword.vue'
@@ -211,6 +212,11 @@ const routes = [
     path: '/create-new-pub-floor-area',
     component: CreateNewPubFloorArea,
     name: 'create-new-pub-floor-area'
+  },
+  {
+    path: '/:key/edit-pub-floor-area',
+    component: EditPubFloorArea,
+    name: 'edit-pub-floor-area'
   },
   {
     path: '/create-new-pub',

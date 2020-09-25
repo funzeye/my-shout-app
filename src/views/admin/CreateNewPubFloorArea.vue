@@ -18,8 +18,11 @@
       <ion-list>
         <ion-item v-for="pfa in pubFloorAreas" :key="pfa['.key']">
           <ion-label>Area Name: {{ pfa.name }}</ion-label>
+          <ion-button fill="clear" shape="round" @click="editPubFloorAreaDetails(pfa.key)">
+            Edit
+          </ion-button>
           <ion-button fill="clear" shape="round">
-            <ion-icon :src="i.closeCircle" slot="icon-only" name="star"></ion-icon>
+            <ion-icon :src="i.closeCircle" slot="icon-only" color="danger" name="star"></ion-icon>
           </ion-button>
         </ion-item>
       </ion-list>
@@ -35,7 +38,10 @@ import * as allIcons from 'ionicons/icons'
 export default {
   data () {
     return {
-      i: allIcons
+      i: allIcons,
+      pubFloorArea: {
+        name: ''
+      }
     }
   },
   components: {
@@ -44,14 +50,6 @@ export default {
   computed: {
     pubFloorAreas () {
       return this.$store.getters['pubModule/pubFloorAreas']
-    },
-    pubFloorArea: {
-      get () {
-        return this.$store.getters['pubModule/pubFloorArea']
-      },
-      set (pubFloorArea) {
-        this.$store.dispatch('updatePubFloorArea', pubFloorArea)
-      }
     }
   },
   methods: {
@@ -61,6 +59,9 @@ export default {
       console.log(newPubFloorArea)
 
       this.$store.dispatch('pubModule/storePubFloorArea', newPubFloorArea)
+    },
+    editPubFloorAreaDetails (areaKey) {
+      this.$router.push({ name: 'edit-pub-floor-area', params: { key: areaKey } })
     }
   },
   created () {
