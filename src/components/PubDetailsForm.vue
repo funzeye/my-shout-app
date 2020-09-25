@@ -59,6 +59,8 @@
           </ion-item>
           <ion-item lines="none">
               <ion-label position="stacked">Floors (drag blue dot left or right to update)</ion-label>
+              <ion-note v-if="mode === 'edit'">If you change floor numbers - dont forget to also update the floor numbers assigned to your individual tables
+                as they could now be incorrect. You can do this on the "Edit Pub Tables" page</ion-note>
               <ion-range ref="floors" id="dual-range"
                 dual-knobs pin snaps debounce="200" min="-5" max="10" v-model="pub.floors"
                 @ionChange="pub.floors = $event.target.value">
