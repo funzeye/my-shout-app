@@ -21,8 +21,8 @@
           <ion-button fill="clear" shape="round" @click="editPubFloorAreaDetails(pfa.key)">
             Edit
           </ion-button>
-          <ion-button fill="clear" shape="round">
-            <ion-icon :src="i.closeCircle" slot="icon-only" color="danger" name="star"></ion-icon>
+          <ion-button fill="clear" shape="round" @click="deletePubFloorArea(pfa.key)">
+            <ion-icon :src="i.closeCircle" slot="icon-only" color="danger" name="star" ></ion-icon>
           </ion-button>
         </ion-item>
       </ion-list>
@@ -57,11 +57,14 @@ export default {
       var newPubFloorArea = this.pubFloorArea
       console.log('submitted new pub floor area details:')
       console.log(newPubFloorArea)
-
       this.$store.dispatch('pubModule/storePubFloorArea', newPubFloorArea)
+      this.pubFloorArea.name = ''
     },
     editPubFloorAreaDetails (areaKey) {
       this.$router.push({ name: 'edit-pub-floor-area', params: { key: areaKey } })
+    },
+    deletePubFloorArea (areaKey) {
+      this.$store.dispatch('pubModule/deletePubFloorArea', areaKey)
     }
   },
   created () {

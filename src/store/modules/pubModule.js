@@ -355,6 +355,15 @@ const actions = {
         console.log(error.message)
       })
   },
+  deletePubFloorArea ({ commit }, areaKey) {
+    firebase.database().ref('pubFloorAreas/' + areaKey).remove()
+      .then(() => {
+        // commit('updatePubPhotoUrl', payload.downloadUrl)
+      })
+      .catch(error => {
+        console.log(error.message)
+      })
+  },
   updatePub ({ commit }, payload) {
     commit('updatePub', payload)
   },

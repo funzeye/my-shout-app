@@ -6,7 +6,6 @@
         </ion-toolbar>
     </ion-header>
     <ion-content>
-        {{ pubFloorAreas }}
         <form @submit.prevent="submitted">
         <ion-item lines="none">
             <ion-label position="stacked">Pub Floor Area Name <ion-text color="danger">*</ion-text></ion-label>
