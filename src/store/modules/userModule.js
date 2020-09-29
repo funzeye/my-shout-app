@@ -29,6 +29,7 @@ const mutations = {
     state.user = null
   },
   setUserType (state, userRoles) {
+    console.log('setUserType userRoles', userRoles)
     state.isPublican = userRoles.isPublican
     state.isPunter = userRoles.isPunter
   },
@@ -54,11 +55,12 @@ const mutations = {
 }
 
 const actions = {
-  checkAuth ({ commit }) {
+  async checkAuth ({ commit, dispatch }) {
     return new Promise((resolve, reject) => {
       firebase.auth().onAuthStateChanged(async (_user) => {
         if (_user) {
           commit('setUser', _user)
+          await dispatch('fetchUserDetails')
         } else {
           commit('setUser', null)
         }
@@ -67,35 +69,6 @@ const actions = {
       })
     })
   },
-  setUser ({ commit }, user) {
-    commit('setUser', user)
-  },
-  // setLogoutTimer ({ commit, dispatch, state }, expirationTime) {
-  //   var timer = setTimeout(() => {
-  //     console.log('timeout elapsed - refreshing token...')
-  //     console.log('timeout elapsed - token is:', state.idToken)
-  //     console.log('timeout elapsed - refresh token is:', state.refreshToken)
-  //     axios.post('https://securetoken.googleapis.com/v1/token?key=AIzaSyB8-xAjyYMTR0Jt1-H-ayS9FDINW4JdAhQ',
-  //       { grant_type: 'refresh_token', refresh_token: state.refreshToken })
-  //       .then(res => {
-  //         console.log('refreshing token:', res)
-  //         const now = new Date()
-  //         const expirationDate = new Date(now.getTime() + res.data.expires_in * 1000)
-  //         console.log('setting localStorage variables')
-  //         localStorage.setItem('token', res.data.id_token)
-  //         localStorage.setItem('refreshToken', res.data.refresh_token)
-  //         localStorage.setItem('expirationDate', expirationDate.getTime())
-  //         commit('authUser', {
-  //           token: res.data.id_token,
-  //           userId: res.data.user_id,
-  //           refreshToken: res.data.refresh_token
-  //         })
-  //         clearTimeout(timer)
-  //         dispatch('setLogoutTimer', res.data.expires_in)
-  //       })
-  //       .catch(error => console.log(error))
-  //   }, expirationTime * 1000)
-  // },
   signup ({ dispatch }, authData) {
     firebase.auth().createUserWithEmailAndPassword(authData.email, authData.password)
       .then(response => {
@@ -108,9 +81,7 @@ const actions = {
           phone: authData.phone
         }).then(() => {
           console.log('add user role to user details in DB')
-          dispatch('addRoleToUsersDetails', {
-            userRole: authData.userRole
-          }).then(() => {
+          dispatch('addRoleToUsersDetails', { userRole: authData.userRole }).then(() => {
             console.log('add user id to user roles in DB')
             dispatch('addUserToUserRolesMembers', {
               userRole: authData.userRole
@@ -123,72 +94,8 @@ const actions = {
       })
       .catch(function (error) {
         console.log(error)
-        // Handle Errors here.
-        // const errorCode = error.code
-        // const errorMessage = error.message
-        // ...
       })
-
-    // axios.post(':signUp?key=AIzaSyB8-xAjyYMTR0Jt1-H-ayS9FDINW4JdAhQ',
-    //   { email: authData.email, password: authData.password, returnSecureToken: true })
-    //   .then(res => {
-    //     console.log(res)
-    //     commit('authUser', {
-    //       token: res.data.idToken,
-    //       refreshToken: res.data.refreshToken,
-    //       userId: res.data.localId
-    //     })
-
-    //     console.log('storing user details in DB')
-    //     dispatch('storeUserDetails', {
-    //       email: authData.email,
-    //       firstName: authData.firstName,
-    //       surname: authData.surname,
-    //       phone: authData.phone
-    //     }).then(() => {
-    //       console.log('add user role to user details in DB')
-    //       dispatch('addRoleToUsersDetails', {
-    //         userRole: authData.userRole,
-    //         userId: res.data.localId
-    //       }).then(() => {
-    //         console.log('add user id to user roles in DB')
-    //         dispatch('addUserToUserRolesMembers', {
-    //           userRole: authData.userRole,
-    //           userId: res.data.localId
-    //         })
-    //       })
-    //     })
-
-    //     // console.log('calling setLogoutTimer action')
-    //     // dispatch('setLogoutTimer', res.data.expiresIn)
-
-    //     console.log('calling router for #/tabs/search-for-pub')
-    //     router.replace({ name: 'search-for-pub' })
-    //   })
-    //   .catch(error => console.log(error))
   },
-  // async signin ({ commit, dispatch }, { authData, noRedirect }) {
-  //   await axios.post(':signInWithPassword?key=AIzaSyB8-xAjyYMTR0Jt1-H-ayS9FDINW4JdAhQ',
-  //     { email: authData.email, password: authData.password, returnSecureToken: true })
-  //     .then(res => {
-  //       console.log(res)
-  //       const now = new Date()
-  //       const expirationDate = new Date(now.getTime() + res.data.expiresIn * 1000)
-  //       localStorage.setItem('token', res.data.idToken)
-  //       localStorage.setItem('userId', res.data.localId)
-  //       localStorage.setItem('refreshToken', res.data.refreshToken)
-  //       localStorage.setItem('expirationDate', expirationDate.getTime())
-  //       commit('authUser', {
-  //         token: res.data.idToken,
-  //         userId: res.data.localId,
-  //         refreshToken: res.data.refreshToken
-  //       })
-  //       dispatch('fetchUserDetails')
-  //       dispatch('setLogoutTimer', res.data.expiresIn)
-  //       console.log('noRedirect', noRedirect)
-  //       if (!noRedirect) router.replace({ name: 'search-for-pub' })
-  //     })
-  // },
   async signin ({ commit, dispatch }, { authData, noRedirect }) {
     await firebase.auth().signInWithEmailAndPassword(authData.email, authData.password)
       .then(function (response) {
@@ -212,31 +119,6 @@ const actions = {
         dispatch('storeUserDetailsEmail', { email: newData.newEmail })
       })
     })
-
-    // console.log('id token:', state.idToken)
-    // console.log('email:', newData.newEmail)
-    // axios.post(':update?key=AIzaSyB8-xAjyYMTR0Jt1-H-ayS9FDINW4JdAhQ',
-    //   { idToken: token, email: newData.newEmail, returnSecureToken: true })
-    //   .then(res => {
-    //     console.log('response:', res)
-    //     console.log('res.data.email:', res.data.email)
-    //     const now = new Date()
-    //     const expirationDate = new Date(now.getTime() + res.data.expiresIn * 1000)
-    //     localStorage.setItem('token', res.data.idToken)
-    //     localStorage.setItem('userId', res.data.localId)
-    //     localStorage.setItem('refreshToken', res.data.refreshToken)
-    //     localStorage.setItem('expirationDate', expirationDate.getTime())
-    //     commit('authUser', {
-    //       token: res.data.idToken,
-    //       userId: res.data.localId,
-    //       refreshToken: res.data.refreshToken
-    //     })
-    //     dispatch('storeUserDetailsEmail', { email: newData.newEmail })
-    //     dispatch('setLogoutTimer', res.data.expiresIn)
-    //   })
-    //   .catch(error => {
-    //     console.log(error)
-    //   })
   },
   sendPasswordEmailReset ({ dispatch }, emailToSendTo) {
     // axios.post(':sendOobCode?key=AIzaSyB8-xAjyYMTR0Jt1-H-ayS9FDINW4JdAhQ',
@@ -250,34 +132,6 @@ const actions = {
         console.log(error)
       })
   },
-  // tryAutoSignin ({ commit, state, dispatch }) {
-  //   console.log('trying auto sign in')
-  //   const token = localStorage.getItem('token')
-  //   if (!token) {
-  //     return
-  //   }
-  //   const expirationDate = localStorage.getItem('expirationDate')
-  //   const now = new Date().getTime()
-  //   if (now >= expirationDate) {
-  //     return // token has expired
-  //   }
-
-  //   const userId = localStorage.getItem('userId')
-  //   const refreshToken = localStorage.getItem('refreshToken')
-  //   const isPunter = localStorage.getItem('isPunter')
-  //   const isPublican = localStorage.getItem('isPublican')
-
-  //   dispatch('setLogoutTimer', (expirationDate - now) / 1000)
-  //   commit('authUser', {
-  //     token: token,
-  //     userId: userId,
-  //     refreshToken: refreshToken
-  //   })
-  //   commit('setUserType', {
-  //     isPublican: isPublican,
-  //     isPunter: isPunter
-  //   })
-  // },
   logout ({ commit }) {
     return firebase
       .auth()
@@ -291,7 +145,7 @@ const actions = {
         localStorage.removeItem('isPunter')
       })
   },
-  fetchUserDetails ({ commit, state }) {
+  async fetchUserDetails ({ commit, state }) {
     console.log('state.user', state.user)
     if (!state.user) {
       console.log('No User - Exiting')
@@ -300,30 +154,34 @@ const actions = {
     // const user = firebase.auth().currentUser
     console.log('fecthing user details data from the DB')
     console.log('for user details with user id:', state.user.uid)
-    firebase.database().ref('/usersDetails/' + state.user.uid)
-      .on('value', function (snapshot) {
-        console.log('fetchUserDetails response: ', snapshot)
-        const data = snapshot.val()
+    return new Promise((resolve, reject) => {
+      firebase.database().ref('/usersDetails/' + state.user.uid)
+        .on('value', function (snapshot) {
+          console.log('fetchUserDetails response: ', snapshot)
+          const data = snapshot.val()
+          console.log('data:', data)
+          if (data) {
+            const foundUser = data
+            commit('storeUserDetails', foundUser)
+            commit('setUserType', { isPublican: foundUser.userRoles.publican === true, isPunter: foundUser.userRoles.punter === true })
+            if (foundUser.userRoles.punter === true) {
+              localStorage.setItem('isPunter', true)
+            } else {
+              localStorage.setItem('isPunter', false)
+            }
 
-        if (data) {
-          const foundUser = data
-          commit('storeUserDetails', foundUser)
-          if (foundUser.userRoles.punter === true) {
-            localStorage.setItem('isPunter', true)
-          } else {
-            localStorage.setItem('isPunter', false)
+            if (foundUser.userRoles.publican === true) {
+              localStorage.setItem('isPublican', true)
+            } else {
+              localStorage.setItem('isPublican', false)
+            }
+            console.log('fetchUserDetails complete...')
+            resolve(snapshot)
           }
-
-          if (foundUser.userRoles.publican === true) {
-            localStorage.setItem('isPublican', true)
-          } else {
-            localStorage.setItem('isPublican', false)
-          }
-          commit('setUserType', { isPublican: foundUser.userRoles.publican === true, isPunter: foundUser.userRoles.punter === true })
-        }
-      }, error => {
-        console.log(error)
-      })
+        }, error => {
+          console.log(error)
+        })
+    })
   },
   fetchUserRoles ({ commit, state }) {
     console.log('fecthing User Roles from the DB and updating List')

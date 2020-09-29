@@ -33,16 +33,6 @@ var firebaseConfig = {
   appId: '1:99944916740:web:2ee7fe3bcb77d6402bd251'
 }
 firebase.initializeApp(firebaseConfig)
-// const database = firebase.database();
-// firebase.auth().onAuthStateChanged((user) => {
-//   if (user) {
-//     console.log('onAuthStateChanged:', user)
-//     store.dispatch('userModule/setUser', user)
-//   } // else {
-//   // store.dispatch('userModule/setUser', null)
-//   // }
-// })
-/// //////////////////////////////
 
 Vue.config.productionTip = false
 

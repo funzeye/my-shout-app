@@ -295,6 +295,15 @@ const router = new IonicVueRouter({
 
 router.beforeEach((to, from, next) => {
   const currentUser = store.state.userModule.user
+  const userRoles = store.state.userModule.userDetails.userRoles
+  if (userRoles !== null) {
+    console.log('publican?:', userRoles.publican)
+    console.log('admin?:', userRoles.admin)
+    console.log('punter?:', userRoles.punter)
+  } else {
+    console.log('NO ROLES SET...')
+  }
+
   console.log('currentUser in router beforeEach:', currentUser)
   const doesntRequireAuth = to.matched.some(record => record.meta && record.meta.requiresAuth === false)
 

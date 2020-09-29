@@ -120,18 +120,8 @@ export default {
     }
   },
   created () {
-    // const loading = await loadingController.create({
-    //   duration: 700
-    // })
-
-    // await loading.present()
     console.log('bookedTables created method called')
-    // if (this.user.email === '') {
-    //  this.$store.dispatch('userModule/fetchUserDetails', this.userId)
-    // }
-    // if (!this.publicansPub || this.publicansPub === '') {
-    // this.$store.dispatch('pubModule/fetchPubs')
-    // }
+
     if (this.isPunter === true || this.isPunter === 'true') {
       console.log('fetching all reservations for patron...')
       this.$store.dispatch('reservationModule/fetchReservationsForPunter', this.userId)
