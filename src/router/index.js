@@ -48,16 +48,6 @@ const routes = [
         meta: {
           requiresAuth: false
         }
-        // beforeEnter (to, from, next) {
-        //   var token = store.state.userModule.idToken
-        //   if (token) {
-        //     console.log('token found, going to next:', next)
-        //     next()
-        //   } else {
-        //     console.log('token not found, going to /home:')
-        //     next('/home')
-        //   }
-        // }
       },
       {
         path: ':id/pub-details',
@@ -68,14 +58,6 @@ const routes = [
         meta: {
           requiresAuth: false
         }
-        // beforeEnter (to, from, next) {
-        //   var token = store.state.userModule.idToken
-        //   if (token) {
-        //     next()
-        //   } else {
-        //     next('/home')
-        //   }
-        // }
       },
       {
         path: ':id/reserve-table',
@@ -86,14 +68,6 @@ const routes = [
         meta: {
           requiresAuth: false
         }
-        // beforeEnter (to, from, next) {
-        //   var token = store.state.userModule.idToken
-        //   if (token) {
-        //     next()
-        //   } else {
-        //     next('/home')
-        //   }
-        // }
       },
       {
         path: ':id/edit-pub',
@@ -211,22 +185,34 @@ const routes = [
   {
     path: '/create-new-pub-floor-area',
     component: CreateNewPubFloorArea,
-    name: 'create-new-pub-floor-area'
+    name: 'create-new-pub-floor-area',
+    beforeEnter (to, from, next) {
+      checkIfAdmin(next)
+    }
   },
   {
     path: '/:key/edit-pub-floor-area',
     component: EditPubFloorArea,
-    name: 'edit-pub-floor-area'
+    name: 'edit-pub-floor-area',
+    beforeEnter (to, from, next) {
+      checkIfAdmin(next)
+    }
   },
   {
     path: '/create-new-pub',
     component: CreateNewPub,
-    name: 'create-new-pub'
+    name: 'create-new-pub',
+    beforeEnter (to, from, next) {
+      checkIfPublican(next)
+    }
   },
   {
     path: '/create-user-roles',
     component: CreateUserRoles,
-    name: 'create-user-roles'
+    name: 'create-user-roles',
+    beforeEnter (to, from, next) {
+      checkIfAdmin(next)
+    }
   },
   {
     path: '/privacy',
@@ -283,7 +269,6 @@ const routes = [
   },
   { path: '/', redirect: 'home' },
   { path: '*', redirect: 'home' }
-
   // { path: '' }
 ]
 
@@ -296,12 +281,8 @@ const router = new IonicVueRouter({
 router.beforeEach((to, from, next) => {
   const currentUser = store.state.userModule.user
   const userRoles = store.state.userModule.userDetails.userRoles
-  if (userRoles !== null) {
-    console.log('publican?:', userRoles.publican)
-    console.log('admin?:', userRoles.admin)
-    console.log('punter?:', userRoles.punter)
-  } else {
-    console.log('NO ROLES SET...')
+  if (userRoles === null) {
+    console.log('NO USER ROLES FOUND...')
   }
 
   console.log('currentUser in router beforeEach:', currentUser)
@@ -314,5 +295,27 @@ router.beforeEach((to, from, next) => {
     next()
   }
 })
+
+const checkIfPublican = function (next) {
+  const roles = store.state.userModule.userDetails.userRoles
+  console.log('roles', roles)
+  if (!roles || !roles.publican) {
+    console.log('not publican - re-directing to home page')
+    next('/')
+  } else {
+    next()
+  }
+}
+
+const checkIfAdmin = function (next) {
+  const roles = store.state.userModule.userDetails.userRoles
+  console.log('roles', roles)
+  if (!roles || !roles.admin) {
+    console.log('not admin - re-directing to home page')
+    next('/')
+  } else {
+    next()
+  }
+}
 
 export default router
