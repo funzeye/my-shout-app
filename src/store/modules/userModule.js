@@ -78,14 +78,12 @@ const actions = {
           email: authData.email,
           firstName: authData.firstName,
           surname: authData.surname,
-          phone: authData.phone
+          phone: authData.phone,
+          userRoles: { [authData.userRole]: true }
         }).then(() => {
-          console.log('add user role to user details in DB')
-          dispatch('addRoleToUsersDetails', { userRole: authData.userRole }).then(() => {
-            console.log('add user id to user roles in DB')
-            dispatch('addUserToUserRolesMembers', {
-              userRole: authData.userRole
-            })
+          console.log('add user id to user roles in DB')
+          dispatch('addUserToUserRolesMembers', {
+            userRole: authData.userRole
           })
         })
 
@@ -162,15 +160,19 @@ const actions = {
           console.log('data:', data)
           if (data) {
             const foundUser = data
+            console.log('foundUser.userRoles', foundUser.userRoles)
             commit('storeUserDetails', foundUser)
-            commit('setUserType', { isPublican: foundUser.userRoles.publican === true, isPunter: foundUser.userRoles.punter === true })
-            if (foundUser.userRoles.punter === true) {
+            commit('setUserType', {
+              isPublican: foundUser.userRoles.publican !== undefined && foundUser.userRoles.publican !== false,
+              isPunter: foundUser.userRoles.punter !== undefined && foundUser.userRoles.punter !== false
+            })
+            if (foundUser.userRoles.punter !== undefined && foundUser.userRoles.punter !== false) {
               localStorage.setItem('isPunter', true)
             } else {
               localStorage.setItem('isPunter', false)
             }
 
-            if (foundUser.userRoles.publican === true) {
+            if (foundUser.userRoles.publican !== undefined && foundUser.userRoles.publican !== false) {
               localStorage.setItem('isPublican', true)
             } else {
               localStorage.setItem('isPublican', false)
@@ -202,21 +204,20 @@ const actions = {
         console.log(error)
       })
   },
-  storeUserDetails ({ commit, state }, userData) {
+  storeUserDetails ({ commit }, userData) {
     var user = firebase.auth().currentUser
     if (!user) {
       console.log('No user Id - Exiting')
       return
     }
-    // globalAxios.put('usersDetails/' + state.user.uid + '.json' + '?auth=' + state.idToken, userData)
     firebase.database().ref('usersDetails/' + user.uid).set(userData)
-      .then(res => {
-        console.log(res)
+      .then(() => {
         commit('storeUserDetails', {
           email: userData.email,
           firstName: userData.firstName,
           surname: userData.surname,
-          phone: userData.phone
+          phone: userData.phone,
+          userRoles: userData.userRoles
         })
       })
       .catch(error => console.log(error))

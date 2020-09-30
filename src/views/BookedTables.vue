@@ -134,7 +134,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
- .booking-item{
+.booking-item{
    margin-right: 16px;
    h2{
      font-weight:bold;

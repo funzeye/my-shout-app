@@ -1,6 +1,7 @@
 <template>
   <div>
       <ion-card button="true" @click.prevent="viewPub">
+        <ion-img class="pub-card-image" :src="pub.photoUrl"></ion-img>
         <ion-card-header>
           <ion-card-subtitle>Pub</ion-card-subtitle>
           <ion-card-title>{{ pub.pubName }}</ion-card-title>
@@ -31,3 +32,11 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.pub-card-image {
+  padding: 16px;
+  padding-bottom: 0;
+  background: #406c6c;
+}
+</style>

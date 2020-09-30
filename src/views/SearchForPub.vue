@@ -12,7 +12,7 @@
         <template v-if="publicansPub && publicansPub.key !== ''">
           <ion-grid fixed>
             <ion-row class="ion-justify-content-center">
-              <ion-col size="12" size-sm="8" size-md="6" size-xl="4">
+              <ion-col size="12" size-sm="6" size-md="6" size-lg="3" size-xl="2">
                 <pub-card :i="i" :pub="publicansPub" actionName="Manage" />
               </ion-col>
             </ion-row>
@@ -55,10 +55,10 @@
         </ion-grid>
         <ion-grid style="max-width:1200px;">
           <ion-row class="ion-justify-content-center">
-            <ion-col size="12" size-md="6" size-lg="4" animated="true" v-show="!p.hidePub" v-for="p in pubs" :key="p['.key']">
-            <div>
-                <pub-card :pub="p" actionName="Select" />
-            </div>
+            <ion-col size="12" size-sm="6" size-md="6" size-lg="3" size-xl="2" animated="true" v-show="!p.hidePub" v-for="p in pubs" :key="p['.key']">
+              <div>
+                  <pub-card :pub="p" actionName="Select" />
+              </div>
             </ion-col>
           </ion-row>
         </ion-grid>
