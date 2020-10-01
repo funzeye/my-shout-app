@@ -72,23 +72,26 @@ const actions = {
   signup ({ dispatch }, authData) {
     firebase.auth().createUserWithEmailAndPassword(authData.email, authData.password)
       .then(response => {
-        console.log('response:', response)
-        console.log('storing user details in DB')
-        dispatch('storeUserDetails', {
-          email: authData.email,
-          firstName: authData.firstName,
-          surname: authData.surname,
-          phone: authData.phone,
-          userRoles: { [authData.userRole]: true }
-        }).then(() => {
-          console.log('add user id to user roles in DB')
-          dispatch('addUserToUserRolesMembers', {
-            userRole: authData.userRole
+        console.log('sign in new user?', authData.signInNewUser)
+        if (authData.signInNewUser) {
+          console.log('response:', response)
+          console.log('storing user details in DB')
+          dispatch('storeUserDetails', {
+            email: authData.email,
+            firstName: authData.firstName,
+            surname: authData.surname,
+            phone: authData.phone,
+            userRoles: { [authData.userRole]: true }
+          }).then(() => {
+            console.log('add user id to user roles in DB')
+            dispatch('addUserToUserRolesMembers', {
+              userRole: authData.userRole
+            })
           })
-        })
 
-        console.log('calling router for #/tabs/search-for-pub')
-        router.replace({ name: 'search-for-pub' })
+          console.log('calling router for #/tabs/search-for-pub')
+          router.replace({ name: 'search-for-pub' })
+        }
       })
       .catch(function (error) {
         console.log(error)

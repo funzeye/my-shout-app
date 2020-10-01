@@ -5,7 +5,7 @@ import Home from '../views/Home.vue'
 import CreateUserRoles from '../views/admin/CreateUserRoles.vue'
 import CreateNewPubFloorArea from '../views/admin/CreateNewPubFloorArea.vue'
 import EditPubFloorArea from '../views/admin/EditPubFloorArea.vue'
-import TabRoot from '../components/TabRoot.vue'
+// import TabRoot from '../components/TabRoot.vue'
 import SignUpPage from '../components/auth/SignUp.vue'
 import ForgotPassword from '../components/auth/ForgotPassword.vue'
 import SignInPage from '../components/auth/SignIn.vue'
@@ -30,7 +30,8 @@ const routes = [
   },
   {
     path: '/tabs',
-    component: TabRoot,
+    // component: TabRoot,
+    component: () => import('@/components/TabRoot.vue'),
     children: [
       {
         path: '/',
@@ -174,6 +175,13 @@ const routes = [
         name: 'change-email'
       },
       {
+        path: ':userId/edit-user-details',
+        components: {
+          profileRoute: () => import('@/views/EditUserDetails.vue')
+        },
+        name: 'edit-user-details'
+      },
+      {
         path: 'booked-tables',
         components: {
           bookedTablesRoute: () => import('@/views/BookedTables.vue')
@@ -273,7 +281,7 @@ const routes = [
 ]
 
 const router = new IonicVueRouter({
-  // mode: 'history', // for not having the # in the URL
+  mode: 'history', // for not having the # in the URL
   base: process.env.BASE_URL,
   routes
 })
@@ -285,7 +293,6 @@ router.beforeEach((to, from, next) => {
     console.log('NO USER ROLES FOUND...')
   }
 
-  console.log('currentUser in router beforeEach:', currentUser)
   const doesntRequireAuth = to.matched.some(record => record.meta && record.meta.requiresAuth === false)
 
   if (doesntRequireAuth === false && !currentUser) {
@@ -298,7 +305,6 @@ router.beforeEach((to, from, next) => {
 
 const checkIfPublican = function (next) {
   const roles = store.state.userModule.userDetails.userRoles
-  console.log('roles', roles)
   if (!roles || !roles.publican) {
     console.log('not publican - re-directing to home page')
     next('/')
@@ -309,7 +315,6 @@ const checkIfPublican = function (next) {
 
 const checkIfAdmin = function (next) {
   const roles = store.state.userModule.userDetails.userRoles
-  console.log('roles', roles)
   if (!roles || !roles.admin) {
     console.log('not admin - re-directing to home page')
     next('/')

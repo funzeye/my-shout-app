@@ -11,7 +11,7 @@
           <ion-vue-router name="bookedTablesRoute"></ion-vue-router>
         </ion-tab>
 
-        <ion-tab tab="profile" :routes="['profile', 'change-email']" id="profile">
+        <ion-tab tab="profile" :routes="['profile', 'change-email', 'edit-user-details']" id="profile">
           <ion-vue-router name="profileRoute"></ion-vue-router>
         </ion-tab>
 

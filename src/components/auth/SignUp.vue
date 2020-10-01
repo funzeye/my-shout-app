@@ -10,7 +10,7 @@
         <ion-row>
           <ion-col size="12" offset-md="3" size-md="6" offset-xl="4" size-xl="4">
             <h1 class="ion-padding-start">Sign Up</h1>
-            <sign-up-form/>
+            <sign-up-form signInNewUser='true'/>
           </ion-col>
         </ion-row>
       </ion-grid>

@@ -16,6 +16,9 @@
          <ion-button style="margin-bottom:16px" @click="changeEmail">Change Email</ion-button>
       </ion-item>
       <ion-item lines="none">
+         <ion-button style="margin-top:16px; margin-bottom:16px" @click="editUserDetails">Edit Your Details</ion-button>
+      </ion-item>
+      <ion-item lines="none">
         <ion-button style="margin-top:16px; margin-bottom: 16px" @click="changePassword">Send Password Reset Email</ion-button>
       </ion-item>
     </ion-content>
@@ -37,6 +40,9 @@ export default {
   methods: {
     changeEmail () {
       this.$router.push({ name: 'change-email', params: { userId: this.userId } })
+    },
+    editUserDetails () {
+      this.$router.push({ name: 'edit-user-details', params: { userId: this.userId } })
     },
     changePassword () {
       return this.$ionic.alertController

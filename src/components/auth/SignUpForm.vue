@@ -37,7 +37,7 @@
     v-model="userRole">
         <ion-select-option value="punter">Patron / Pub goer</ion-select-option>
         <ion-select-option value="publican">Publican</ion-select-option>
-        <ion-select-option v-if="userIsAdmin" value="admin">Admin</ion-select-option>
+        <ion-select-option v-if="user.userRoles.admin" value="admin">Admin</ion-select-option>
 
     </ion-select-vue>
     <ion-note v-if="$v.userRole.$invalid && $v.userRole.$dirty" class="error ion-padding" color="danger">required</ion-note>
@@ -91,11 +91,12 @@
 <script>
 import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
 import axios from '@/axios-auth'
+import { mapGetters } from 'vuex'
 
 export default {
+  props: ['signInNewUser'],
   data () {
     return {
-      userIsAdmin: false,
       firstName: '',
       surname: '',
       phone: '',
@@ -106,6 +107,11 @@ export default {
       terms: false,
       email_not_focused: false
     }
+  },
+  computed: {
+    ...mapGetters({
+      user: 'userModule/userDetails'
+    })
   },
   validations: {
     email: {
@@ -179,7 +185,8 @@ export default {
         firstName: this.firstName,
         surname: this.surname,
         userRole: this.userRole,
-        phone: this.phone
+        phone: this.phone,
+        signInNewUser: this.signInNewUser
       }
       console.log(formData)
       this.$store.dispatch('userModule/signup', formData)
