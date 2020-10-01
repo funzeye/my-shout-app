@@ -11,7 +11,7 @@ The app is a Vue 2 app built using the Vue CLI and then the Ionic Framework 5 pa
 
 The app uses tabs to navigate between pages.
 
-How to create an Ionic Vue (Beta) app: https://hovercraft.ie/setting-up-a-basic-ionic-vue-app-beta/
+How to create an Ionic 5 Vue 2 (Beta) app: https://hovercraft.ie/setting-up-a-basic-ionic-vue-app-beta/
 
 ### Also uses
 - Vuex for state management,
